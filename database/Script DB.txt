@@ -1,0 +1,142 @@
+DROP DATABASE NeedlOS;
+CREATE DATABASE NeedlOS;
+USE NeedlOS;
+
+CREATE TABLE Cliente(
+	id_cliente INT PRIMARY KEY NOT NULL,
+	nombre VARCHAR(20) NOT NULL,
+	apellido VARCHAR(20) NOT NULL,
+	telefono INT NOT NULL,
+	fecha_registro DATE NOT NULL
+);
+
+CREATE TABLE Pedido(
+	id_pedido INT PRIMARY KEY NOT NULL,
+	fecha DATE NOT NULL,
+	foto_pedido BIT NOT NULL,
+	total_abonos INT NOT NULL,
+	saldo INT NOT NULL,
+    FK_cliente INT,
+    CONSTRAINT FK_cliente_pedido FOREIGN KEY (FK_cliente)
+    REFERENCES cliente(id_cliente)
+);
+
+CREATE TABLE Detalle_pedido(
+	id_detalle_pedido INT PRIMARY KEY NOT NULL,
+	cantidad INT NOT NULL,
+	precio_unitario INT NOT NULL,
+	descripcion VARCHAR(50) NOT NULL,
+    FK_pedido INT,
+    CONSTRAINT FK_pedido_detPedido FOREIGN KEY (FK_pedido)
+    REFERENCES Pedido(id_pedido)
+); 
+
+CREATE TABLE Estado(
+	id_estado INT PRIMARY KEY NOT NULL,
+    en_proceso BOOLEAN,
+    finalizado BOOLEAN,
+    entregado BOOLEAN,
+    anulado BOOLEAN
+);
+
+CREATE TABLE Estado_pedido(
+	id_estado INT NOT NULL,
+    id_detalle_pedido INT NOT NULL,
+	fecha DATETIME,
+	CONSTRAINT PK_Estado_pedido PRIMARY KEY(id_estado, id_detalle_pedido),
+    CONSTRAINT FK_estado_estPedido FOREIGN KEY (id_estado)
+    REFERENCES Estado(id_estado),
+    CONSTRAINT FK_detPedido_estPedido FOREIGN KEY (id_detalle_pedido)
+    REFERENCES Detalle_pedido(id_detalle_pedido)
+);
+
+CREATE TABLE MetodoP_abono(
+	id_metodoP_abono INT PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE Detalle_abono(
+	id_detalle_abono INT PRIMARY KEY NOT NULL,
+	monto INT NOT NULL,
+    fecha DATE NOT NULL,
+    monto_total INT NOT NULL,
+    FK_detPedido INT,
+    FK_metPagoA INT,
+    CONSTRAINT FK_detPedido_detAbono FOREIGN KEY (FK_detPedido)
+    REFERENCES Detalle_pedido(id_detalle_pedido),
+    CONSTRAINT FK_metPagoA_detAbono FOREIGN KEY (FK_metPagoA)
+    REFERENCES metodoP_abono(id_metodoP_abono)
+);
+
+CREATE TABLE Metodo (
+	id_metodo INT PRIMARY KEY NOT NULL,
+    metodo varchar(15)
+);
+
+CREATE TABLE Ingreso(
+	id_ingreso INT PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE Material(
+	id_material INT PRIMARY KEY NOT NULL,
+    nombre VARCHAR(20),
+    descripcion VARCHAR(40)
+);
+
+CREATE TABLE Material_ingresado(
+	id_ingreso INT NOT NULL,
+    id_material INT NOT NULL,
+    precio INT,
+    cantidad INT,
+    CONSTRAINT PK_Material_ingresado PRIMARY KEY (id_ingreso, id_material),
+    CONSTRAINT FK_ingreso_materialI FOREIGN KEY (id_ingreso)
+    REFERENCES Ingreso(id_ingreso),
+    CONSTRAINT FK_material_materialI FOREIGN KEY (id_material)
+    REFERENCES Material(id_material)
+);
+
+CREATE TABLE Tipo_documento(
+	id_tipo_documento INT PRIMARY KEY NOT NULL,
+	descripcion_tipo VARCHAR(3)
+);
+
+CREATE TABLE Empleado(
+	id_empleado INT PRIMARY KEY NOT NULL,
+    nombre VARCHAR(30),
+    apellido VARCHAR(30),
+    telefono INT,
+    n_documento INT,
+    FK_tipo_documento INT,
+    CONSTRAINT FK_tipoD_empleado FOREIGN KEY (FK_tipo_documento)
+    REFERENCES Tipo_documento(id_tipo_documento)
+);
+
+CREATE TABLE Pago(
+	id_pago INT PRIMARY KEY NOT NULL,
+	fecha DATETIME,
+    valor INT,
+    FK_empleado INT,
+    CONSTRAINT FK_empleado_pago FOREIGN KEY (FK_empleado)
+    REFERENCES Empleado(id_empleado)
+);
+
+CREATE TABLE Prenda(
+	id_prenda INT PRIMARY KEY NOT NULL,
+    descripcion VARCHAR(50),
+    valor INT,
+    FK_detalles_pedido INT,
+    FK_empleado INT,
+    CONSTRAINT FK_empleado_prenda FOREIGN KEY (FK_empleado)
+    REFERENCES Empleado(id_empleado),
+    CONSTRAINT FK_detPedido_prenda FOREIGN KEY (FK_detalles_pedido)
+    REFERENCES Detalle_pedido(id_detalle_pedido)
+);
+
+CREATE TABLE Material_usado(
+	id_prenda INT NOT NULL,
+    id_material INT NOT NULL,
+    CONSTRAINT PK_Material_usado PRIMARY KEY (id_prenda, id_material),
+    CONSTRAINT FK_prenda_matUsado FOREIGN KEY (id_prenda)
+    REFERENCES Prenda(id_prenda),
+    CONSTRAINT FK_material_matUsado FOREIGN KEY (id_material)
+    REFERENCES Material(id_material)
+);
