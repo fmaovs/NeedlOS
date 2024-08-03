@@ -33,10 +33,7 @@ CREATE TABLE Detalle_pedido(
 
 CREATE TABLE Estado(
 	id_estado INT PRIMARY KEY NOT NULL,
-    en_proceso BOOLEAN,
-    finalizado BOOLEAN,
-    entregado BOOLEAN,
-    anulado BOOLEAN
+    estado VARCHAR(15),
 );
 
 CREATE TABLE Estado_pedido(
