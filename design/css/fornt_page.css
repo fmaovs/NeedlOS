@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; 
+    position: fixed;
+    font-family: "Inter", sans-serif;
+}
+
+/*VIDEO DE FONDO*/
+.fondo-fronPage{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/*CONTENEDOR LOGO/MARCA/TEXTO*/
+.logo-eslogan{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    margin-top: 7.4em;
+    margin-bottom: 0;
+
+    /*NO PUEDE SER SELECCIONADO*/
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;   
+    -ms-user-select: none;      
+    pointer-events: none;   
+}
+
+/*IMAGEN LOGO*/
+img[src="/img/logo-blanco.png"]{
+    height: 16em;
+    margin: auto;
+    margin-right: 1.5em;
+    margin-left: 0;
+}
+
+/*CONTENEDOR TEXTO*/
+.text-title{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    
+}
+
+/*MARCA*/
+.nombre-marca{
+    font-size: 8.4em;
+    font-weight: 400;
+    color: #FFFFFF;
+    margin-bottom: 0;
+    margin-top: 11%;
+    line-height: .8em;
+}
+
+/*DESCRIPCION*/
+.description{
+    font-size: 2em;
+    font-weight: 200;
+    color: #DFDFDF;
+    margin-bottom: 11%;
+    margin-top: 0;
+    line-height: 1em;
+    padding-left: .38em;
+}
+
+/*IMAGEN R*/
+img[src="/img/r-blanco.png"]{
+    height: 1.6em;
+    margin-top: 3em;
+    margin-bottom: auto;
+}
+
+/*SEPARADOR DE TITULO Y ESLOGAN*/
+.sep-horizontal-frontPage{
+    height: .1em;
+    width: 64%;
+    background-color: #FFFFFF;
+    margin: 4.4em auto;
+}
+
+/*ESLOGAN*/
+.eslogan{
+    font-size: 3.8em;
+    color: #FFFFFF;
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+
+    /*NO PUEDE SER SELECCIONADO*/
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;   
+    -ms-user-select: none;      
+    pointer-events: none;
+}
+
+/*BOTON INICIAR SESION*/
+.iniciar-sesion{
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: .8em;
+    margin: auto;
+    margin-top: 3.8em;
+    width: 9%;
+    border-radius: .8em;
+    outline: none;
+    border: none;
+    transition: .3s ease-in-out;
+    will-change: transform;
+}
+/*HOVER DEL BOTON*/
+.iniciar-sesion:hover{
+    transform: scale(1.04);
+}
+
+.footer{
+    color: #FFFFFF;
+    font-size: .9em;
+    font-weight: 200;
+}
+
+.footer p{
+    margin: .8em;
+}
