@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
+html{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+}
 body{
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; 
-    position: fixed;
-    font-family: "Inter", sans-serif;
+    flex-direction: column;
 }
 
 /*VIDEO DE FONDO*/
@@ -22,117 +26,135 @@ body{
     z-index: -1;
 }
 
-/*CONTENEDOR LOGO/MARCA/TEXTO*/
-.logo-eslogan{
+/*CONTENEDOR LOGO, TITULO, ESLOGAN, COPYRIGHT*/
+.marca{
+    width: 42.8vw;
+    height: 13.19vw;
+    margin: 0 auto;
+    margin-top: 12.3vh;
     display: flex;
     flex-direction: row;
-    margin: auto;
-    margin-top: 7.4em;
-    margin-bottom: 0;
-
-    /*NO PUEDE SER SELECCIONADO*/
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;   
-    -ms-user-select: none;      
-    pointer-events: none;   
+    overflow: hidden;
 }
 
-/*IMAGEN LOGO*/
+/*LOGO*/
 img[src="/img/logo-blanco.png"]{
-    height: 16em;
-    margin: auto;
-    margin-right: 1.5em;
-    margin-left: 0;
+    width: 28.41%;
+    height: fit-content;
+    margin: auto 0;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-/*CONTENEDOR TEXTO*/
-.text-title{
+/*CONTENEDOR TITULO, ESLOGAN*/
+.marca-titulo{
     height: 100%;
     width: 100%;
+    margin-left: 4%;
     display: flex;
     flex-direction: column;
-    justify-content: center;    
+    justify-content: center;
 }
 
-/*MARCA*/
+/*NEEDLOS*/
 .nombre-marca{
-    font-size: 8.4em;
+    margin: 0;
+    color: white;
     font-weight: 400;
-    color: #FFFFFF;
-    margin-bottom: 0;
-    margin-top: 11%;
-    line-height: .8em;
-}
-
-/*DESCRIPCION*/
-.description{
-    font-size: 2em;
-    font-weight: 200;
-    color: #DFDFDF;
-    margin-bottom: 11%;
-    margin-top: 0;
-    line-height: 1em;
-    padding-left: .38em;
-}
-
-/*IMAGEN R*/
-img[src="/img/r-blanco.png"]{
-    height: 1.6em;
-    margin-top: 3em;
-    margin-bottom: auto;
-}
-
-/*SEPARADOR DE TITULO Y ESLOGAN*/
-.sep-horizontal-frontPage{
-    height: .1em;
-    width: 64%;
-    background-color: #FFFFFF;
-    margin: 4.4em auto;
-}
-
-/*ESLOGAN*/
-.eslogan{
-    font-size: 3.8em;
-    color: #FFFFFF;
-    margin: auto;
-    margin-top: 0;
-    margin-bottom: 0;
-    text-align: center;
-
-    /*NO PUEDE SER SELECCIONADO*/
+    font-size: 6.98vw;
+    line-height: 82%;
     user-select: none;
+}
+
+/*TAILOR WOFTWARE*/
+.description{
+    margin: 0;
+    margin-left: 1.8%;
+    color: #DFDFDF;
+    font-weight: 200;
+    font-size: 2.06vw;
+    line-height: 100%;
+    user-select: none;
+}
+
+/*COPYRIGHT*/
+img[src="/img/r-blanco.png"]{
+    width: 3.08%;
+    height: fit-content;
+    margin: auto 0;
+    padding-top: 5%;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
     -webkit-user-select: none;
-    -moz-user-select: none;   
-    -ms-user-select: none;      
-    pointer-events: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*SEPARACION MARCA/ESLOGAN*/
+.sep-horizontal-frontPage{
+    width: 80%;
+    height: 0.2%;
+    background-color: #FFFFFF;
+    /*margin: 6.9vh auto;*/
+    margin: calc(32vh - 13vw) auto;
+}
+
+/*EL MEJOR SOFTWARE...*/
+.eslogan{
+    font-size: clamp(2em, 2.9vw, 20em);
+    color: #FFFFFF;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 80%;
+    user-select: none;
 }
 
 /*BOTON INICIAR SESION*/
 .iniciar-sesion{
-    font-size: 1.2em;
-    font-weight: 600;
-    padding: .8em;
-    margin: auto;
-    margin-top: 3.8em;
-    width: 9%;
+    font-size: 1vw;
+    font-weight: 500;
+    padding: 0.9%;
+    margin: 0 auto;
+    margin-top: 9vh;
+    width: 10%;
+    min-width: 8em;
+    max-width: 40%;
     border-radius: .8em;
+    cursor: pointer;
     outline: none;
     border: none;
+    overflow: hidden;
     transition: .3s ease-in-out;
     will-change: transform;
 }
-/*HOVER DEL BOTON*/
+
+/*HOVER INICIAR SESION*/
 .iniciar-sesion:hover{
     transform: scale(1.04);
 }
 
 .footer{
-    color: #FFFFFF;
-    font-size: .9em;
-    font-weight: 200;
+    margin-top: auto;
 }
 
 .footer p{
-    margin: .8em;
+    color: #FFFFFF;
+    margin: 0.8% 0.8%;
+    font-size: 0.7vw;
+    font-weight: 200;
+    line-height: 80%;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
