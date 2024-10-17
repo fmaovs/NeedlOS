@@ -35,6 +35,13 @@ body{
     display: flex;
     flex-direction: row;
     overflow: hidden;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 /*LOGO*/
@@ -119,10 +126,11 @@ img[src="/img/r-blanco.png"]{
 /*BOTON INICIAR SESION*/
 .iniciar-sesion{
     font-size: 1vw;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.9%;
     margin: 0 auto;
     margin-top: 9vh;
+    margin-bottom: auto;
     width: 10%;
     min-width: 8em;
     max-width: 40%;
@@ -131,6 +139,13 @@ img[src="/img/r-blanco.png"]{
     outline: none;
     border: none;
     overflow: hidden;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     transition: .3s ease-in-out;
     will-change: transform;
 }
@@ -140,10 +155,13 @@ img[src="/img/r-blanco.png"]{
     transform: scale(1.04);
 }
 
-.footer{
-    margin-top: auto;
+.iniciar-sesion.click{
+    width: 100%;
+    height: 83%;
+    transform: rotate(-80.72deg) translateY(47%);
 }
 
+/*POWERED BY ADS...*/
 .footer p{
     color: #FFFFFF;
     margin: 0.8% 0.8%;
