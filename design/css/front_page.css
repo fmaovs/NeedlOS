@@ -11,6 +11,7 @@ body{
     width: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
@@ -19,11 +20,11 @@ body{
 .fondo-fronPage{
     height: 100%;
     width: 100%;
-    position: fixed;
     top: 0;
     left: 0;
-    object-fit: cover;
     z-index: -1;
+    object-fit: cover;
+    position: fixed;
 }
 
 /*CONTENEDOR LOGO, TITULO, ESLOGAN, COPYRIGHT*/
@@ -36,11 +37,6 @@ body{
     flex-direction: row;
     overflow: hidden;
     -webkit-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -50,11 +46,6 @@ img[src="/img/logo-blanco.png"]{
     height: fit-content;
     margin: auto 0;
     -webkit-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -96,11 +87,6 @@ img[src="/img/r-blanco.png"]{
     margin: auto 0;
     padding-top: 5%;
     -webkit-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -109,7 +95,6 @@ img[src="/img/r-blanco.png"]{
     width: 80%;
     height: 0.2%;
     background-color: #FFFFFF;
-    /*margin: 6.9vh auto;*/
     margin: calc(32vh - 13vw) auto;
 }
 
@@ -140,11 +125,6 @@ img[src="/img/r-blanco.png"]{
     border: none;
     overflow: hidden;
     -webkit-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     transition: .3s ease-in-out;
     will-change: transform;
@@ -155,12 +135,6 @@ img[src="/img/r-blanco.png"]{
     transform: scale(1.04);
 }
 
-.iniciar-sesion.click{
-    width: 100%;
-    height: 83%;
-    transform: rotate(-80.72deg) translateY(47%);
-}
-
 /*POWERED BY ADS...*/
 .footer p{
     color: #FFFFFF;
@@ -169,10 +143,5 @@ img[src="/img/r-blanco.png"]{
     font-weight: 200;
     line-height: 80%;
     -webkit-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
