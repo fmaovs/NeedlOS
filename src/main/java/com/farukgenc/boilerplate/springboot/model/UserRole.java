@@ -1,12 +1,15 @@
 package com.farukgenc.boilerplate.springboot.model;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum UserRole {
 
-	USER, ADMIN
+	USER, ADMIN;
+
+	@JsonCreator
+	public static UserRole fromValue(String value) {
+		return UserRole.valueOf(value.toUpperCase());
+	}
 
 }

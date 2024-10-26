@@ -1,7 +1,9 @@
 package com.farukgenc.boilerplate.springboot.security.dto;
 
+import com.farukgenc.boilerplate.springboot.model.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,5 +32,8 @@ public class RegistrationRequest {
 
 	@NotEmpty(message = "{registration_password_not_empty}")
 	private String password;
+
+	@NotNull(message = "{registration_user_role_not_null}")
+	private UserRole user_role;
 
 }

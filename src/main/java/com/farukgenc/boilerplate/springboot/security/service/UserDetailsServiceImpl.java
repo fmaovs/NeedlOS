@@ -14,11 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Objects;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
