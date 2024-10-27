@@ -3,8 +3,6 @@ package com.farukgenc.boilerplate.springboot.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-
 @Getter
 @Setter
 @Entity
@@ -20,12 +18,16 @@ public class User {
 
 	private String name;
 
+	private String lastname;
+
 	@Column(unique = true)
 	private String username;
 
 	private String password;
 
 	private String email;
+
+	private int phone;
 
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
