@@ -20,7 +20,7 @@ public class ExceptionMessageAccessor {
 	public String getMessage(Locale locale, String key, Object... parameter) {
 
 		if (Objects.isNull(locale)) {
-			return messageSource.getMessage(key, parameter, ProjectConstants.TURKISH_LOCALE);
+			return messageSource.getMessage(key, parameter, ProjectConstants.SPANISH_COLOMBIA_LOCALE);
 		}
 
 		return messageSource.getMessage(key, parameter, locale);

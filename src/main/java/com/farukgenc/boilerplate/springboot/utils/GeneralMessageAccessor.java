@@ -7,11 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Service
 public class GeneralMessageAccessor {
 
@@ -24,7 +20,7 @@ public class GeneralMessageAccessor {
 	public String getMessage(Locale locale, String key, Object... parameter) {
 
 		if (Objects.isNull(locale)) {
-			return messageSource.getMessage(key, parameter, ProjectConstants.TURKISH_LOCALE);
+			return messageSource.getMessage(key, parameter, ProjectConstants.SPANISH_COLOMBIA_LOCALE);
 		}
 
 		return messageSource.getMessage(key, parameter, locale);
