@@ -1,0 +1,7 @@
+/*SEPARACION MARCA/ESLOGAN*/
+.sep-horizontal-frontPage{
+    width: 80%;
+    height: 0.2%;
+    background-color: #FFFFFF;
+    margin: calc(3.7vh + 1.7vw) auto;
+}

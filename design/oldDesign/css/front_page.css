@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+html{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+}
+body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/*VIDEO DE FONDO*/
+.fondo-fronPage{
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    object-fit: cover;
+    position: fixed;
+}
+
+/*CONTENEDOR LOGO, TITULO, ESLOGAN, COPYRIGHT*/
+.marca{
+    width: 42.8vw;
+    height: 13.19vw;
+    margin: 0 auto;
+    /*margin-top: 12.3vh;*/
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/*LOGO*/
+img[src="/img/logo-blanco.png"]{
+    width: 28.41%;
+    height: fit-content;
+    margin: auto 0;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/*CONTENEDOR TITULO, ESLOGAN*/
+.marca-titulo{
+    height: 100%;
+    width: 100%;
+    margin-left: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/*NEEDLOS*/
+.nombre-marca{
+    margin: 0;
+    color: white;
+    font-weight: 400;
+    font-size: 6.98vw;
+    line-height: 82%;
+    user-select: none;
+}
+
+/*TAILOR WOFTWARE*/
+.description{
+    margin: 0;
+    margin-left: 1.8%;
+    color: #DFDFDF;
+    font-weight: 200;
+    font-size: 2.06vw;
+    line-height: 100%;
+    user-select: none;
+}
+
+/*COPYRIGHT*/
+img[src="/img/r-blanco.png"]{
+    width: 3.08%;
+    height: fit-content;
+    margin: auto 0;
+    padding-top: 5%;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/*SEPARACION MARCA/ESLOGAN*/
+.sep-horizontal-frontPage{
+    width: 80%;
+    height: 0.2%;
+    background-color: #FFFFFF;
+    margin: calc(3.7vh + 1.7vw) auto;
+}
+
+/*EL MEJOR SOFTWARE...*/
+.eslogan{
+    font-size: clamp(2em, 2.9vw, 20em);
+    color: #FFFFFF;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 80%;
+    user-select: none;
+}
+
+/*BOTON INICIAR SESION*/
+.iniciar-sesion{
+    font-size: calc(1vh + 0.6vw);
+    font-weight: 600;
+    padding: 0.9%;
+    margin: 0 auto;
+    margin-top: 9vh;
+    margin-bottom: auto;
+    width: calc(6vw + 9vh);
+    height: calc(1vw + 4vh);
+    min-width: 8em;
+    max-width: 40%;
+    border-radius: .8em;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    overflow: hidden;
+    -webkit-user-drag: none;
+    user-select: none;
+    transition: .3s ease-in-out;
+    will-change: transform;
+}
+
+/*HOVER INICIAR SESION*/
+.iniciar-sesion:hover{
+    transform: scale(1.04);
+}
+
+/*POWERED BY ADS...*/
+.footer p{
+    color: #FFFFFF;
+    margin: 0.8% 0.8%;
+    font-size: 0.7vw;
+    font-weight: 200;
+    line-height: 80%;
+    -webkit-user-drag: none;
+    user-select: none;
+}

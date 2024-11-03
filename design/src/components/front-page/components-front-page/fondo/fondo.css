@@ -1,0 +1,10 @@
+/*VIDEO DE FONDO*/
+.fondo-fronPage{
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    object-fit: cover;
+    position: fixed;
+}

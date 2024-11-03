@@ -1,0 +1,63 @@
+/*CONTENEDOR LOGO, TITULO, ESLOGAN, COPYRIGHT*/
+.marca{
+    width: 42.8vw;
+    height: 13.19vw;
+    margin: 0 auto;
+    /*margin-top: 12.3vh;*/
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/*LOGO*/
+.logo-blanco{
+    width: 28.41%;
+    height: fit-content;
+    margin: auto 0;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/*CONTENEDOR TITULO, ESLOGAN*/
+.marca-titulo{
+    height: 100%;
+    width: 100%;
+    margin-left: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/*NEEDLOS*/
+.nombre-marca{
+    margin: 0;
+    color: white;
+    font-weight: 400;
+    font-size: 6.98vw;
+    line-height: 82%;
+    user-select: none;
+}
+
+/*TAILOR WOFTWARE*/
+.description{
+    margin: 0;
+    margin-left: 1.8%;
+    color: #DFDFDF;
+    font-weight: 200;
+    font-size: 2.06vw;
+    line-height: 100%;
+    user-select: none;
+}
+
+/*COPYRIGHT*/
+.r{
+    width: 3.08%;
+    height: fit-content;
+    margin: auto 0;
+    padding-top: 5%;
+    -webkit-user-drag: none;
+    user-select: none;
+}
