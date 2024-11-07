@@ -1,9 +1,9 @@
 /*CONTENEDOR LOGO, TITULO, ESLOGAN, COPYRIGHT*/
 .marca{
     width: 42.8vw;
-    height: 13.19vw;
+    min-width: 40rem;
+    height: auto;
     margin: 0 auto;
-    /*margin-top: 12.3vh;*/
     margin-top: auto;
     display: flex;
     flex-direction: row;
@@ -36,7 +36,7 @@
     margin: 0;
     color: white;
     font-weight: 400;
-    font-size: 6.98vw;
+    font-size: clamp(6.6rem, 6.98vw, 6.98vw);
     line-height: 82%;
     user-select: none;
 }
@@ -47,7 +47,7 @@
     margin-left: 1.8%;
     color: #DFDFDF;
     font-weight: 200;
-    font-size: 2.06vw;
+    font-size: clamp(1.6rem, 2.06vw, 2.06vw);
     line-height: 100%;
     user-select: none;
 }

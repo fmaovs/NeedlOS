@@ -1,6 +1,6 @@
 /*BOTON INICIAR SESION*/
 .iniciar-sesion{
-    font-size: calc(1vh + 0.6vw);
+    font-size: clamp(1.1rem, calc(1vh + 0.6vw), calc(1vh + 0.6vw));
     font-weight: 600;
     padding: 0.9%;
     margin: 0 auto;
@@ -8,7 +8,7 @@
     margin-bottom: auto;
     width: calc(6vw + 9vh);
     height: calc(1vw + 4vh);
-    min-width: 8em;
+    min-width: 10rem;
     max-width: 40%;
     border-radius: .8em;
     cursor: pointer;
