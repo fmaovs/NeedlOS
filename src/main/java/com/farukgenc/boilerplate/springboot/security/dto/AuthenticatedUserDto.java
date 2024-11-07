@@ -13,6 +13,8 @@ public class AuthenticatedUserDto {
 
 	private String name;
 
+	private Long phone;
+
 	private String username;
 
 	private String password;

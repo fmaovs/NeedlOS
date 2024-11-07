@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    public Order findByOrderByDate(Date date);
-    public List<Order> findByOrderByDateDesc(Date date);
+    //public Order findByOrderByDate(Date date);
+
 }

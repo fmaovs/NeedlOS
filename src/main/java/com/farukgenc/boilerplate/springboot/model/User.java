@@ -27,7 +27,7 @@ public class User {
 
 	private String email;
 
-	private int phone;
+	private Long phone;
 
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
