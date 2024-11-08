@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -19,6 +20,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_order;
 
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = false)
     private Date date;
 
@@ -27,5 +29,8 @@ public class Order {
 
     @Column
     private float saldo;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Customer customer;
 
 }

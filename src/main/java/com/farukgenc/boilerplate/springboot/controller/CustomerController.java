@@ -3,26 +3,46 @@ package com.farukgenc.boilerplate.springboot.controller;
 import com.farukgenc.boilerplate.springboot.model.Customer;
 import com.farukgenc.boilerplate.springboot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
+
     @Autowired
     private CustomerService customerService;
 
     @GetMapping("/all")
-    public List<Customer> getCustomerService() {
+    public List<Customer> getAllCustomers() {
         return customerService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Customer> getCustomerById(Long id) {
+    public Optional<Customer> getCustomerById(@PathVariable Long id) {
         return customerService.findById(id);
     }
+
+    @PostMapping
+    public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
+        customerService.save(customer);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Customer created");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
+        Optional<Customer> customer = customerService.findById(id);
+        if (customer.isPresent()) {
+            customerService.delete(customer.get());
+            return ResponseEntity.ok("Customer deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+        }
+    }
 }
+

@@ -2,6 +2,7 @@ package com.farukgenc.boilerplate.springboot.service;
 
 import com.farukgenc.boilerplate.springboot.model.Customer;
 import com.farukgenc.boilerplate.springboot.repository.CustomerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,12 @@ public class CustomerService {
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
-    public Customer save(Customer customer) {
-        return customerRepository.save(customer);
+    @Transactional
+    public String save(Customer customer) {
+        customerRepository.save(customer);
+        return "";
     }
+    @Transactional
     public void delete(Customer customer) {
         customerRepository.delete(customer);
     }
