@@ -1,0 +1,41 @@
+/*BOTON INICIAR SESION*/
+.iniciar-sesion {
+  /*LETRA*/
+  font-size: clamp(1.1rem, calc(1vh + 0.6vw), calc(1vh + 0.6vw));
+  font-weight: 500;
+  color: rgb(0, 0, 0);
+
+  /*PADDING Y MARGIN*/
+  padding: 0.9%;
+  margin: 9vh auto auto auto;
+
+  /*TAMAÑO*/
+  width: calc(6vw + 9vh);
+  min-width: 11rem;
+  max-width: 40%;
+
+  height: calc(1vw + 4vh);
+  min-height: 3.2rem;
+
+  /*BORDER*/
+  border-radius: 0.8em;
+  border: 1px solid rgb(255, 255, 255);
+
+  /*PROPIEDADES*/
+  cursor: pointer;
+  overflow: hidden;
+  will-change: transform;
+  -webkit-user-drag: none;
+  user-select: none;
+
+  /*TRANSICION*/
+  transition: 0.4s ease-in-out;
+}
+
+/*HOVER INICIAR SESION*/
+.iniciar-sesion:hover {
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.4);
+
+  border: 1px solid #000000;
+  border-radius: 0.8em;
+}
