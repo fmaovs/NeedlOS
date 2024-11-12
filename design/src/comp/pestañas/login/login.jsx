@@ -18,9 +18,8 @@ export default function Login() {
         <Footer />
       </div>
       <div className="cont-lados">
-        <div className="cont-form">
-          <FormLogin />
-        </div>
+        <div className="cont-form"></div>
+        <FormLogin />
       </div>
     </div>
   );

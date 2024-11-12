@@ -20,9 +20,11 @@
 
 /*DERECHA*/
 .cont-form {
+  position: fixed;
+  z-index: -1;
   background-color: white;
-  width: 87%;
-  min-width: 40rem;
+  width: 43.5%;
+  min-width: 48rem;
   height: 100%;
   transform: skew(-9.28deg);
   display: flex;
