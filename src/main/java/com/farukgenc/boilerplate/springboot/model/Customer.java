@@ -1,7 +1,6 @@
 package com.farukgenc.boilerplate.springboot.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity

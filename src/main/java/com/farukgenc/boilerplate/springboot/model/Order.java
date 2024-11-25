@@ -25,7 +25,7 @@ public class Order {
     @Column(nullable = false)
     private float total_abonos;
 
-    @Column
+    @Column(nullable = false)
     private float saldo;
 
 }
