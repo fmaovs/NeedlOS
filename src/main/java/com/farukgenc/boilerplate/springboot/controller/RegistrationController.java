@@ -11,11 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/register")

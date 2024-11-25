@@ -26,8 +26,8 @@ public class RegistrationRequest {
 	@NotEmpty(message = "{registration_email_not_empty}")
 	private String email;
 
-	@NotNull(message = "{registration_user_role_not_null}")
-	private int phone;
+	@NotNull(message = "{registration_phone_not_empty}")
+	private Long phone;
 
 	@NotEmpty(message = "{registration_username_not_empty}")
 	private String username;
