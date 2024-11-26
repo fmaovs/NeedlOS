@@ -7,6 +7,8 @@ export default function CheckBox({
   type,
   placeholder,
   id,
+  valor,
+  cambio
 }) {
   return (
     <>
@@ -22,6 +24,8 @@ export default function CheckBox({
           placeholder={placeholder}
           id={id}
           className="inputs"
+          value={valor}
+          onChange={cambio}
         />
       </div>
     </>
