@@ -29,7 +29,7 @@ export default function IniciarSesion() {
       localStorage.setItem("authToken", response.data.token);
       // Redireccionar o actualizar estado de autenticación
       console.log("Login exitoso", response.data);
-      navigate("/CrearMaterial");
+      navigate("/inventario/nuevo");
     } catch (error) {
       setError("Credenciales incorrectas");
       console.error("Error de login:", error);
