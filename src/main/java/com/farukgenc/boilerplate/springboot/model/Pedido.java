@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -15,7 +16,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_order;
@@ -25,12 +26,24 @@ public class Order {
     private Date date;
 
     @Column(nullable = false)
-    private float total_abonos;
+    private double total_abonos;
 
     @Column(nullable = false)
-    private float saldo;
+    private double saldo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalles;
+
+    public double getTotalAbonos() {
+        return total_abonos;
+    }
+
+    public void setTotalAbonos(double totalAbonos) {
+        this.total_abonos = totalAbonos;
+    }
+
 
 }

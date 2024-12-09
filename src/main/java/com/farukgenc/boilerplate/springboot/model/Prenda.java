@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +24,9 @@ public class Prenda {
 
     @Column
     private Double valor;
+
+    @OneToMany(mappedBy = "prenda", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalles;
 
     //******************************************
 
