@@ -22,7 +22,7 @@
 .cont-form {
   position: fixed;
   z-index: -1;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   width: 43.5%;
   min-width: 48rem;
   height: 100%;

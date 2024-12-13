@@ -1,52 +1,41 @@
-  .container input {
-    display: none;
-  }
+/*OCULTAR BOTON ORIGINAL*/
+.cont-cb input{
+  display: none;
+}
 
-  .container {
-    margin: auto 0;
-    display: block;
-    position: relative;
-    cursor: pointer;
-    font-size: 20px;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
 
-  .checkmark {
-    position: relative;
-    top: 0;
-    left: 0;
-    height: 1.3em;
-    width: 1.3em;
-    background-color: #2196F300;
-    border-radius: 0.25em;
-    transition: all 0.25s;
-  }
+/*ESTILO DEL BOTON*/
+.check-style {
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 0 0 1px rgb(203, 203, 203);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
 
-  .container input:checked ~ .checkmark {
-    background-color: #014093;
-  }
+/*CAMBIAR ESTILO CUANDO ESTE MARCADO*/
+.cont-cb input[type="checkbox"]:checked + .check-style {
+  background-color: #014093;
+  box-shadow: 0 0 0 1px #014093;
+}
 
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    transform: rotate(0deg);
-    border: 0.01em solid black;
-    left: 0;
-    top: 0;
-    width: 1.05em;
-    height: 1.05em;
-    border-radius: 0.25em;
-    transition: all 0.25s, border-width 0.1s;
-  }
+.cont-cb input[type="checkbox"]:checked + .check-style:before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  width: 10px;
+  height: 5px;
+  background-color: transparent;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white; 
+  transform: rotate(-45deg);
+}
 
-  .container input:checked ~ .checkmark:after {
-    left: 0.45em;
-    top: 0.25em;
-    width: 0.25em;
-    height: 0.5em;
-    border-color: #fff0 white white #fff0;
-    border-width: 0 0.15em 0.15em 0;
-    border-radius: 0em;
-    transform: rotate(45deg);
-  }
+/*ESTILOS DEL LABEL*/
+.cont-cb {
+  display: inline-block;
+  cursor: pointer;
+}

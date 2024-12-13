@@ -1,12 +1,13 @@
 .cont-lb{
     width: 90%;
-    margin: 1.4vh auto 1.4vh auto;
+    margin: 2vh auto 2vh auto;
 }
 
 .lb-inp{
     cursor: pointer;
     width: 90%;
     box-sizing: border-box;
+    font-weight: 500;
 }
 
 .cont-inp{

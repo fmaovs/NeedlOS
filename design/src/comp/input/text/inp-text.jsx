@@ -13,7 +13,7 @@ export default function CheckBox({
   return (
     <>
       <div className="cont-lb">
-        <label for={lbDireccion} className="lb-inp">
+        <label htmlFor={lbDireccion} className="lb-inp">
           {txt}
         </label>
       </div>
@@ -26,6 +26,7 @@ export default function CheckBox({
           className="inputs"
           value={valor}
           onChange={cambio}
+          autocomplete="off"
         />
       </div>
     </>
