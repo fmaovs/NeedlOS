@@ -1,4 +1,4 @@
-import Encabezado from '../encabezado-seccion/encabezado.jsx'
+import Encabezado from '../../encabezado-seccion/encabezado.jsx'
 
 export default function Ordenes() {
     return(

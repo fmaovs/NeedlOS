@@ -1,6 +1,6 @@
 import './render-secciones.css'
 
-import Ordenes from "../ordenes/ordenes"
+import Ordenes from "../secciones/ordenes/ordenes.jsx"
 
 export default function Render() {
     return (

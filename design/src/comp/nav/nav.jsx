@@ -1,7 +1,7 @@
 import "./nav.css";
 import LogoImgTxt from "../logo/logo-negro/LogoImg+Text.jsx";
 import SepXBlancoSmall from "../separadores/sep-x-blanco-small/sep-x-blanco-s.jsx";
-import Secciones from "../secciones/recuadro-seccion/secciones.jsx";
+import Secciones from "../recuadro-seccion/secciones.jsx";
 
 const Ordenes = "../../../public/media/img/ordenes.png";
 const Informes = '../../../public/media/img/informes.png'
