@@ -1,7 +1,7 @@
 import "./nav.css";
 import LogoImgTxt from "../logo/logo-negro/LogoImg+Text.jsx";
 import SepXBlancoSmall from "../separadores/sep-x-blanco-small/sep-x-blanco-s.jsx";
-import Secciones from "../recuadro-seccion/secciones.jsx";
+import OpcionNav from "../opciones-nav/opciones-nav.jsx";
 
 const Ordenes = "../../../public/media/img/ordenes.png";
 const Informes = '../../../public/media/img/informes.png'
@@ -17,15 +17,15 @@ export default function Nav() {
     <div className="cont-nav">
       <LogoImgTxt />
       <SepXBlancoSmall />
-      <Secciones img={Ordenes} txt={"Ordenes"} clase={"cont-seccion-first"} />
-      <Secciones img={Informes} txt={"Informes"} clase={"cont-seccion"} />
-      <Secciones img={Inventario} txt={"Inventario"} clase={"cont-seccion"} />
-      <Secciones img={Usuarios} txt={"Usuarios"} clase={"cont-seccion"} />
-      <Secciones img={Gastos} txt={"Gastos"} clase={"cont-seccion"} />
-      <Secciones img={ArqueoCaja} txt={"Arqueo Caja"} clase={"cont-seccion"} />
-      <Secciones img={Nomina} txt={"Nomina"} clase={"cont-seccion-last"} />
+      <OpcionNav img={Ordenes} txt={"Ordenes"} clase={"cont-seccion-first"} />
+      <OpcionNav img={Informes} txt={"Informes"} clase={"cont-seccion"} />
+      <OpcionNav img={Inventario} txt={"Inventario"} clase={"cont-seccion"} />
+      <OpcionNav img={Usuarios} txt={"Usuarios"} clase={"cont-seccion"} />
+      <OpcionNav img={Gastos} txt={"Gastos"} clase={"cont-seccion"} />
+      <OpcionNav img={ArqueoCaja} txt={"Arqueo Caja"} clase={"cont-seccion"} />
+      <OpcionNav img={Nomina} txt={"Nomina"} clase={"cont-seccion-last"} />
       <SepXBlancoSmall />
-      <Secciones img={Ajustes} txt={"Ajustes"} clase={"cont-seccion-sett"} />
+      <OpcionNav img={Ajustes} txt={"Ajustes"} clase={"cont-seccion-sett"} />
     </div>
   );
 }

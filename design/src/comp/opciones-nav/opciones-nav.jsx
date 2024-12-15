@@ -1,4 +1,4 @@
-import './secciones.css'
+import './opciones-nav.css'
 
 export default function Secciones({ img , txt , clase }) {
     return(
