@@ -41,7 +41,7 @@ export default function IniciarSesion() {
 
       // Esperar 2 segundos antes de redirigir
       setTimeout(() => {
-        navigate("/ordenes");
+        navigate("/home");
       }, 2000);
     } catch (error) {
       setError("Credenciales incorrectas");
@@ -122,9 +122,7 @@ export default function IniciarSesion() {
         </div>
 
         <div className="cont-butt-login">
-          <button type="submit" className="buttom-login">
-            Login
-          </button>
+          <button type="submit" className="buttom-login">Login</button>
         </div>
       </form>
     </div>

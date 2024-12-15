@@ -1,4 +1,4 @@
-import "./logo.css";
+import "./logo-blanco.css";
 
 const Logo = "/public/media/img/logo-blanco.png";
 

@@ -26,7 +26,7 @@ export default function CheckBox({
           className="inputs"
           value={valor}
           onChange={cambio}
-          autocomplete="off"
+          autoComplete="off"
         />
       </div>
     </>
