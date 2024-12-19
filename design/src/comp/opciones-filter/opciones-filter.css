@@ -1,0 +1,78 @@
+.filter {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 1.2vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 1.2vh;
+    z-index: 0;
+    opacity: 0;
+    cursor: pointer;
+    transition: 0.3s ease-in;
+}
+
+/*COLORES*/
+.filter.azul::after{
+    opacity: 1;
+    background: linear-gradient(to right, #E2EEFF, #FFFFFF);
+}
+
+.filter.verde::after{
+    opacity: 1;
+    background: linear-gradient(to right, #E3FFE7, #FFFFFF);
+}
+
+.filter.amarillo::after{
+    opacity: 1;
+    background: linear-gradient(to right, #E3FFE7, #FFFFFF);
+}
+
+.filter.amarillo::after{
+    opacity: 1;
+    background: linear-gradient(to right, #FFF3DC, #FFFFFF);
+}
+
+.filter.rojo::after{
+    opacity: 1;
+    background: linear-gradient(to right, #FFE5E4, #FFFFFF);
+}
+
+.filter.gris::after{
+    opacity: 1;
+    background: linear-gradient(to right, #eeeeee, #ffffff);
+}
+
+.filter * {
+    z-index: 1;
+}
+
+
+.filter-txt{
+    font-size: calc((0.2vw + 3.2vh)* 0.5);
+    margin-left: 2vh;
+    cursor: pointer;
+}
+
+.filter-img{
+    height: 50%;
+    width: auto;
+    object-fit: contain;
+    margin-right: 2vh;
+}
+
+.filter-img:hover{
+    cursor: pointer;
+}
