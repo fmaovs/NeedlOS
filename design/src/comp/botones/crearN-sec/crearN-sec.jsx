@@ -1,11 +1,11 @@
-import './crearN.css'
+import "./crearN.css";
 
-const CrearNuevo = '../../../../public/media/img/crear.png'
+const CrearNuevo = "../../../../public/media/img/crear.png";
 
-export default function CrearNSec({ visible }) {
-    return(
-        <button className='cont-crear-nuevo' id={visible}>
-            <img src={CrearNuevo} className='img-crear-nuevo'/>
-        </button>
-    )
+export default function CrearNSec({ visible, onClick }) {
+  return (
+    <div className="cont-crear-nuevo" id={visible} onClick={onClick}>
+      <img src={CrearNuevo} className="img-crear-nuevo" />
+    </div>
+  );
 }

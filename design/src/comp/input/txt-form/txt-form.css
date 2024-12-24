@@ -1,0 +1,18 @@
+.box-form {
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #D2D2D2;
+  outline: none;
+  font-size: calc((0.2vw + 3.2vh) * 0.4);
+}
+
+.box-form[type="number"]::-webkit-inner-spin-button,
+.box-form[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.box-form[type="number"] {
+  -moz-appearance: textfield;
+}

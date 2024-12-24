@@ -7,6 +7,7 @@ import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
 import BotonFilter from "../../botones/filter-sec/filter-sec.jsx";
 import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
 import EspacioRender from "../../espacio-render/espacio-render.jsx";
+import CrearOrden from '../../formularios/crear-orden/crear-orden.jsx'
 
 const EnProceso = "../../../../public/media/img/enProceso.png";
 const Finalziado = "../../../../public/media/img/entregado.png";
@@ -27,6 +28,8 @@ export default function Ordenes() {
     <TbEnProceso />
   );
   const [filtroSeleccionado, setFiltroSeleccionado] = useState("En Proceso");
+
+  const [mostrarFormulario, setMostrarFormulario] = useState(false)
 
   const handleFilterClick = (filtro) => {
     // Si es el mismo que ya esta no hace nada
@@ -56,6 +59,16 @@ export default function Ordenes() {
     }
   };
 
+  //Mostrar formulario de crear orden
+  const mostrarCrearOrden = () => {
+    setMostrarFormulario(true)
+  }
+
+  //Ocultar Formulario de crear orden
+  const ocultarCrearOrden = () => {
+    setMostrarFormulario(false)
+  }
+
   return (
     <>
       <Encabezado
@@ -65,7 +78,9 @@ export default function Ordenes() {
         opc2={"Prenda"}
         opc3={"Valor"}
         opc4={"N°"}
+        onClick={mostrarCrearOrden}
       />
+      {mostrarFormulario && <CrearOrden onClick={ocultarCrearOrden}/>}
       <SepXNegro />
       <div className="cont-filterAndBoton">
         <Filtrador>
