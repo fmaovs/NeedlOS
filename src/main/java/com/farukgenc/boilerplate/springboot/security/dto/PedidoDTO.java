@@ -12,8 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PedidoDTO {
     private Date date;
-    private double totalAbonos;
-    private double saldo;
     private Long customerId; // ID del cliente asociado
     private List<DetallePedidoDTO> detalles; // Lista de detalles del pedido
+    private Date fechaEntrega; // Fecha de entrega de la prenda
 }

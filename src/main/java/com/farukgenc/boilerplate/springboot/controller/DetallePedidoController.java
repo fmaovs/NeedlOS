@@ -23,9 +23,6 @@ public class DetallePedidoController {
         return ResponseEntity.ok("Estado cambiado correctamente");
     }
 
-    @GetMapping("/{id}/historial")
-    public ResponseEntity<List<EstadoPedidoDTO>> obtenerHistorial(@PathVariable Long id) {
-        return ResponseEntity.ok(detallePedidoService.obtenerHistorialEstados(id));
-    }
+
 
 }

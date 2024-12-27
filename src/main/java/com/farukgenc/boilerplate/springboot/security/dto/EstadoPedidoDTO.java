@@ -17,4 +17,7 @@ public class EstadoPedidoDTO {
 
     public EstadoPedidoDTO(Long id, Estado estado, LocalDateTime fechaCambio) {
     }
+
+    public EstadoPedidoDTO(Estado estado, LocalDateTime fechaCambio) {
+    }
 }

@@ -34,7 +34,7 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<DetallePedido> detalles;
 
     public double getTotalAbonos() {

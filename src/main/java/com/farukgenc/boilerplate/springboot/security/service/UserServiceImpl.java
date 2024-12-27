@@ -66,4 +66,8 @@ public class UserServiceImpl implements UserService {
 
 		return UserMapper.INSTANCE.convertToAuthenticatedUserDto(user);
 	}
+
+	public Iterable<User> findAll() {
+		return userRepository.findAll();
+	}
 }

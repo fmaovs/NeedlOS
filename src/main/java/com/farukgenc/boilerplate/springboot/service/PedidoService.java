@@ -1,22 +1,21 @@
 package com.farukgenc.boilerplate.springboot.service;
 
-import com.farukgenc.boilerplate.springboot.model.Customer;
-import com.farukgenc.boilerplate.springboot.model.DetallePedido;
-import com.farukgenc.boilerplate.springboot.model.Pedido;
-import com.farukgenc.boilerplate.springboot.model.Prenda;
-import com.farukgenc.boilerplate.springboot.repository.CustomerRepository;
-import com.farukgenc.boilerplate.springboot.repository.PedidoRepository;
-import com.farukgenc.boilerplate.springboot.repository.PrendaRepository;
+import com.farukgenc.boilerplate.springboot.model.*;
+import com.farukgenc.boilerplate.springboot.repository.*;
+import com.farukgenc.boilerplate.springboot.security.dto.DetallePedidoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
+
     @Autowired
     private PedidoRepository pedidoRepository;
 
@@ -26,13 +25,11 @@ public class PedidoService {
     @Autowired
     private PrendaRepository prendaRepository;
 
-    public List<Pedido> findAll(){
-        return pedidoRepository.findAll();
-    }
+    @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
 
-    public Pedido findById(Long id){
-        return pedidoRepository.findById(id).get();
-    }
+    @Autowired
+    private EstadoPedidoRepository estadoPedidoRepository;
 
     @Transactional
     public void createPedido(PedidoDTO pedidoDTO) {
@@ -43,38 +40,65 @@ public class PedidoService {
         // 2. Crear el pedido
         Pedido pedido = new Pedido();
         pedido.setDate(pedidoDTO.getDate());
-        pedido.setTotalAbonos((float) pedidoDTO.getTotalAbonos());
+        pedido.setTotalAbonos(0);
         pedido.setSaldo(0);
         pedido.setCustomer(customer);
 
         // 3. Crear los detalles del pedido
-        List<DetallePedido> detalles = pedidoDTO.getDetalles().stream().map(detalleDTO -> {
+        List<DetallePedido> detalles = new ArrayList<>();
+        for (DetallePedidoDTO detalleDTO : pedidoDTO.getDetalles()) {
+            // Buscar la prenda
             Prenda prenda = prendaRepository.findById(detalleDTO.getPrendaId())
                     .orElseThrow(() -> new IllegalArgumentException("Prenda no encontrada"));
 
+            // Crear el detalle del pedido
             DetallePedido detalle = new DetallePedido();
             detalle.setPedido(pedido);
             detalle.setPrenda(prenda);
             detalle.setCantidad(detalleDTO.getCantidad());
-            detalle.calcularValorTotal(); // Calcula el valor total para este detalle
-            return detalle;
-        }).collect(Collectors.toList());
+            detalle.setFechaEntrega(pedidoDTO.getFechaEntrega());
+            detalle.calcularValorTotal(); // Calcula el valor total
+            detallePedidoRepository.save(detalle); // Persistir el detalle primero
 
+            // Crear el estado inicial para este detalle
+            EstadoPedido estadoInicial = new EstadoPedido();
+            estadoInicial.setEstado(Estado.PENDIENTE);
+            estadoInicial.setFechaCambio(LocalDateTime.now());
+            estadoInicial.setDetallePedido(detalle); // Ahora el 'detalle' ya está en la base de datos
+            estadoPedidoRepository.save(estadoInicial);
+
+            // Asociar el estado inicial al detalle
+            detalle.setEstadoActual(estadoInicial);
+            detalles.add(detalle);
+        }
+
+        // 4. Asociar los detalles al pedido
         pedido.setDetalles(detalles);
 
+        // 5. Calcular el saldo total
         double totalPedido = detalles.stream()
                 .mapToDouble(DetallePedido::getValorTotal)
                 .sum();
         pedido.setSaldo((float) (totalPedido - pedido.getTotalAbonos()));
 
+        // 6. Guardar el pedido
         pedidoRepository.save(pedido);
     }
 
-    public Pedido update(Pedido pedido){
+    public List<Pedido> findAll() {
+        return pedidoRepository.findAll();
+    }
+
+    public Pedido findById(Long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+    }
+
+    public Pedido update(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
 
-    public void delete(Pedido pedido){
+    public void delete(Pedido pedido) {
         pedidoRepository.delete(pedido);
     }
 }

@@ -28,8 +28,17 @@ public class PedidoController {
 
     @PostMapping
     public ResponseEntity<String> createOrder(@RequestBody PedidoDTO pedidoDTO) {
-        pedidoService.createPedido(pedidoDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Pedido creado correctamente!");
+        try {
+            pedidoService.createPedido(pedidoDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Pedido creado correctamente");
+        } catch (Exception e) {
+            // Imprime el error en la consola para depuración
+            e.printStackTrace();
+
+            // Respuesta detallada para identificar el problema
+            String errorMessage = "Error al crear el pedido: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
     }
 
 }
