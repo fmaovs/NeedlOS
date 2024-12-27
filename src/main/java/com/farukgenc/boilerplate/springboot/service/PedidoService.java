@@ -4,6 +4,7 @@ import com.farukgenc.boilerplate.springboot.model.*;
 import com.farukgenc.boilerplate.springboot.repository.*;
 import com.farukgenc.boilerplate.springboot.security.dto.DetallePedidoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,13 +87,26 @@ public class PedidoService {
         pedidoRepository.save(pedido);
     }
 
-    public List<Pedido> findAll() {
-        return pedidoRepository.findAll();
+    public List<PedidoResponse> findAll() {
+        List<PedidoResponse> pedidos = new ArrayList<>();
+        for (DetallePedido detallePedido : detallePedidoRepository.findAll()) {
+            PedidoResponse pedidoResponse = new PedidoResponse();
+            pedidoResponse.setId(detallePedido.getPedido().getId());
+            String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
+            pedidoResponse.setCustomerName(nombreCompleto);
+            pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
+            pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
+            pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
+            pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+            pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
+            pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
+            pedidos.add(pedidoResponse);
+        }
+        return pedidos;
     }
 
-    public Pedido findById(Long id) {
-        return pedidoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+    public Optional<PedidoResponse> findById(Long id) {
+        return Optional.ofNullable(pedidoRepository.findPedidoResponseById(id));
     }
 
     public Pedido update(Pedido pedido) {

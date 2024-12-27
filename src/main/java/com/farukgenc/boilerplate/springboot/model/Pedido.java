@@ -19,7 +19,7 @@ import java.util.List;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_order;
+    private Long id;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = false)

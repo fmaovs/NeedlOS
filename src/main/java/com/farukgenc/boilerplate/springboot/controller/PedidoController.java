@@ -1,7 +1,7 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
-import com.farukgenc.boilerplate.springboot.model.Pedido;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import com.farukgenc.boilerplate.springboot.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/orders")
@@ -17,13 +20,13 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Pedido>> getOrders() {
+    public ResponseEntity<List<PedidoResponse>> getOrders() {
         return ResponseEntity.ok(pedidoService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> getOrderById(@PathVariable Long id) {
-        return ResponseEntity.ok(pedidoService.findById(id));
+    public ResponseEntity<Optional<PedidoResponse>> getOrderById(@PathVariable Long id_order) {
+        return ResponseEntity.ok(pedidoService.findById(id_order));
     }
 
     @PostMapping
