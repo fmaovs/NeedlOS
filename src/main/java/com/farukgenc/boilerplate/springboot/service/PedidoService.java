@@ -105,6 +105,24 @@ public class PedidoService {
         return pedidos;
     }
 
+    public List<PedidoResponse> findAllByEstado(String estado) {
+        List<PedidoResponse> pedidos = new ArrayList<>();
+        for (DetallePedido detallePedido : detallePedidoRepository.findPedidosByEstadoActual_Estado(Estado.valueOf(estado))) {
+            PedidoResponse pedidoResponse = new PedidoResponse();
+            pedidoResponse.setId(detallePedido.getPedido().getId());
+            String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
+            pedidoResponse.setCustomerName(nombreCompleto);
+            pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
+            pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
+            pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
+            pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+            pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
+            pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
+            pedidos.add(pedidoResponse);
+        }
+        return pedidos;
+    }
+
     public Optional<PedidoResponse> findById(Long id) {
         return Optional.ofNullable(pedidoRepository.findPedidoResponseById(id));
     }

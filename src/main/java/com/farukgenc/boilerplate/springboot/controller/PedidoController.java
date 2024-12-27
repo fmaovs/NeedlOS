@@ -24,6 +24,11 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.findAll());
     }
 
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<PedidoResponse>> getOrdersByEstado(@PathVariable String estado) {
+        return ResponseEntity.ok(pedidoService.findAllByEstado(estado));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<PedidoResponse>> getOrderById(@PathVariable Long id_order) {
         return ResponseEntity.ok(pedidoService.findById(id_order));
