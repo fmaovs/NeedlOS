@@ -15,6 +15,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/orders")
+@CrossOrigin(origins = "*")
 public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
