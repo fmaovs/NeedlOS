@@ -3,6 +3,7 @@ package com.farukgenc.boilerplate.springboot.service;
 import com.farukgenc.boilerplate.springboot.model.Prenda;
 import com.farukgenc.boilerplate.springboot.repository.PrendaRepository;
 import com.farukgenc.boilerplate.springboot.security.dto.PrendaDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PrendaResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,11 @@ public class PrendaService {
     @Autowired
     private PrendaRepository prendaRepository;
 
-    public List<PrendaDTO> getAllPrendas() {
-        List<PrendaDTO> prendaDTOList = new ArrayList<>();
+    public List<PrendaResponseDTO> getAllPrendas() {
+        List<PrendaResponseDTO> prendaDTOList = new ArrayList<>();
         for (Prenda prenda : prendaRepository.findAll()) {
-            PrendaDTO prendaDTO = new PrendaDTO();
+            PrendaResponseDTO prendaDTO = new PrendaResponseDTO();
+            prendaDTO.setId(prenda.getId());
             prendaDTO.setDescripcion(prenda.getDescripcion());
             prendaDTO.setValor(prenda.getValor());
             prendaDTOList.add(prendaDTO);
@@ -25,15 +27,16 @@ public class PrendaService {
         return prendaDTOList;
     }
 
-    public PrendaDTO getPrendaById(Long id) {
+    public PrendaResponseDTO getPrendaById(Long id) {
         Prenda prenda = prendaRepository.findById(id).orElse(null);
         if (prenda == null) {
             return null;
         }
-        PrendaDTO prendaDTO = new PrendaDTO();
-        prendaDTO.setDescripcion(prenda.getDescripcion());
-        prendaDTO.setValor(prenda.getValor());
-        return prendaDTO;
+        PrendaResponseDTO prendaResponseDTO = new PrendaResponseDTO();
+        prendaResponseDTO.setId(prenda.getId());
+        prendaResponseDTO.setDescripcion(prenda.getDescripcion());
+        prendaResponseDTO.setValor(prenda.getValor());
+        return prendaResponseDTO;
     }
 
     public Prenda savePrenda(PrendaDTO prendaDTO) {

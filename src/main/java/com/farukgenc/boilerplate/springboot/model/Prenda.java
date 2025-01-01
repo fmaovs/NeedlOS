@@ -28,6 +28,10 @@ public class Prenda {
     @OneToMany(mappedBy = "prenda", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles;
 
+    public Long getId() {
+        return id_prenda;
+    }
+
     //******************************************
 
     //faltan foreignkey con tablas

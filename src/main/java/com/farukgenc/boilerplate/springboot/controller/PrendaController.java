@@ -2,6 +2,7 @@ package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.Prenda;
 import com.farukgenc.boilerplate.springboot.security.dto.PrendaDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PrendaResponseDTO;
 import com.farukgenc.boilerplate.springboot.service.PrendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class PrendaController {
     private PrendaService prendaService;
 
     @GetMapping("/all")
-    public List<PrendaDTO> getAllPrendas() {
+    public List<PrendaResponseDTO> getAllPrendas() {
         return prendaService.getAllPrendas();
     }
 
     @GetMapping("/{id}")
-    public PrendaDTO getPrendaById(@PathVariable Long id) {
+    public PrendaResponseDTO getPrendaById(@PathVariable Long id) {
         return prendaService.getPrendaById(id);
     }
 
