@@ -10,6 +10,8 @@ public interface UserService {
 
 	User findByUsername(String username);
 
+	User findById(Long id);
+
 	RegistrationResponse registration(RegistrationRequest registrationRequest);
 
 	AuthenticatedUserDto findAuthenticatedUserByUsername(String username);

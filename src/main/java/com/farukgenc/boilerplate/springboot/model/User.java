@@ -3,6 +3,8 @@ package com.farukgenc.boilerplate.springboot.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -31,5 +33,8 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<DetallePedido> detallePedido;
 
 }

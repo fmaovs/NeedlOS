@@ -5,10 +5,16 @@ import com.farukgenc.boilerplate.springboot.repository.*;
 import com.farukgenc.boilerplate.springboot.security.dto.DetallePedidoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
+import com.farukgenc.boilerplate.springboot.security.service.UserService;
+import com.farukgenc.boilerplate.springboot.security.service.UserServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +39,12 @@ public class PedidoService {
     @Autowired
     private EstadoPedidoRepository estadoPedidoRepository;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @Autowired
+    private UserServiceImpl userService;
+
     @Transactional
     public void createPedido(PedidoDTO pedidoDTO) {
         // 1. Buscar el cliente
@@ -53,10 +65,16 @@ public class PedidoService {
             Prenda prenda = prendaRepository.findById(detalleDTO.getPrendaId())
                     .orElseThrow(() -> new IllegalArgumentException("Prenda no encontrada"));
 
+            // Buscar el sastre
+            User user = userService.findById(detalleDTO.getUser());
+            System.out.println(user);
+
+
             // Crear el detalle del pedido
             DetallePedido detalle = new DetallePedido();
             detalle.setPedido(pedido);
             detalle.setPrenda(prenda);
+            detalle.setUser(user);
             detalle.setCantidad(detalleDTO.getCantidad());
             detalle.setFechaEntrega(pedidoDTO.getFechaEntrega());
             detalle.calcularValorTotal(); // Calcula el valor total
@@ -99,6 +117,26 @@ public class PedidoService {
             pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
             pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
             pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
+            pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
+            pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
+            pedidos.add(pedidoResponse);
+        }
+        return pedidos;
+    }
+
+    public List<PedidoResponse> findAllBySastre(Long id) {
+        List<PedidoResponse> pedidos = new ArrayList<>();
+        for (DetallePedido detallePedido : detallePedidoRepository.findPedidosByUser_Id(id)) {
+            PedidoResponse pedidoResponse = new PedidoResponse();
+            pedidoResponse.setId(detallePedido.getPedido().getId());
+            String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
+            pedidoResponse.setCustomerName(nombreCompleto);
+            pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
+            pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
+            pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
+            pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+            pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
+            pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
             pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
             pedidos.add(pedidoResponse);
         }
@@ -117,6 +155,7 @@ public class PedidoService {
             pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
             pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
             pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
+            pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
             pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
             pedidos.add(pedidoResponse);
         }
@@ -134,5 +173,38 @@ public class PedidoService {
     public void delete(Pedido pedido) {
         pedidoRepository.delete(pedido);
     }
+
+    public void saveFotoRecogida(Long id, MultipartFile file) throws IOException {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+
+        String fileName = fileStorageService.saveFile(file);
+        pedido.setFotoRecogida(fileName);
+        pedidoRepository.save(pedido);
+    }
+
+    public void saveFotoEntrega(Long id, MultipartFile file) throws IOException {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+
+        String fileName = fileStorageService.saveFile(file);
+        pedido.setFotoEntrega(fileName);
+        pedidoRepository.save(pedido);
+    }
+
+    public File getFotoRecogida(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+
+        return fileStorageService.getFile(pedido.getFotoRecogida());
+    }
+
+    public File getFotoEntrega(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+
+        return fileStorageService.getFile(pedido.getFotoEntrega());
+    }
+
 }
 

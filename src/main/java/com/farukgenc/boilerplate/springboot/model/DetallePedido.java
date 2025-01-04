@@ -30,6 +30,10 @@ public class DetallePedido {
     @JoinColumn(name = "prenda_id")
     private Prenda prenda;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(nullable = false)
     private int cantidad; // Cantidad de prendas del mismo tipo
 
