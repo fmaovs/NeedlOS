@@ -145,9 +145,10 @@ public class PedidoController {
         }
     }
 
-    @GetMapping("/sastre/{id}")
-    public ResponseEntity<List<PedidoResponse>> getOrdersBySastre(@PathVariable Long id) {
-        return ResponseEntity.ok(pedidoService.findAllBySastre(id));
+
+    @GetMapping("/concepto/{concepto}")
+    public ResponseEntity<List<PedidoResponse>> getOrdersByConcepto(@PathVariable String concepto) {
+        return ResponseEntity.ok(pedidoService.findPedidosByConcepto(concepto));
     }
 
 }

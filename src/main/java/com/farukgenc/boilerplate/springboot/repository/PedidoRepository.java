@@ -10,6 +10,4 @@ import java.util.List;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     PedidoResponse findPedidoResponseById(Long id);
-    public PedidoResponse findPedidosByCustomerId(Long id);
-
 }

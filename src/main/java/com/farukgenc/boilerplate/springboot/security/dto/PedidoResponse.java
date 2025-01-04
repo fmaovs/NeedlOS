@@ -21,6 +21,7 @@ public class PedidoResponse {
     private String prenda; // Nombre de la prenda asociada
     private String sastre; // Sastre encargado del pedido
     private Estado estado; // Estado actual del pedido
+    private String concepto; // Concepto del pedido
 
     public String orElseThrow(Object pedidoNoEncontrado) {
         return String.valueOf(pedidoNoEncontrado);

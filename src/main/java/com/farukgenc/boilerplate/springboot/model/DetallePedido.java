@@ -40,6 +40,9 @@ public class DetallePedido {
     @Column(nullable = false)
     private double valorTotal;
 
+    @Enumerated(EnumType.STRING)
+    private Concepto concepto;
+
 
     @OneToMany(mappedBy = "detallePedido", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<EstadoPedido> estados = new ArrayList<>();

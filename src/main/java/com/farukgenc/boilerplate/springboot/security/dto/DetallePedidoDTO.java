@@ -14,4 +14,5 @@ public class DetallePedidoDTO {
     private Long prendaId; // ID de la prenda asociada
     private int cantidad;  // Cantidad de unidades de la prenda
     private Long user;     // Sastre que se encarga del pedido
+    private String concepto; // Concepto del pedido
 }

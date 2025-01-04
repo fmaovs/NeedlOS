@@ -78,6 +78,8 @@ public class PedidoService {
             detalle.setCantidad(detalleDTO.getCantidad());
             detalle.setFechaEntrega(pedidoDTO.getFechaEntrega());
             detalle.calcularValorTotal(); // Calcula el valor total
+            String concepto = detalleDTO.getConcepto();
+            detalle.setConcepto(Concepto.valueOf(concepto.toUpperCase()));
             detallePedidoRepository.save(detalle); // Persistir el detalle primero
 
             // Crear el estado inicial para este detalle
@@ -117,6 +119,7 @@ public class PedidoService {
             pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
             pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
             pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
+            pedidoResponse.setConcepto(detallePedido.getConcepto().toString());
             pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
             pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
             pedidos.add(pedidoResponse);
@@ -138,6 +141,7 @@ public class PedidoService {
             pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
             pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
             pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
+            pedidoResponse.setConcepto(detallePedido.getConcepto().toString());
             pedidos.add(pedidoResponse);
         }
         return pedidos;
@@ -157,6 +161,7 @@ public class PedidoService {
             pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
             pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
             pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
+            pedidoResponse.setConcepto(detallePedido.getConcepto().toString());
             pedidos.add(pedidoResponse);
         }
         return pedidos;
@@ -205,6 +210,41 @@ public class PedidoService {
 
         return fileStorageService.getFile(pedido.getFotoEntrega());
     }
+
+
+
+    public List<PedidoResponse> findPedidosByConcepto(String concepto) {
+        List<PedidoResponse> pedidos = new ArrayList<>();
+        try {
+            // Convertir el concepto del tipo String al enum Concepto
+            Concepto conceptoEnum = Concepto.valueOf(concepto.toUpperCase());
+
+            // Recuperar los detalles de los pedidos usando el repositorio
+            List<DetallePedido> detalles = detallePedidoRepository.findPedidosByConcepto(conceptoEnum);
+
+            for (DetallePedido detallePedido : detalles) {
+                PedidoResponse pedidoResponse = new PedidoResponse();
+                pedidoResponse.setId(detallePedido.getPedido().getId());
+                String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
+                pedidoResponse.setCustomerName(nombreCompleto);
+                pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
+                pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
+                pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
+                pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+                pedidoResponse.setPrenda(detallePedido.getPrenda().getDescripcion());
+                pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
+                pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
+                pedidoResponse.setConcepto(conceptoEnum.name());
+                pedidos.add(pedidoResponse);
+            }
+        } catch (IllegalArgumentException e) {
+            // Manejo del caso en que el valor del concepto no sea válido
+            throw new IllegalArgumentException("Concepto no válido: " + concepto, e);
+        }
+        return pedidos;
+    }
+
+
 
 }
 
