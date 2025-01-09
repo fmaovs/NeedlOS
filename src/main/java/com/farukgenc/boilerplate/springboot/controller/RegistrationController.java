@@ -21,7 +21,7 @@ public class RegistrationController {
 	@PostMapping
 	@Operation(tags = "Register Service", description = "You can register to the system by sending information in the appropriate format.")
 	public ResponseEntity<RegistrationResponse> registrationRequest(@Valid @RequestBody RegistrationRequest registrationRequest) {
-
+		System.out.println(registrationRequest);
 		final RegistrationResponse registrationResponse = userService.registration(registrationRequest);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(registrationResponse);

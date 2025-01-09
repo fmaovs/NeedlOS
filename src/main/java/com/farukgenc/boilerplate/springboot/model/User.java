@@ -34,7 +34,10 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Enumerated(EnumType.STRING)
+	private Cargo cargo;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<DetallePedido> detallePedido;
 
 }

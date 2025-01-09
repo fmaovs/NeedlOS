@@ -1,5 +1,7 @@
 package com.farukgenc.boilerplate.springboot.security.service;
 
+import com.farukgenc.boilerplate.springboot.model.Cargo;
+import com.farukgenc.boilerplate.springboot.security.dto.UserResponse;
 import com.farukgenc.boilerplate.springboot.service.UserValidationService;
 import com.farukgenc.boilerplate.springboot.model.User;
 import com.farukgenc.boilerplate.springboot.model.UserRole;
@@ -13,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created on Ağustos, 2020
@@ -53,7 +58,7 @@ public class UserServiceImpl implements UserService {
 		final User user = UserMapper.INSTANCE.convertToUser(registrationRequest);
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setUserRole(registrationRequest.getUser_role());
-
+		user.setCargo(Cargo.valueOf(String.valueOf(registrationRequest.getCargo())));
 		userRepository.save(user);
 
 		final String username = registrationRequest.getUsername();
@@ -75,4 +80,19 @@ public class UserServiceImpl implements UserService {
 	public Iterable<User> findAll() {
 		return userRepository.findAll();
 	}
+
+	public List<UserResponse> findAllByCargo(Cargo cargo){
+		List<UserResponse> users = new ArrayList<>();
+		for(User user : userRepository.findAllByCargo(cargo)){
+			UserResponse userTemporal = new UserResponse();
+			userTemporal.setUsername(user.getUsername());
+			userTemporal.setEmail(user.getEmail());
+			userTemporal.setCargo(user.getCargo().getCargoName());
+			userTemporal.setPhone(user.getPhone());
+			userTemporal.setName(user.getName());
+			userTemporal.setLastname(user.getLastname());
+			users.add(userTemporal);
+		}
+		return users;
+	};
 }

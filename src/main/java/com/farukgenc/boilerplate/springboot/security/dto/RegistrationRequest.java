@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.security.dto;
 
+import com.farukgenc.boilerplate.springboot.model.Cargo;
 import com.farukgenc.boilerplate.springboot.model.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -37,5 +38,8 @@ public class RegistrationRequest {
 
 	@NotNull(message = "{registration_user_role_not_null}")
 	private UserRole user_role;
+
+	@NotNull(message = "{registration_cargo_not_null}")
+	private Cargo cargo;
 
 }

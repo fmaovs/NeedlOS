@@ -3,9 +3,11 @@ package com.farukgenc.boilerplate.springboot.service;
 import com.farukgenc.boilerplate.springboot.model.DetallePedido;
 import com.farukgenc.boilerplate.springboot.model.Estado;
 import com.farukgenc.boilerplate.springboot.model.EstadoPedido;
+import com.farukgenc.boilerplate.springboot.model.User;
 import com.farukgenc.boilerplate.springboot.repository.DetallePedidoRepository;
 import com.farukgenc.boilerplate.springboot.repository.EstadoPedidoRepository;
 import com.farukgenc.boilerplate.springboot.security.dto.EstadoPedidoDTO;
+import com.farukgenc.boilerplate.springboot.security.service.UserServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class DetallePedidoService {
     private DetallePedidoRepository detallePedidoRepository;
     @Autowired
     private EstadoPedidoRepository estadoPedidoRepository;
+    @Autowired
+    private UserServiceImpl userService;
 
     @Transactional
     public void cambiarEstado(Long detallePedidoId, Estado nuevoEstado) {
@@ -44,6 +48,25 @@ public class DetallePedidoService {
         detallePedido.setEstadoActual(estadoPedido);
 
         // 5. Guardar los cambios
+        detallePedidoRepository.save(detallePedido);
+    }
+
+    @Transactional
+    public void cambiarSastre(Long detallePedidoId, Long userId) {
+        // 1. Buscar el detalle del pedido
+        DetallePedido detallePedido = detallePedidoRepository.findById(detallePedidoId)
+                .orElseThrow(() -> new IllegalArgumentException("DetallePedido no encontrado"));
+        // 2. Buscar el usuario
+        try {
+            User user = userService.findById(userId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+        // 2. Cambiar el usuario sastre
+
+        detallePedido.setUser(userService.findById(userId));
+
+        // 3. Guardar los cambios
         detallePedidoRepository.save(detallePedido);
     }
 
