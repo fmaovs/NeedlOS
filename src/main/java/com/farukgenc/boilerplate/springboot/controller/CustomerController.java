@@ -1,6 +1,7 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.Customer;
+import com.farukgenc.boilerplate.springboot.security.dto.CustomerDTO;
 import com.farukgenc.boilerplate.springboot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,16 @@ public class CustomerController {
     public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
         customerService.save(customer);
         return ResponseEntity.status(HttpStatus.CREATED).body("Customer created");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO updatedCustomer){
+        try{
+            Customer updated = customerService.update(id, updatedCustomer );
+            return ResponseEntity.ok("cabios guardados");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("error con la actualizacion de informacion: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -17,5 +17,4 @@ SpringBootBoilerplateApplication {
 
 		SpringApplication.run(SpringBootBoilerplateApplication.class, args);
 	}
-
 }
