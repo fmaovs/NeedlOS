@@ -327,7 +327,18 @@ public class PedidoService {
                 pedidoResponse.setFechaPedido(pedido.getDate());
                 pedidoResponse.setFechaEntrega(pedido.getDetalles().get(0).getFechaEntrega());
                 pedidoResponse.setSaldo(pedido.getSaldo());
+                List<PrendaDTO> prendasPedido = new ArrayList<>();
+                for (DetallePedido detallePedido: pedido.getDetalles()) {
+                    PrendaDTO prendaDTO = new PrendaDTO();
+                    prendaDTO.setDescripcion(detallePedido.getPrenda().getDescripcion());
+                    prendaDTO.setValor(detallePedido.getValorTotal());
+                    prendaDTO.setCantidad(detallePedido.getCantidad());
+                    prendasPedido.add(prendaDTO);
+                }
+                pedidoResponse.setPrenda(prendasPedido);
+                pedidoResponse.setSastre(pedido.getDetalles().get(0).getUser().getName() + " " + pedido.getDetalles().get(0).getUser().getLastname());
                 pedidoResponse.setEstado(Estado.valueOf(pedido.getDetalles().get(0).getEstadoActual().getEstado().toString()));
+                pedidoResponse.setConcepto(pedido.getDetalles().get(0).getConcepto().toString());
                 pedidosResponse.add(pedidoResponse);
             }
         }
