@@ -149,5 +149,16 @@ public class UserServiceImpl implements UserService {
 		return userToUpdate;
 	}
 
+	public Long findIdByNombre(String nombre) {
+		List<User> users = userRepository.findAll();
+		Long id = null;
+		for (User user : users) {
+			if (user.getName().equals(nombre)) {
+				id = user.getId();
+			}
+		}
+		return id;
+	}
+
 
 }

@@ -156,4 +156,14 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.findAllByCustomer(customer));
     }
 
+    @GetMapping("/sastre/{sastre}")
+    public ResponseEntity<List<PedidoResponse>> getOrdersBySastre(@PathVariable String sastre) {
+        return ResponseEntity.ok(pedidoService.findPedidosByDetalleSastreName(sastre));
+    }
+
+    @GetMapping("/Customer/phone/{phone}")
+    public ResponseEntity<List<PedidoResponse>> getOrdersByCustomerPhone(@PathVariable Long phone) {
+        return ResponseEntity.ok(pedidoService.findPedidosByCustomerPhone(phone));
+    }
+
 }
