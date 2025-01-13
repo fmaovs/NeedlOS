@@ -5,8 +5,11 @@ import SepYNegro from "../../separadores/sep-y-negro/sep-y-negro";
 import ContTxtForm from "../../section/cont-txt-form/cont-txt-form";
 import TxtForm from "../../input/txt-form/txt-form";
 import SpanForm from "../../parrafos/span-form/span-form";
+import CustomDateInput from "../../calendario/calendario";
+import CardPrenda from "../../card-prenda/card-prenda";
 
-const Calendar = "../../../../public/media/img/calendario.png";
+/*IMAGENES PRENDA*/
+const camisa = '../../../../public/media/img/prendas/camisa.png'
 
 export default function CrearOrden({ onClick }) {
   /*ANIMACION MOSTRAR FORMULARIO*/
@@ -21,7 +24,7 @@ export default function CrearOrden({ onClick }) {
     // Verifica si el clic fue directamente en el contenedor "salir"
     if (event.target.classList.contains("salir")) {
       setIsVisible(false);
-      setTimeout(onClick, 500); // Llama onClick después de que la animación termine
+      setTimeout(onClick, 500); // Llama onClick después de que la animación termine  
     }
   };
 
@@ -72,14 +75,20 @@ export default function CrearOrden({ onClick }) {
               <button className="seven">Agregar a lista</button>
             </ContTxtForm>
             <SepXNegro />
-            <div className="tb-lista">tabla</div>
+            <div className="tb-lista"></div>
             <SepXNegro />
             <div className="cont-dateEtc">
-              <video className="camara" id="camara" autoPlay></video>
+              <video
+                className="camara"
+                id="camara"
+                autoPlay
+                playsInline
+                muted
+              ></video>
               <div className="div-column">
-                <input type="date" className="calendar" />
-                <img src={Calendar} className="img-calendar" />
+                <CustomDateInput />
                 <select className="select-form">
+                  <option>. . .</option>
                   <option>Maria</option>
                   <option>Luis</option>
                   <option>Juliana</option>
@@ -102,7 +111,28 @@ export default function CrearOrden({ onClick }) {
             </div>
           </form>
           <SepYNegro />
-          <div className="cont-prendas"></div>
+          <div className="cont-prendas">
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+          </div>
         </div>
       </div>
     </div>

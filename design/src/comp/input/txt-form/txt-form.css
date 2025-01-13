@@ -2,9 +2,15 @@
   height: 100%;
   box-sizing: border-box;
   border-radius: 1.2vh;
-  border: 0.1vh solid #D2D2D2;
+  border: 0.1vh solid #d2d2d2;
   outline: none;
-  font-size: calc((0.2vw + 3.2vh) * 0.4);
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  text-transform: uppercase;
+}
+
+.box-form::placeholder {
+  text-transform: capitalize;
+  color: #D2D2D2;
 }
 
 .box-form[type="number"]::-webkit-inner-spin-button,

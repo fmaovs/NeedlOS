@@ -7,7 +7,7 @@ import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
 import BotonFilter from "../../botones/filter-sec/filter-sec.jsx";
 import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
 import EspacioRender from "../../espacio-render/espacio-render.jsx";
-import CrearOrden from '../../formularios/crear-orden/crear-orden.jsx'
+import CrearOrden from "../../formularios/crear-orden/crear-orden.jsx";
 
 const EnProceso = "../../../../public/media/img/enProceso.png";
 const Finalziado = "../../../../public/media/img/entregado.png";
@@ -29,11 +29,11 @@ export default function Ordenes() {
   );
   const [filtroSeleccionado, setFiltroSeleccionado] = useState("En Proceso");
 
-  const [mostrarFormulario, setMostrarFormulario] = useState(false)
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
   const handleFilterClick = (filtro) => {
     // Si es el mismo que ya esta no hace nada
-    if (filtro === filtroSeleccionado)return;
+    if (filtro === filtroSeleccionado) return;
 
     // Cambiar el componente según el filtro seleccionado
     setFiltroSeleccionado(filtro);
@@ -57,17 +57,17 @@ export default function Ordenes() {
         setComponenteSeleccionado(<TbTodo />);
         break;
     }
-  };
+  };    
 
-  //Mostrar formulario de crear orden
-  const mostrarCrearOrden = () => {
-    setMostrarFormulario(true)
-  }
+  // Mostrar formulario de crear orden y activar cámara
+  const mostrarCrearOrden = async () => {
+    setMostrarFormulario(true);
+  };
 
   //Ocultar Formulario de crear orden
   const ocultarCrearOrden = () => {
-    setMostrarFormulario(false)
-  }
+    setMostrarFormulario(false);
+  };
 
   return (
     <>
@@ -80,7 +80,7 @@ export default function Ordenes() {
         opc4={"N°"}
         onClick={mostrarCrearOrden}
       />
-      {mostrarFormulario && <CrearOrden onClick={ocultarCrearOrden}/>}
+      {mostrarFormulario && <CrearOrden onClick={ocultarCrearOrden} />}
       <SepXNegro />
       <div className="cont-filterAndBoton">
         <Filtrador>

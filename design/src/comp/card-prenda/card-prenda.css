@@ -1,0 +1,26 @@
+.cont-card-prenda{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    border-radius: 1.2vh;
+    height: 18vh;
+    width: 100%;
+    background-color: antiquewhite;
+}
+
+.id-prenda{
+    position: absolute;
+    top: 0.5vh;
+    left: 0.5vh;
+}
+
+.img-prenda{
+    max-height: 80%;
+}
+
+.name-prenda{
+text-align: center  ;
+}

@@ -7,17 +7,17 @@
   flex-direction: row;
   align-items: center;
   box-sizing: border-box;
-  padding-left: 1.2vh;
+  padding-left: 1.4vh;
   border-radius: 1.2vh;
   background-color: transparent;
   border: 0.1vh solid #d2d2d2;
-  font-size: calc((0.2vw + 3.2vh) * 0.4);
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
 }
 
 .span-ins {
   flex: 1;
   color: black;
   margin: 0 1.2vh;
-  letter-spacing: 0.1vh;
+  letter-spacing: 0.2vh;
   text-align: center;
 }
