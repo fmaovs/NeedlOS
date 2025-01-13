@@ -39,8 +39,8 @@ public class PedidoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<PedidoResponse>> getOrderById(@PathVariable Long id_order) {
-        return ResponseEntity.ok(pedidoService.findById(id_order));
+    public ResponseEntity<Optional<PedidoResponse>> getOrderById(@PathVariable Long id) {
+        return ResponseEntity.ok(pedidoService.findById(id));
     }
 
     @PostMapping
@@ -149,6 +149,11 @@ public class PedidoController {
     @GetMapping("/concepto/{concepto}")
     public ResponseEntity<List<PedidoResponse>> getOrdersByConcepto(@PathVariable String concepto) {
         return ResponseEntity.ok(pedidoService.findPedidosByConcepto(concepto));
+    }
+
+    @GetMapping("/customer/{customer}")
+    public ResponseEntity<List<PedidoResponse>> getOrdersByCustomer(@PathVariable String customer) {
+        return ResponseEntity.ok(pedidoService.findAllByCustomer(customer));
     }
 
 }

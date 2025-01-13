@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +19,7 @@ public class PedidoResponse {
     private Date fechaPedido; // Fecha de realizacion del pedido
     private Date fechaEntrega; // Fecha de entrega de la prenda
     private double saldo; // Saldo pendiente del pedido
-    private String prenda; // Nombre de la prenda asociada
+    private List<PrendaDTO> prenda; // Nombre de la prenda asociada
     private String sastre; // Sastre encargado del pedido
     private Estado estado; // Estado actual del pedido
     private String concepto; // Concepto del pedido

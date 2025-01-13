@@ -15,4 +15,5 @@ public interface DetallePedidoRepository extends JpaRepository<DetallePedido, Lo
 
     public List<DetallePedido> findPedidosByUser_Id(Long id);
     List<DetallePedido> findPedidosByConcepto(Concepto concepto);
+    List<DetallePedido> findByPedido_Id(Long id);
 }

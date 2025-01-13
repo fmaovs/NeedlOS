@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class PrendaDTO {
     private String descripcion;
     private double valor;
+    private int cantidad;
 }
