@@ -12,6 +12,8 @@ import CardPrenda from "../../card-prenda/card-prenda";
 const camisa = '../../../../public/media/img/prendas/camisa.png'
 
 export default function CrearOrden({ onClick }) {
+  /*ACTIVAR CAMARA*/
+  
   /*ANIMACION MOSTRAR FORMULARIO*/
   const [isVisible, setIsVisible] = useState(true);
 
@@ -26,6 +28,9 @@ export default function CrearOrden({ onClick }) {
       setIsVisible(false);
       setTimeout(onClick, 500); // Llama onClick después de que la animación termine  
     }
+
+    /*DESACTIVAR CAMARA*/
+    
   };
 
   return (

@@ -30,7 +30,7 @@
 /*ENCABEZADO DIAS*/
 .react-datepicker__day-name {
   text-transform: capitalize;
-  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  font-size: calc((0.2vw + 3.2vh) * 0.4);
 }
 
 /*SABADOS Y DOMINGOS*/
@@ -47,7 +47,7 @@
 
 /*TODOS LOS DIAS*/
 .react-datepicker__day {
-  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  font-size: calc((0.2vw + 3.2vh) * 0.4);
 }
 
 /*DIA SELECCIONADO*/
@@ -73,15 +73,15 @@
 }
 
 .react-datepicker__navigation {
-  top: 0.6rem;
+  top: 1.7vh;
 }
 
 .react-datepicker__navigation--next {
-  right: 0.6rem;
+  right: 1.7vh;
 }
 
 .react-datepicker__navigation--previous {
-  left: 0.6rem;
+  left: 1.7vh;
 }
 
 .react-datepicker-wrapper{
