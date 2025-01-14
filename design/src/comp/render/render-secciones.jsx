@@ -3,13 +3,13 @@ import "./render-secciones.css";
 
 // Importación de los componentes
 import Ordenes from "../secciones/ordenes/ordenes.jsx";
-import Informes from "../secciones/informes/Informes.jsx";
-import Inventario from "../secciones/inventario/Inventario.jsx";
-import Usuarios from "../secciones/usuarios/Usuarios.jsx";
-import Gastos from "../secciones/gastos/Gastos.jsx";
+import Informes from "../secciones/informes/informes.jsx";
+import Inventario from "../secciones/inventario/inventario.jsx";
+import Usuarios from "../secciones/usuarios/usuarios.jsx";
+import Gastos from "../secciones/gastos/gastos.jsx";
 import ArqueoCaja from "../secciones/arqueo-caja/arqueo-caja.jsx";
-import Nomina from "../secciones/nomina/Nomina.jsx";
-import Ajustes from "../secciones/ajustes/Ajustes.jsx";
+import Nomina from "../secciones/nomina/nomina.jsx";
+import Ajustes from "../secciones/ajustes/ajustes.jsx";
 
 export default function Render({ componenteSeleccionado }) {
   const [componenteActual, setComponenteActual] = useState(
