@@ -2,6 +2,8 @@ package com.farukgenc.boilerplate.springboot.model;
 
 import com.farukgenc.boilerplate.springboot.model.llavesCompuestas.MaterialUsadoId;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,12 +22,13 @@ public class MaterialUsado {
     private MaterialUsadoId id_MaterialUsado;
 
     @Column(nullable = false)
+    @Positive(message = "la cantidad_usada debe ser un número positivo")
+    @Min(value = 1, message = "La cantidad mínima debe ser 1")
     private Integer cantidad_usada;
 
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime fechaConsumo;
-
 
     @ManyToOne
     @MapsId("id_prenda")

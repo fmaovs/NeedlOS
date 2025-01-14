@@ -19,6 +19,6 @@ public class Ingreso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_ingreso;
 
-    @Column
+    @Column(updatable = false, nullable = false)
     private Date fecha_ingreso;
 }

@@ -3,13 +3,14 @@ package com.farukgenc.boilerplate.springboot.model;
 
 import com.farukgenc.boilerplate.springboot.model.llavesCompuestas.MaterialIngresadoId;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -27,10 +28,12 @@ public class MaterialIngresado {
     @EmbeddedId
     private MaterialIngresadoId id_MaterialIngresado;
 
-    @Column
+    @Column(updatable = false, nullable = false)
+    @Positive(message = "El precio debe ser un número positivo")
     private Double precio;
 
-    @Column
+    @Column(updatable = false, nullable = false)
+    @Min(value = 1, message = "La cantidad mínima debe ser 1")
     private Long cantidad_ingresada;
 
     @Column(updatable = false, nullable = false)

@@ -1,6 +1,8 @@
 package com.farukgenc.boilerplate.springboot.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +18,14 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_material;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column
+    @Column(nullable = false, length = 255)
     private String  descripcion;
 
-    @Column
+    @Column(nullable = false)
+    @Positive(message = "el stock_actual debe ser un número positivo")
+    @Min(value = 1, message = "el stock_actual mínimo debe ser 1")
     private Long stock_actual;
 }
