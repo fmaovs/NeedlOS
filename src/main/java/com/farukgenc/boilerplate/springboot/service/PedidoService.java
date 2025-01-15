@@ -18,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,35 +108,45 @@ public class PedidoService {
     }
 
     public List<PedidoResponse> findAll() {
-        List<PedidoResponse> pedidos = new ArrayList<>();
+        Map<Long, PedidoResponse> pedidosMap = new HashMap<>();
+
         for (DetallePedido detallePedido : detallePedidoRepository.findAll()) {
-            PedidoResponse pedidoResponse = new PedidoResponse();
-            List<DetallePedido> detallePedidoList = detallePedidoRepository.findByPedido_Id(detallePedido.getPedido().getId());
-            List<PrendaDTO> prendasPedido = new ArrayList<>();
-            for (DetallePedido detallePedido1: detallePedidoList) {
-                PrendaDTO prendaDTO = new PrendaDTO();
-                prendaDTO.setDescripcion(detallePedido1.getPrenda().getDescripcion());
-                prendaDTO.setValor(detallePedido1.getValorTotal());
-                prendaDTO.setCantidad(detallePedido1.getCantidad());
-                prendasPedido.add(prendaDTO);
+            Long pedidoId = detallePedido.getPedido().getId();
+
+            // Si ya existe un PedidoResponse para este pedido, lo usamos
+            PedidoResponse pedidoResponse = pedidosMap.get(pedidoId);
+            if (pedidoResponse == null) {
+                // Crear un nuevo PedidoResponse si no existe
+                pedidoResponse = new PedidoResponse();
+                pedidoResponse.setId(pedidoId);
+                String nombreCompleto = detallePedido.getPedido().getCustomer().getName()
+                        + " " + detallePedido.getPedido().getCustomer().getLastname();
+                pedidoResponse.setCustomerName(nombreCompleto);
+                pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
+                pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
+                pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
+                pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+                pedidoResponse.setPrenda(new ArrayList<>());
+                pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
+                pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
+                pedidoResponse.setConcepto(detallePedido.getConcepto().toString());
+
+                // Guardar en el mapa
+                pedidosMap.put(pedidoId, pedidoResponse);
             }
 
-            pedidoResponse.setId(detallePedido.getPedido().getId());
-            String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
-            pedidoResponse.setCustomerName(nombreCompleto);
-            pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
-            pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
-            pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
-            pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
-
-            pedidoResponse.setPrenda(prendasPedido);
-            pedidoResponse.setConcepto(detallePedido.getConcepto().toString());
-            pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
-            pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
-            pedidos.add(pedidoResponse);
+            // Agregar las prendas al PedidoResponse correspondiente
+            PrendaDTO prendaDTO = new PrendaDTO();
+            prendaDTO.setDescripcion(detallePedido.getPrenda().getDescripcion());
+            prendaDTO.setValor(detallePedido.getValorTotal());
+            prendaDTO.setCantidad(detallePedido.getCantidad());
+            pedidoResponse.getPrenda().add(prendaDTO);
         }
-        return pedidos;
+
+        // Convertir el mapa a una lista de resultados
+        return new ArrayList<>(pedidosMap.values());
     }
+
 
 
 
