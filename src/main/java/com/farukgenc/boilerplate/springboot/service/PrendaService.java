@@ -3,6 +3,7 @@ package com.farukgenc.boilerplate.springboot.service;
 import com.farukgenc.boilerplate.springboot.model.Prenda;
 import com.farukgenc.boilerplate.springboot.repository.PrendaRepository;
 import com.farukgenc.boilerplate.springboot.security.dto.PrendaDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PrendaRequest;
 import com.farukgenc.boilerplate.springboot.security.dto.PrendaResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,11 +40,11 @@ public class PrendaService {
         return prendaResponseDTO;
     }
 
-    public Prenda savePrenda(PrendaDTO prendaDTO) {
-        Prenda prenda = new Prenda();
-        prenda.setDescripcion(prendaDTO.getDescripcion());
-        prenda.setValor(prendaDTO.getValor());
-        return prendaRepository.save(prenda);
+    public Prenda savePrenda(PrendaRequest prendaRequest) {
+        Prenda prendaNueva = new Prenda();
+        prendaNueva.setDescripcion(prendaRequest.getDescripcion());
+        prendaNueva.setValor(prendaRequest.getValor());
+        return prendaRepository.save(prendaNueva);
     }
 
     public void deletePrenda(Long id) {

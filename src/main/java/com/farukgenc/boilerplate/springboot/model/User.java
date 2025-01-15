@@ -40,4 +40,7 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<DetallePedido> detallePedido;
 
+	@OneToMany(mappedBy = "empleado", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Gastos> gastos;
+
 }

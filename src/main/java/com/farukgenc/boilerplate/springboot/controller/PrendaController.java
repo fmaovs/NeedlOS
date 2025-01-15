@@ -2,6 +2,7 @@ package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.Prenda;
 import com.farukgenc.boilerplate.springboot.security.dto.PrendaDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PrendaRequest;
 import com.farukgenc.boilerplate.springboot.security.dto.PrendaResponseDTO;
 import com.farukgenc.boilerplate.springboot.service.PrendaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class PrendaController {
     }
 
     @PostMapping("/save")
-    public Prenda savePrenda(@RequestBody PrendaDTO prenda) {
+    public Prenda savePrenda(@RequestBody PrendaRequest prenda) {
         return prendaService.savePrenda(prenda);
     }
 }
