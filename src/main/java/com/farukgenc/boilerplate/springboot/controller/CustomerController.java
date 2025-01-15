@@ -29,6 +29,13 @@ public class CustomerController {
         return customerService.findById(id);
     }
 
+    @GetMapping("/phone")
+    public ResponseEntity<?> buscarPorTelefono(@RequestParam Long phone) {
+        return customerService.buscarPorTelefono(phone)
+                .map(customer -> ResponseEntity.ok(customer))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
         customerService.save(customer);
