@@ -22,6 +22,9 @@ public class CustomerService {
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
+    public Optional<Customer> buscarPorTelefono(Long phone) {
+        return customerRepository.findByPhone(phone);
+    }
 
     @Transactional
     public String save(Customer customer) {
