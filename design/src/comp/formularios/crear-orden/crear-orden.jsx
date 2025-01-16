@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import "./crear-orden.css";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro";
 import SepYNegro from "../../separadores/sep-y-negro/sep-y-negro";
@@ -8,29 +10,73 @@ import SpanForm from "../../parrafos/span-form/span-form";
 import CustomDateInput from "../../calendario/calendario";
 import CardPrenda from "../../card-prenda/card-prenda";
 
-/*IMAGENES PRENDA*/
-const camisa = '../../../../public/media/img/prendas/camisa.png'
+/*CARPETA PRENDAS*/
+const prendasUbi = "../../../../public/media/img/prendas/";
 
 export default function CrearOrden({ onClick }) {
-  /*ACTIVAR CAMARA*/
-  
-  /*ANIMACION MOSTRAR FORMULARIO*/
   const [isVisible, setIsVisible] = useState(true);
+  const [prendas, setPrendas] = useState([]);
 
+  /*ANIMACION MOSTRAR FORMULARIO*/
   useEffect(() => {
     // Al cargar el componente, aseguramos que la animación de entrada se ejecute
     setIsVisible(true);
+    mostrarPrendas();
   }, []);
 
   const handleExit = (event) => {
     // Verifica si el clic fue directamente en el contenedor "salir"
     if (event.target.classList.contains("salir")) {
       setIsVisible(false);
-      setTimeout(onClick, 500); // Llama onClick después de que la animación termine  
+      setTimeout(onClick, 500); // Llama onClick después de que la animación termine
     }
+  };
 
-    /*DESACTIVAR CAMARA*/
-    
+  /*INSERTAR NOMBRE SEGUN TELEFONO*/
+  async function insertarNombre() {
+    const valueTelefono = parseInt(document.getElementById("telefono").value);
+    const valueNombre = document.getElementById("nombre");
+
+    try {
+      // Llamada a la API para obtener todos los clientes utilizando axios
+      const response = await axios.get("http://localhost:8080/customers/all", {
+        headers: {
+          Authorization: `Bearer ${tokenPass}`,
+        },
+      });
+
+      // Filtrar el cliente cuyo teléfono coincida
+      const customer = response.data.find((c) => c.phone === valueTelefono);
+
+      if (customer) {
+        // Si se encuentra el cliente, actualizamos el campo nombre
+        valueNombre.value = customer.name;
+        valueNombre.classList.remove("err");
+      } else {
+        // Si no se encuentra, mostrar un mensaje
+        valueNombre.classList.add("err");
+      }
+    } catch (error) {
+      // Manejo de errores
+      console.error("Error al obtener los clientes:", error);
+      alert("Hubo un problema al obtener los datos");
+    }
+  }
+
+  /*LLAMAR A PRENDAS*/
+  const mostrarPrendas = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/prendas/all", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${tokenPass}`,
+        },
+      });
+      console.log(response.data)
+      setPrendas(response.data); // Actualizar el estado con las prendas obtenidas
+    } catch (error) {
+      console.error("Error al cargar las prendas:", error);
+    }
   };
 
   return (
@@ -47,11 +93,14 @@ export default function CrearOrden({ onClick }) {
                 type={"text"}
                 className={"one"}
                 placeholder={"Nombre..."}
+                id={"nombre"}
               />
               <TxtForm
                 type={"number"}
                 className={"two"}
                 placeholder={"Telefono..."}
+                id={"telefono"}
+                onBlur={insertarNombre}
               />
             </ContTxtForm>
             <ContTxtForm className={"dos"}>
@@ -117,26 +166,14 @@ export default function CrearOrden({ onClick }) {
           </form>
           <SepYNegro />
           <div className="cont-prendas">
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
-            <CardPrenda id={'01'} imgPrenda={camisa} name={'Camisa'}/>
+            {prendas.map((prenda) => (
+              <CardPrenda
+                key={prenda.id}
+                id={prenda.id}
+                name={prenda.descripcion}
+                imgPrenda={`${prendasUbi}${prenda.descripcion}.png`}
+              />
+            ))}
           </div>
         </div>
       </div>

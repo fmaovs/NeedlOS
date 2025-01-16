@@ -12,21 +12,23 @@ const Error = "../../../../public/media/img/error.png";
 const Aprobado = '../../../../public/media/img/aprobado.png'
 const Cerrar = "../../../../public/media/img/cerrar.png";
 
+export let tokenPass = null
+
 export default function IniciarSesion() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [hideError, setHideError] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(""); 
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
-  /*CONEXION BACKEND*/
+  /* CONEXION BACKEND */
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true); 
-    setHideError(false); 
+    setLoading(true);
+    setHideError(false);
 
     try {
       const response = await axios.post("http://localhost:8080/login", {
@@ -34,27 +36,30 @@ export default function IniciarSesion() {
         password,
       });
 
-      // Guardar token y manejar login exitoso
-      localStorage.setItem("authToken", response.data.token);
+      // Extraer el token de la respuesta
+      const token = response.data.token;
+      tokenPass = token
+
+      // Manejar el login exitoso
       console.log("Login exitoso", response.data);
       setSuccessMessage("Bienvenido");
 
       // Esperar 2 segundos antes de redirigir
       setTimeout(() => {
         navigate("/home");
-      }, 2000);
+      }, 1000);
     } catch (error) {
       setError("Credenciales incorrectas");
-      setHideError(false); 
+      setHideError(false);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   /*BORRAR MENSAJE DE ERROR*/
   const closeError = () => {
     setHideError(true);
-    setTimeout(() => setError(""), 300); 
+    setTimeout(() => setError(""), 300);
   };
 
   return (
@@ -122,7 +127,9 @@ export default function IniciarSesion() {
         </div>
 
         <div className="cont-butt-login">
-          <button type="submit" className="buttom-login">Login</button>
+          <button type="submit" className="buttom-login">
+            Login
+          </button>
         </div>
       </form>
     </div>

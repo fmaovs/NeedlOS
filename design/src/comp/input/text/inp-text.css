@@ -39,6 +39,7 @@
   outline: none;
   border: none;
   border-radius: calc(0.1vw + 1vh);
+  letter-spacing: 0.2vh;
 }
 
 .inputs::placeholder {
