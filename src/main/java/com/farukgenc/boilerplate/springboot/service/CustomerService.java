@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,11 @@ public class CustomerService {
     }
 
     @Transactional
-    public String save(Customer customer) {
-        customerRepository.save(customer);
+    public String save(CustomerDTO customer) {
+        Customer newCustomer = new Customer();
+        BeanUtils.copyProperties(customer, newCustomer);
+        newCustomer.setFecha_registro(new Date());
+        customerRepository.save(newCustomer);
         return "Operación exitosa";
     }
     @Transactional
