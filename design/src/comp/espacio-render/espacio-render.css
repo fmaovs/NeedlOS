@@ -9,7 +9,7 @@
 /* Animación para la entrada, solo se aplicará al componente visible */
 .cont-info > .entrando {
   opacity: 0;
-  animation: entrada 0.3s ease-in 0.3s forwards; 
+  animation: entrada 0.15s ease-in 0.15s forwards; 
 }
 
 @keyframes entrada {
@@ -35,6 +35,5 @@
 }
 
 .cont-info > .exiting {
-  animation: salida 0.3s ease-in forwards;
-  position: absolute;
+  animation: salida 0.15s ease-in forwards;
 }

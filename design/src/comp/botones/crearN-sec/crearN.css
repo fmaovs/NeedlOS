@@ -15,8 +15,17 @@
   transition: 0.3s ease-in;
 }
 
+.cont-crear-nuevo:active .img-crear-nuevo{
+  scale: 0.9;
+} 
+
 .img-crear-nuevo {
   height: 100%;
   width: auto;
   object-fit: contain;
+  transition: 0.1s ease-in-out;
+}
+
+.img-crear-nuevo:active{
+  scale: 0.9;
 }

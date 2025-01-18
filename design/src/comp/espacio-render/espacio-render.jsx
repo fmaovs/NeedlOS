@@ -11,19 +11,19 @@ export default function EspacioRender({ children }) {
       // Marcar el componente actual como saliente
       setPrevChildren(<div className="exiting">{currentChildren}</div>);
 
-      // Hacer invisible el componente nuevo por un breve momento
-      setIsVisible(false);
-
       // Actualizar al nuevo componente después de la animación de salida del anterior
       setTimeout(() => {
-        setCurrentChildren(children);
         setIsVisible(true); // Mostrar el nuevo componente después del retraso
-      }, 0); // Tiempo para la animación de salida
+        setCurrentChildren(children);
+      }, 150); // Tiempo para la animación de salida
+
+      // Hacer invisible el componente nuevo por un breve momento
+      setIsVisible(false);
 
       // Remover el componente anterior después de su animación
       setTimeout(() => {
         setPrevChildren(null);
-      }, 300); // Tiempo suficiente para que el componente anterior termine su animación
+      }, 150); // Tiempo suficiente para que el componente anterior termine su animación
     }
   }, [children]);
 

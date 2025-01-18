@@ -66,12 +66,23 @@
 }
 
 .one {
-  flex: 1;
+  width: 40%;
   margin-right: 0.5vh;
   padding-left: 1.4vh;
 }
 
 .one.err{
+  border-color: #34c84a;
+}
+
+.one-2{
+ width: 40%;
+  margin-right: 0.5vh;
+  margin-left: 0.5vh;
+  padding-left: 1.4vh;
+}
+
+.one-2.err{
   border-color: #34c84a;
 }
 
@@ -82,7 +93,7 @@
 }
 
 .thre {
-  width: 10%;
+  width: 14%;
   margin-right: 0.5vh;
   padding-left: 1.4vh;
 }
@@ -104,6 +115,20 @@
   flex: 1;
   margin-right: 0.5vh;
   padding-left: 1.4vh;
+}
+
+.six-2{
+  width: 20%;
+  text-align: center;
+  appearance: none;
+  margin-left: 0.5vh;
+  margin-right: 0.5vh;
+}
+
+.six-2:hover{
+  border-color: black;
+  text-decoration: underline;
+  letter-spacing: 0.02vw;
 }
 
 .seven {
