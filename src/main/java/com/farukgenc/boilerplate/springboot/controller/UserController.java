@@ -2,6 +2,7 @@ package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.Cargo;
 import com.farukgenc.boilerplate.springboot.model.User;
+import com.farukgenc.boilerplate.springboot.security.dto.SastreResponse;
 import com.farukgenc.boilerplate.springboot.security.dto.UserDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.UserResponse;
 import com.farukgenc.boilerplate.springboot.security.service.UserService;
@@ -23,7 +24,7 @@ public class UserController {
 
     // Implementar los métodos de la clase UserService
     @GetMapping("/all")
-    public Iterable<User> getUsers() {
+    public List<SastreResponse> getUsers() {
         return userServiceImpl.findAll();
     }
 
