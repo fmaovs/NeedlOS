@@ -28,12 +28,12 @@ public class CustomerService {
     }
 
     @Transactional
-    public String save(CustomerDTO customer) {
+    public Customer save(CustomerDTO customer) {
         Customer newCustomer = new Customer();
         BeanUtils.copyProperties(customer, newCustomer);
         newCustomer.setFecha_registro(new Date());
         customerRepository.save(newCustomer);
-        return "Operación exitosa";
+        return newCustomer;
     }
     @Transactional
     public Customer update(Long  id, CustomerDTO updatedCustomer){

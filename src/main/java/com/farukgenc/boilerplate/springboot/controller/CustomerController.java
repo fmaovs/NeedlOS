@@ -37,9 +37,9 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createCustomer(@RequestBody CustomerDTO customer) {
-        customerService.save(customer);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Customer created");
+    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDTO customer) {
+        Customer newCustomer = customerService.save(customer);
+        return ResponseEntity.ok().body(newCustomer);
     }
 
     @PutMapping("/{id}")
