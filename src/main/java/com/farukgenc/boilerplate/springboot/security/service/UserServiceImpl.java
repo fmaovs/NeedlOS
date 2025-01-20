@@ -70,8 +70,21 @@ public class UserServiceImpl implements UserService {
 		return UserMapper.INSTANCE.convertToAuthenticatedUserDto(user);
 	}
 
-	public Iterable<User> findAll() {
-		return userRepository.findAll();
+	public List<SastreResponse> findAll() {
+		List<User> users = userRepository.findAll();
+		List<SastreResponse> usersResponse = new ArrayList<>();
+		for (User user : users) {
+			SastreResponse userResponse = new SastreResponse();
+			userResponse.setId(user.getId());
+			userResponse.setUsername(user.getUsername());
+			userResponse.setEmail(user.getEmail());
+			userResponse.setCargo(user.getCargo().getCargoName());
+			userResponse.setPhone(user.getPhone());
+			userResponse.setName(user.getName());
+			userResponse.setLastname(user.getLastname());
+			usersResponse.add(userResponse);
+		}
+		return usersResponse;
 	}
 
 	public List<UserResponse> findAllByCargo(Cargo cargo){
