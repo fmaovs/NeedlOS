@@ -1,39 +1,27 @@
 import "./estado-ordenes.css";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { tokenPass } from "../../../formularios/iniciar-sesion/iniciar-sesion";
 
 export default function TbTodo() {
-  const [orders, setOrders] = useState([]);
-  const [error, setError] = useState(null);
-
   useEffect(() => {
-    const fetchOrders = async () => {
-      const apiURL = "http://localhost:8080/orders/all";
-      try {
-        const response = await axios.get(apiURL, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${tokenPass}`, // Incluimos el token en el encabezado Authorization
-          },
-        });
-        // Mostrar todos los pedidos en la consola
-        console.log(response.data);
-        // Actualizar el estado con los pedidos obtenidos
-        setOrders(response.data);
-      } catch (error) {
-        if (error.response) {
-          setError(`Error en la respuesta: ${error.response.statusText}`);
-        } else if (error.request) {
-          setError("No se recibió respuesta del servidor.");
-        } else {
-          setError(`Error: ${error.message}`);
-        }
-      }
-    };
-
-    fetchOrders();
+    mostrarPedido();
   }, []);
+
+  const [orders, setOrders] = useState([]);
+  const mostrarPedido = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/orders/all", {
+        headers: {
+          Authorization: `Bearer ${tokenPass}`,
+        },
+      });
+      setOrders(response.data);
+      console.log(response.data);
+    } catch {
+      console.log("Error accediendo a las ordenes");
+    }
+  };
 
   /*MOSTRAR COMO PESO COLOMBIANO*/
   const formatoPesoColombiano = new Intl.NumberFormat("es-CO", {
@@ -41,9 +29,6 @@ export default function TbTodo() {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
-
-  const valor = 70000;
-  const valorFormateado = formatoPesoColombiano.format(valor);
 
   /*TRANSFORMAR LA FECHA*/
   const formatDate = (dateString) => {
@@ -74,11 +59,11 @@ export default function TbTodo() {
           <tr className="tr-encabezado">
             <th className="th">N°</th>
             <th className="th"> Cliente </th>
-            <th className="th">Telefono</th>
+            <th className="th"> Telefono </th>
             <th className="th">Fecha radicacion</th>
             <th className="th">Fecha entrega</th>
             <th className="th"> Valor </th>
-            <th className="th"> Prenda </th>
+            <th className="th">Prenda</th>
             <th className="th">Estado</th>
           </tr>
           <tr className="separacion-fila-head"></tr>
@@ -124,12 +109,10 @@ export default function TbTodo() {
                   }).format(order.saldo)}
                 </td>
                 <td className="td">
-                  {order.prenda && order.prenda.length > 0
-                    ? order.prenda
-                        .slice(0, 2)
-                        .map((p) => p.descripcion)
-                        .join(", ") + (order.prenda.length > 2 ? "..." : "")
-                    : "Sin prendas"}
+                  {order.prenda
+                    .slice(0, 2)
+                    .map((p) => p.descripcion)
+                    .join(", ") + (order.prenda.length > 2 ? "..." : "")}
                 </td>
                 <td className="td">{order.estado}</td>
               </tr>

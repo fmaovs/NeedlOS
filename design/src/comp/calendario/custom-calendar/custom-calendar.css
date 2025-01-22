@@ -17,7 +17,8 @@
 }
 
 .img-calendario {
-  max-width: 72%;
+  max-width: 60%;
+  max-height: 60%;
   object-fit: contain;
   transition: 0.3s ease-in-out;
 }

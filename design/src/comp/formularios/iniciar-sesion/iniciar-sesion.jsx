@@ -41,13 +41,12 @@ export default function IniciarSesion() {
       tokenPass = token
 
       // Manejar el login exitoso
-      console.log("Login exitoso", response.data);
       setSuccessMessage("Bienvenido");
 
-      // Esperar 2 segundos antes de redirigir
+      // Esperar 0.8 segundos antes de redirigir
       setTimeout(() => {
         navigate("/home");
-      }, 1000);
+      }, 800);
     } catch (error) {
       setError("Credenciales incorrectas");
       setHideError(false);

@@ -7,11 +7,6 @@
 }
 
 /* Animación para la entrada, solo se aplicará al componente visible */
-.cont-info > .entrando {
-  opacity: 0;
-  animation: entrada 0.15s ease-in 0.15s forwards; 
-}
-
 @keyframes entrada {
   from {
     opacity: 0;
@@ -26,14 +21,18 @@
 @keyframes salida {
   from {
     opacity: 1;
-    transform: translateX(0);
   }
   to {
     opacity: 0;
-    transform: translateX(1vh);
   }
+}
+
+.cont-info > .entrando {
+  opacity: 0;
+  animation: entrada 0.15s ease-out 0.15s forwards; 
 }
 
 .cont-info > .exiting {
   animation: salida 0.15s ease-in forwards;
+  opacity: 1;
 }

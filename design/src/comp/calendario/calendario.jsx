@@ -5,17 +5,11 @@ import "./calendario.css";
 import { es } from "date-fns/locale";
 import CustomCalendar from "./custom-calendar/custom-calendar";
 
-export default function CustomDateInput() {
-  const [selectedDate, setSelectedDate] = useState(null);
-
-  const handlePrintDate = () => {
-    console.log(selectedDate);
-  };
-
+export default function CustomDateInput({ selected, onChange }) {
   return (
     <DatePicker
-      selected={selectedDate}
-      onChange={(date) => setSelectedDate(date)}
+      selected={selected}
+      onChange={onChange}
       dateFormat="dd/MM/yyyy"
       locale={es}
       customInput={<CustomCalendar />}

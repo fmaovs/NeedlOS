@@ -1,6 +1,6 @@
 import "./txt-form.css";
 
-export default function TxtForm({ type, className, placeholder, id, onBlur}) {
+export default function TxtForm({ type, className, placeholder, id, onBlur }) {
   return (
     <input
       type={type}
