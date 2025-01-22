@@ -76,4 +76,9 @@ public class MaterialInventarioService {
     public List<Material> inventarioActual(){
         return materialRepository.findAll();
     }
+
+
+    public List<Material> obtenerMaterialesBajaCantidad() {
+        return materialRepository.findByCantidadBaja(5);
+    }
 }
