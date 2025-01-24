@@ -1,4 +1,4 @@
-import React, { useState, useEffect    } from "react";
+import React, { useState, useEffect } from "react";
 import { isDate } from "date-fns";
 import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import axios from "axios";
@@ -149,7 +149,7 @@ export default function CrearOrden({ onClick }) {
     const cantidad = parseInt(document.getElementById("cantidad").value);
     const idSastre = parseInt(document.getElementById("select-sastre").value);
     const concepto = document.getElementById("detalles").value;
-    const tipoTrabajo = document.getElementById("tipo-trabajo").value
+    const tipoTrabajo = document.getElementById("tipo-trabajo").value;
 
     /*VARIABLES PARA LA TABLA*/
     let producto;
@@ -358,8 +358,8 @@ export default function CrearOrden({ onClick }) {
         alert("No se aceptan fechas anteriores al dia actual");
         return;
       } else {
-        dataPedido.date = fechaPedido.toISOString()
-        dataPedido.fechaEntrega = selectedDate.toISOString()
+        dataPedido.date = fechaPedido.toISOString();
+        dataPedido.fechaEntrega = selectedDate.toISOString();
       }
     } else {
       alert("Ingrese una fecha");
@@ -368,6 +368,7 @@ export default function CrearOrden({ onClick }) {
 
     console.log(dataPedido);
 
+    /*
     try {
       const responsePedido = await axios.post(
         "http://localhost:8080/orders",
@@ -388,6 +389,7 @@ export default function CrearOrden({ onClick }) {
         error.response ? error.response.data : error.message
       );
     }
+    */
   }
 
   return (
@@ -532,12 +534,23 @@ export default function CrearOrden({ onClick }) {
               </div>
               <div className="div-column-full">
                 <div className="div-row">
-                  <SpanForm txt={"Dias"} insert={"8"} />
-                  <SpanForm txt={"Pzs"} insert={"7"} />
+                  <SpanForm txt={"Dias:"} id={"dias"} insert={"8"} />
+                  <SpanForm txt={"Pzs:"} id={"piezas"} insert={"7"} />
                 </div>
-                <SpanForm txt={"Subtotal"} insert={"$ 85.000"} />
-                <SpanForm txt={"Abono"} insert={"$ 20.000"} />
-                <SpanForm txt={"Total"} insert={"$ 65.000"} />
+                <SpanForm
+                  txt={"Subtotal:"}
+                  id={"subtotal"}
+                  insert={"$ 85.000"}
+                />
+                <SpanForm
+                  txt={"Abono:"}
+                  onHover={"on"}
+                  label={"abono"}
+                  cursor={"onCursor"}
+                >
+                  <input type="number" id="abono" className="inp-abono" />
+                </SpanForm>
+                <SpanForm txt={"Total:"} id={""} insert={"$ 65.000"} />
               </div>
               <div className="div-column">
                 <button className="clean-print">Limpiar</button>
