@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 public enum TipoPrenda {
-
     CAMISA(1, "Camisa", 18000),
     CAMISETA(2, "Camiseta", 12000),
     PANTALON(3, "Pantalon", 12000),
