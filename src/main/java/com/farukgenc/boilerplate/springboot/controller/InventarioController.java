@@ -47,4 +47,11 @@ public class InventarioController {
         inventario.usarMaterial(request);
         return ResponseEntity.ok("Stock actualizado correctamente");
     }
+
+    @GetMapping("/baja-cantidad")
+    @Operation(tags = "inventario", description = "muestra los materiales que estan próximos a agotarse")
+    public ResponseEntity<List<Material>> listarMaterialesConBajaCantidad() {
+        List<Material> materiales = inventario.obtenerMaterialesBajaCantidad();
+        return ResponseEntity.ok(materiales);
+    }
 }
