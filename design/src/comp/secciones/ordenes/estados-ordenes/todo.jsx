@@ -17,7 +17,6 @@ export default function TbTodo() {
         },
       });
       setOrders(response.data);
-      console.log(response.data);
     } catch {
       console.log("Error accediendo a las ordenes");
     }
