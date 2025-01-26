@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { isDate } from "date-fns";
+import { intlFormat, isDate, sub } from "date-fns";
 import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import axios from "axios";
 import "./crear-orden.css";
@@ -127,6 +127,8 @@ export default function CrearOrden({ onClick }) {
 
   /*SELECCIONAR FECHA*/
   const [selectedDate, setSelectedDate] = useState(null);
+
+  /*ASIGNAR DIAS RESTANTES*/
   const [numeroDias, setNumeroDias] = useState("");
   function diasRestantes(date) {
     if (fechaPedido > date) {
@@ -152,7 +154,54 @@ export default function CrearOrden({ onClick }) {
     fechaEntrega: null,
   });
 
-  useEffect(() => {}, [dataPedido]); // Observa los cambios en dataPedido
+  /*ASIGNAR VALORES PIEZAS, SUBTOTAL, TOTAL*/
+  const [piezasTotal, setPiezasTotal] = useState(null);
+  const [subTotal, setSubtotal] = useState("");
+  const [total, setTotal] = useState("");
+  const [triggerEffect, setTriggerEffect] = useState(0);
+
+  useEffect(() => {
+    /* Asignar valor piezas */
+    const piezasTotal = document.querySelectorAll(".td-cantidad");
+    let totalPiezas = 0;
+
+    piezasTotal.forEach((celdaPzs) => {
+      const nPiezas = celdaPzs.textContent.trim();
+      const nPiezasInt = parseInt(nPiezas, 10);
+
+      totalPiezas += nPiezasInt;
+    });
+    setPiezasTotal(totalPiezas);
+
+    /* Asignar valor subtotal */
+    const valorTotal = document.querySelectorAll(".td-valor-total");
+    let total = 0;
+
+    valorTotal.forEach((celda) => {
+      const valor = celda.textContent.trim().replace(/\./g, "");
+      const valorInt = parseInt(valor, 10);
+
+      total += valorInt;
+    });
+    const pesoCop = new Intl.NumberFormat("es-CO").format(total);
+    setSubtotal(`$ ${pesoCop}`);
+
+    /* Restar abono */
+    const abonoValue = document.getElementById("abono")?.value || "";
+    if (abonoValue !== "" && !isNaN(Number(abonoValue))) {
+      const abono = +abonoValue;
+      const resta = total - abono;
+      const pesoCop = new Intl.NumberFormat("es-CO").format(resta);
+      setTotal(`$ ${pesoCop}`);
+    } else {
+      setTotal(`$ ${pesoCop}`);
+    }
+  }, [dataPedido, triggerEffect]);
+
+  /*CARGAR EL ABONO*/
+  function calcTotal() {
+    setTriggerEffect((prev) => prev + 1); // Forzar la ejecución del useEffect
+  }
 
   /*FUNCION PARA AGREGAR LOS VALORES DE DETALLES A LA LISTA*/
   async function agregarDetalles(event) {
@@ -455,7 +504,6 @@ export default function CrearOrden({ onClick }) {
                 className={"box-form five"}
                 placeholder={"Vlr. Unit..."}
                 id={"vlr-uni"}
-                onBlur={insertarValor}
               />
             </ContTxtForm>
             <ContTxtForm className={"tres"}>
@@ -475,7 +523,7 @@ export default function CrearOrden({ onClick }) {
             </ContTxtForm>
             <SepXNegro />
             <div className="tb-lista">
-              <table className="tb-detalles">
+              <table className="tb-detalles" id="tb-detalles">
                 <thead>
                   <tr className="sep-fila-detalles-2"></tr>
                   <tr>
@@ -499,11 +547,15 @@ export default function CrearOrden({ onClick }) {
                         } 
           ${fila.isAnimada ? "fila-animada" : ""}`}
                       >
-                        <td className="td-detalles">{fila.cantidad}</td>
+                        <td className="td-detalles td-cantidad">
+                          {fila.cantidad}
+                        </td>
                         <td className="td-detalles">{fila.detalles}</td>
                         <td className="td-detalles">{fila.producto}</td>
                         <td className="td-detalles">{fila.vlrUnit}</td>
-                        <td className="td-detalles">{fila.vlrTotal}</td>
+                        <td className="td-detalles td-valor-total">
+                          {fila.vlrTotal}
+                        </td>
                         <td
                           className="td-detalles"
                           onClick={() => eliminarFila(index)}
@@ -552,22 +604,23 @@ export default function CrearOrden({ onClick }) {
               <div className="div-column-full">
                 <div className="div-row">
                   <SpanForm txt={"Dias:"} id={"dias"} insert={numeroDias} />
-                  <SpanForm txt={"Pzs:"} id={"piezas"} insert={"7"} />
+                  <SpanForm txt={"Pzs:"} id={"piezas"} insert={piezasTotal} />
                 </div>
-                <SpanForm
-                  txt={"Subtotal:"}
-                  id={"subtotal"}
-                  insert={"$ 85.000"}
-                />
+                <SpanForm txt={"Subtotal:"} id={"subtotal"} insert={subTotal} />
                 <SpanForm
                   txt={"Abono:"}
                   onHover={"on"}
                   label={"abono"}
                   cursor={"onCursor"}
                 >
-                  <input type="number" id="abono" className="inp-abono" />
+                  <input
+                    type="number"
+                    id="abono"
+                    className="inp-abono"
+                    onBlur={calcTotal}
+                  />
                 </SpanForm>
-                <SpanForm txt={"Total:"} id={""} insert={"$ 65.000"} />
+                <SpanForm txt={"Total:"} id={"total"} insert={total} />
               </div>
               <div className="div-column">
                 <button className="clean-print">Limpiar</button>
