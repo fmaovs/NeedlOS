@@ -322,6 +322,7 @@
 
 .th-detalles {
   font-weight: 400;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
 }
 
 .th-detalles:first-child {
@@ -341,6 +342,7 @@
 
 .td-detalles {
   text-align: center;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
 }
 
 .td-detalles {

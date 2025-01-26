@@ -127,6 +127,20 @@ export default function CrearOrden({ onClick }) {
 
   /*SELECCIONAR FECHA*/
   const [selectedDate, setSelectedDate] = useState(null);
+  const [numeroDias, setNumeroDias] = useState("");
+  function diasRestantes(date) {
+    if (fechaPedido > date) {
+      return;
+    }
+
+    const diferencia = date.getTime() - fechaPedido.getTime();
+
+    const diasDiferencia = Math.ceil(
+      diferencia / (1000 * 3600 * 24)
+    ).toString();
+
+    setNumeroDias(diasDiferencia);
+  }
 
   /*LISTA DETALLES Y OBJETO A ENVIAR (VACIOS)*/
   let fechaPedidotoISO = new Date().toISOString();
@@ -265,13 +279,28 @@ export default function CrearOrden({ onClick }) {
     }, 150);
   }
 
+  /*VARIBLES PARA LAS ORDENES*/
+  let fechaPedido = new Date(dataPedido.date);
+  let idCliente;
+
   /*MANDAR ORDEN*/
   async function enviarOrden(event) {
     event.preventDefault();
 
-    /*VARIBLES PARA LAS ORDENES*/
-    let fechaPedido = new Date(dataPedido.date);
-    let idCliente;
+    /*ASIGNAR FECHA ENTREGA*/
+    if (isDate(selectedDate)) {
+      /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
+      if (selectedDate.getTime() < fechaPedido.getTime()) {
+        alert("No se aceptan fechas anteriores al dia actual");
+        return;
+      } else {
+        dataPedido.date = fechaPedido.toISOString();
+        dataPedido.fechaEntrega = selectedDate.toISOString();
+      }
+    } else {
+      alert("Ingrese una fecha");
+      return;
+    }
 
     /*EXTRAER NOMBRE, APELLIIDO, TELEFONO, ID*/
     try {
@@ -349,21 +378,6 @@ export default function CrearOrden({ onClick }) {
       } catch (creationError) {
         console.error("Error al crear cliente:", creationError.message);
       }
-    }
-
-    /*ASIGNAR FECHA ENTREGA*/
-    if (isDate(selectedDate)) {
-      /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
-      if (selectedDate.getTime() < fechaPedido.getTime()) {
-        alert("No se aceptan fechas anteriores al dia actual");
-        return;
-      } else {
-        dataPedido.date = fechaPedido.toISOString();
-        dataPedido.fechaEntrega = selectedDate.toISOString();
-      }
-    } else {
-      alert("Ingrese una fecha");
-      return;
     }
 
     console.log(dataPedido);
@@ -519,7 +533,10 @@ export default function CrearOrden({ onClick }) {
               <div className="div-column-2">
                 <CustomDateInput
                   selected={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  onChange={(date) => {
+                    setSelectedDate(date);
+                    diasRestantes(date);
+                  }}
                 />
                 <select className="select-form" id="select-sastre">
                   <option className="option" value="null">
@@ -534,7 +551,7 @@ export default function CrearOrden({ onClick }) {
               </div>
               <div className="div-column-full">
                 <div className="div-row">
-                  <SpanForm txt={"Dias:"} id={"dias"} insert={"8"} />
+                  <SpanForm txt={"Dias:"} id={"dias"} insert={numeroDias} />
                   <SpanForm txt={"Pzs:"} id={"piezas"} insert={"7"} />
                 </div>
                 <SpanForm
