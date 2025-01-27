@@ -1,0 +1,26 @@
+.cont-informes{
+    display: flex;
+    flex-direction: column;
+    margin: 1vh 1vh 1vh 1vh;
+    border-radius: 1.2vh;
+    border: 0.18rem solid #0050b8;
+    box-sizing: border-box;
+    padding: 4vh 6vh 6vh 6vh;
+    height: auto;
+    min-height: calc(100% - (12% + 0.1vh + 2vh));
+}
+
+.tit-informes{
+  font-size: calc((0.2vw + 3.2vh)* 0.9);
+  font-weight: 300;
+  text-align: center;
+  margin: 0 0 4vh 0;
+}
+
+.informes{
+  margin-top: 4vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30vh, 1fr));
+  grid-auto-rows: min-content;
+  gap: 3vh;
+}
