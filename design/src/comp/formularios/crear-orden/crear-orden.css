@@ -133,6 +133,8 @@
 .six-2:hover {
   border-color: black;
   text-decoration: underline;
+  cursor: pointer;
+  text-underline-offset: 0.2vh;
   letter-spacing: 0.02vw;
 }
 
@@ -150,6 +152,7 @@
 
 .seven:hover {
   text-decoration: underline;
+  text-underline-offset: 0.2vh;
   letter-spacing: 0.02vw;
   text-underline-offset: 0.2vh;
   cursor: pointer;
@@ -192,6 +195,7 @@
   appearance: none;
   outline: none;
   cursor: pointer;
+  max-width: 6vw;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
   transition: 0.3s ease-in-out;
   text-transform: capitalize;
@@ -205,6 +209,7 @@
 .select-form:hover {
   border-color: black;
   text-decoration: underline;
+  text-underline-offset: 0.2vh;
   letter-spacing: 0.02vw;
 }
 
@@ -214,6 +219,7 @@
 
 .option {
   text-transform: capitalize;
+  box-sizing: border-box;
 }
 
 .div-column {
@@ -259,6 +265,7 @@
 
 .clean-print:hover {
   text-decoration: underline;
+  text-underline-offset: 0.2vh;
   letter-spacing: 0.02vw;
   border-color: black;
   cursor: pointer;
@@ -414,6 +421,10 @@
   background-color: transparent;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
 }
+.inp-abono::placeholder{
+  color: #D2D2D2;
+}
+
 
 .inp-abono {
   -webkit-appearance: none;

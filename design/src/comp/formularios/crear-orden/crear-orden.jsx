@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { intlFormat, isDate, sub } from "date-fns";
+import { isDate } from "date-fns";
 import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import axios from "axios";
 import "./crear-orden.css";
@@ -31,7 +31,7 @@ export default function CrearOrden({ onClick }) {
     // Verifica si el clic fue directamente en el contenedor "salir"
     if (event.target.classList.contains("salir")) {
       setIsVisible(false);
-      setTimeout(onClick, 500); // Llama onClick después de que la animación termine
+      setTimeout(onClick, 300); // Llama onClick después de que la animación termine
     }
   };
 
@@ -75,7 +75,7 @@ export default function CrearOrden({ onClick }) {
 
   /*INSERTAR VALOR UNITARIO SEGUN NOMBRE PRENDA*/
   async function insertarValor() {
-    const namePrenda = document.getElementById("producto").value;
+    const namePrenda = document.getElementById("producto").value.toLowerCase();
     let vlrUnit = document.getElementById("vlr-uni");
     try {
       const response = await axios.get("http://localhost:8080/prendas/all", {
@@ -110,6 +110,25 @@ export default function CrearOrden({ onClick }) {
     }
   };
 
+  /*BOTON PRENDAS*/
+  const botonPrenda = async (id) => {
+    const txtNamePrenda = document.getElementById("producto");
+    const txtValorPrenda = document.getElementById("vlr-uni");
+    try {
+      const response = await axios.get(`http://localhost:8080/prendas/${id}`, {
+        headers: {
+          Authorization: `Bearer ${tokenPass}`,
+        },
+      });
+      txtNamePrenda.value = response.data.descripcion
+      const valorPrenda = response.data.valor
+      const valorPrendaFormat = new Intl.NumberFormat("es-CO").format(valorPrenda)
+      txtValorPrenda.value = valorPrendaFormat
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   /*TRY ASIGANR ID SASTRE*/
   const [users, setUsers] = useState([]);
   const mostrarUsers = async () => {
@@ -129,7 +148,7 @@ export default function CrearOrden({ onClick }) {
   const [selectedDate, setSelectedDate] = useState(null);
 
   /*ASIGNAR DIAS RESTANTES*/
-  const [numeroDias, setNumeroDias] = useState("");
+  const [numeroDias, setNumeroDias] = useState("0");
   function diasRestantes(date) {
     if (fechaPedido > date) {
       return;
@@ -145,7 +164,6 @@ export default function CrearOrden({ onClick }) {
   }
 
   /*LISTA DETALLES Y OBJETO A ENVIAR (VACIOS)*/
-  let fechaPedidotoISO = new Date().toISOString();
   const [filas, setFilas] = useState([]);
   let [dataPedido, setDataPedido] = useState({
     date: new Date(),
@@ -375,10 +393,7 @@ export default function CrearOrden({ onClick }) {
       dataPedido.customerId = response.data.id;
     } catch (error) {
       // Si no se encontró el cliente (error 404), creamos uno nuevo
-      console.error(
-        "Error al buscar cliente, creando uno nuevo:",
-        error.message
-      );
+      console.error("No se encontro el cliente, Creando nuevo");
 
       // Obtener y validar campos
       const valueNombre = document
@@ -618,6 +633,7 @@ export default function CrearOrden({ onClick }) {
                     id="abono"
                     className="inp-abono"
                     onBlur={calcTotal}
+                    placeholder="$ 0.000"
                   />
                 </SpanForm>
                 <SpanForm txt={"Total:"} id={"total"} insert={total} />
@@ -638,6 +654,7 @@ export default function CrearOrden({ onClick }) {
                 id={prenda.id}
                 name={prenda.descripcion}
                 imgPrenda={`${prendasUbi}${prenda.descripcion}.png`}
+                onClick={() => botonPrenda(prenda.id)}
               />
             ))}
           </div>
