@@ -1,7 +1,11 @@
 import "./estado-ordenes.css";
 import axios from "axios";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { tokenPass } from "../../../formularios/iniciar-sesion/iniciar-sesion";
+import DetallesOrden from "../../../botones/abrir-detalles-orden/detalles-orden";
+import CardDetallePedido from "../../../cards/card-detalle-pedido/detalle-pedido";
+
+const noEncontrado = "../../../../../public/media/img/no-encontrado.png";
 
 export default function TbTodo() {
   useEffect(() => {
@@ -22,103 +26,143 @@ export default function TbTodo() {
     }
   };
 
-  /*MOSTRAR COMO PESO COLOMBIANO*/
-  const formatoPesoColombiano = new Intl.NumberFormat("es-CO", {
-    style: "decimal",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
+  /*MOSTRAR DETALLES ORDEN*/
+  const [mensajeErr, setMensajeErr] = useState(null);
+  const [detalles, setDetalles] = useState(null);
+  const [detallesVisible, setDetallesVisible] = useState(false);
+  const [mostarDt, setMostrarDt] = useState(false);
+  const mostrarDetalles = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/orders/${id}`, {
+        headers: {
+          Authorization: `Bearer ${tokenPass}`,
+        },
+      });
+      setDetalles(response.data);
 
-  /*TRANSFORMAR LA FECHA*/
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
+      /*Animacion de entrada*/
+      setDetallesVisible(true);
+      setTimeout(() => {
+        setMostrarDt(true);
+      }, 0);
+    } catch (error) {
+      console.log(error);
+      setMensajeErr("No se puede acceder a los datos");
+    }
+  };
 
-    // Usar toLocaleString() para formatear la fecha y luego reemplazar la coma por un guion
-    const formattedDate = date.toLocaleString("es-CO", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true, // Esto asegura que use AM/PM
-    });
 
-    // Reemplazar la coma por un guion
-    return formattedDate
-      .replace(",", " -")
-      .replace("a. m.", "AM")
-      .replace("p. m.", "PM");
+  /*OCULTAR DETALLES ORDEN*/
+  const ocultarDetalles = () => {
+    setMostrarDt(false);
+    setTimeout(() => {
+      setDetallesVisible(false);
+    }, 300);
   };
 
   return (
     <div className="cont-tabla">
+      {setMensajeErr && <span>{mensajeErr}</span>}
+      {detallesVisible && (
+        <CardDetallePedido estado={mostarDt} onClick={ocultarDetalles}/>
+      )}
       <table className="tabla">
-        <thead className="th-tabla">
-          <tr className="separacion-fila-head"></tr>
-          <tr className="tr-encabezado">
-            <th className="th">N°</th>
-            <th className="th"> Cliente </th>
-            <th className="th"> Telefono </th>
-            <th className="th">Fecha radicacion</th>
-            <th className="th">Fecha entrega</th>
-            <th className="th"> Valor </th>
-            <th className="th">Prenda</th>
-            <th className="th">Estado</th>
-          </tr>
-          <tr className="separacion-fila-head"></tr>
-        </thead>
-        <tbody className="body-tabla">
-          {orders.map((order) => (
-            <React.Fragment key={order.id}>
-              <tr className="tr-body">
-                <td className="td">{order.id}</td>
-                <td className="td">{order.customerName}</td>
-                <td className="td">{order.telefono}</td>
-                <td className="td">
-                  {new Date(order.fechaPedido)
-                    .toLocaleString("es-CO", {
-                      year: "numeric",
-                      month: "numeric",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-                    .replace(",", " -")
-                    .replace("a. m.", "AM")
-                    .replace("p. m.", "PM")}
-                </td>
-                <td className="td">
-                  {new Date(order.fechaEntrega)
-                    .toLocaleString("es-CO", {
-                      year: "numeric",
-                      month: "numeric",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-                    .replace(",", " -")
-                    .replace("a. m.", "AM")
-                    .replace("p. m.", "PM")}
-                </td>
-                <td className="td">
-                  {new Intl.NumberFormat("es-CO", {
-                    style: "decimal",
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  }).format(order.saldo)}
-                </td>
-                <td className="td">
-                  {order.prenda
-                    .slice(0, 2)
-                    .map((p) => p.descripcion)
-                    .join(", ") + (order.prenda.length > 2 ? "..." : "")}
-                </td>
-                <td className="td">{order.estado}</td>
+        {orders.length > 0 ? (
+          <>
+            <thead className="th-tabla">
+              <tr className="separacion-fila-head"></tr>
+              <tr className="tr-encabezado">
+                <th className="th">N°</th>
+                <th className="th"> Cliente </th>
+                <th className="th"> Telefono </th>
+                <th className="th">Fecha radicacion</th>
+                <th className="th">Fecha entrega</th>
+                <th className="th"> Valor </th>
+                <th className="th">Prenda</th>
+                <th className="th">Estado</th>
               </tr>
-              <tr className="separacion-fila"></tr>
-            </React.Fragment>
-          ))}
-        </tbody>
+              <tr className="separacion-fila-head"></tr>
+            </thead>
+            <tbody className="body-tabla">
+              {orders.map((order) => (
+                <React.Fragment key={order.id}>
+                  <tr className="tr-body">
+                    <td className="td">{order.id}</td>
+                    <td className="td">{order.customerName}</td>
+                    <td className="td">{order.telefono}</td>
+                    <td className="td">
+                      {new Date(order.fechaPedido)
+                        .toLocaleString("es-CO", {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                        .replace(",", " -")
+                        .replace("a. m.", "AM")
+                        .replace("p. m.", "PM")}
+                    </td>
+                    <td className="td">
+                      {new Date(order.fechaEntrega)
+                        .toLocaleString("es-CO", {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                        .replace(",", " -")
+                        .replace("a. m.", "AM")
+                        .replace("p. m.", "PM")}
+                    </td>
+                    <td className="td">
+                      {new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(order.saldo)}
+                    </td>
+                    <td className="td">
+                      {order.prenda
+                        .slice(0, 2)
+                        .map((p) => p.descripcion)
+                        .join(", ") + (order.prenda.length > 2 ? "..." : "")}
+                    </td>
+                    <td
+                      className="td"
+                      onClick={() => mostrarDetalles(order.id)}
+                    >
+                      {(() => {
+                        switch (order.estado) {
+                          case "PENDIENTE":
+                            return <DetallesOrden clase={"en-proceso"} />;
+                          case "FINALIZADO":
+                            return <DetallesOrden clase={"finalizado"} />;
+                          case "ENTREGADO":
+                            return <DetallesOrden clase={"entregado"} />;
+                          case "ANULADO":
+                            return <DetallesOrden clase={"anulado"} />;
+                          default:
+                            return null;
+                        }
+                      })()}
+                    </td>
+                  </tr>
+                  <tr className="separacion-fila"></tr>
+                </React.Fragment>
+              ))}
+            </tbody>
+          </>
+        ) : (
+          <tbody className="body-tabla">
+            <tr className="no-orders">
+              <td colSpan="8">
+                <img src={noEncontrado} className="cont-mess-err" />
+              </td>
+            </tr>
+          </tbody>
+        )}
       </table>
     </div>
   );

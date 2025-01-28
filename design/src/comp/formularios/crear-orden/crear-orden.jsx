@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { isDate } from "date-fns";
 import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import axios from "axios";
+import WebCam from "react-webcam";
 import "./crear-orden.css";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro";
 import SepYNegro from "../../separadores/sep-y-negro/sep-y-negro";
@@ -20,19 +21,52 @@ export default function CrearOrden({ onClick }) {
 
   /*ANIMACION MOSTRAR FORMULARIO*/
   useEffect(() => {
-    // Al cargar el componente, aseguramos que la animación de entrada se ejecute
     setIsVisible(true);
     mostrarPrendas();
     mostrarUsers();
+    setCameraOn((prevState) => !prevState);
   }, []);
 
   /*SALIR DEL FORMULARIO*/
   const handleExit = (event) => {
-    // Verifica si el clic fue directamente en el contenedor "salir"
     if (event.target.classList.contains("salir")) {
       setIsVisible(false);
-      setTimeout(onClick, 300); // Llama onClick después de que la animación termine
+      setTimeout(onClick, 300);
     }
+    setCameraOn((prevState) => !prevState);
+  };  
+
+  /*ACCEDER A LA CAMARA Y TOMAR FOTO*/
+  const webcamRef = useRef(null);
+  const [foto, setFoto] = useState(null);
+  const [fotoBlob, setFotoBlob] = useState(null);
+  const [cameraOn, setCameraOn] = useState(false);
+  const capturarFoto = (event) => {
+    event.preventDefault();
+    const imgSrc = webcamRef.current.getScreenshot();
+    setFoto(imgSrc);
+
+    // Pausar el video
+    const videoElement = webcamRef.current.video;
+    if (videoElement) {
+      videoElement.pause();
+    }
+
+    /*Convertir base64 a blob*/
+    /*Remover el prefijo data url*/
+    const base64Data = imgSrc.split(",")[1];
+    // Convertir base64 a array de bytes
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    // Crear Blob
+    const blob = new Blob([byteArray], { type: "image/jpeg" });
+    setFotoBlob(blob);
   };
 
   /*INSERTAR NOMBRE SEGUN TELEFONO*/
@@ -120,10 +154,12 @@ export default function CrearOrden({ onClick }) {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
-      txtNamePrenda.value = response.data.descripcion
-      const valorPrenda = response.data.valor
-      const valorPrendaFormat = new Intl.NumberFormat("es-CO").format(valorPrenda)
-      txtValorPrenda.value = valorPrendaFormat
+      txtNamePrenda.value = response.data.descripcion;
+      const valorPrenda = response.data.valor;
+      const valorPrendaFormat = new Intl.NumberFormat("es-CO").format(
+        valorPrenda
+      );
+      txtValorPrenda.value = valorPrendaFormat;
     } catch (error) {
       console.log(error);
     }
@@ -444,8 +480,6 @@ export default function CrearOrden({ onClick }) {
       }
     }
 
-    console.log(dataPedido);
-
     /*
     try {
       const responsePedido = await axios.post(
@@ -460,7 +494,7 @@ export default function CrearOrden({ onClick }) {
       );
 
       //Mostrar resultado
-      console.log("Pedido Creado", responsePedido.dataPedido);
+      console.log(responsePedido.data);
     } catch (error) {
       console.log(
         "Error creando pedido:",
@@ -468,6 +502,20 @@ export default function CrearOrden({ onClick }) {
       );
     }
     */
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/orders/1/upload-photo-entrega",
+        fotoBlob,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -590,13 +638,15 @@ export default function CrearOrden({ onClick }) {
             </div>
             <SepXNegro />
             <div className="cont-dateEtc">
-              <video
-                className="camara"
-                id="camara"
-                autoPlay
-                playsInline
-                muted
-              ></video>
+              <div className="camara">
+                <WebCam
+                  audio={false}
+                  ref={webcamRef}
+                  screenshotFormat="image/png"
+                  height={206}
+                  width={206}
+                />
+              </div>
               <div className="div-column-2">
                 <CustomDateInput
                   selected={selectedDate}
@@ -639,7 +689,11 @@ export default function CrearOrden({ onClick }) {
                 <SpanForm txt={"Total:"} id={"total"} insert={total} />
               </div>
               <div className="div-column">
-                <button className="clean-print">Limpiar</button>
+                <button className="clean-print" onClick={capturarFoto}>
+                  Tomar
+                  <br />
+                  Foto
+                </button>
                 <button className="clean-print" onClick={enviarOrden}>
                   Imprimir
                 </button>

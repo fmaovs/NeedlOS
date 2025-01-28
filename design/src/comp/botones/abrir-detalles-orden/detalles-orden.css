@@ -1,0 +1,27 @@
+.abrir-detalles {
+    border: none;
+    height: 100%;
+    border-radius: 1vh;
+    width: 80%;
+    margin: 0;
+}
+
+.abrir-detalles:hover {
+    cursor: pointer;
+}
+
+.en-proceso{
+    background: linear-gradient(135deg, #5599FF, #255AA9);
+}
+
+.finalizado{
+    background: linear-gradient(135deg, #48EA60, #2C9B3C);
+}
+
+.entregado{
+    background: linear-gradient(135deg, #FDBC40, #B18329);
+}
+
+.anulado{
+    background: linear-gradient(135deg, #FC615D, #AF0000);
+}
