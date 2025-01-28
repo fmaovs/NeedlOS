@@ -389,6 +389,7 @@ export default function CrearOrden({ onClick }) {
   /*MANDAR ORDEN*/
   async function enviarOrden(event) {
     event.preventDefault();
+    const [idOrden, setIdOrden] = useState(null)
 
     /*ASIGNAR FECHA ENTREGA*/
     if (isDate(selectedDate)) {
@@ -480,7 +481,6 @@ export default function CrearOrden({ onClick }) {
       }
     }
 
-    /*
     try {
       const responsePedido = await axios.post(
         "http://localhost:8080/orders",
@@ -495,21 +495,21 @@ export default function CrearOrden({ onClick }) {
 
       //Mostrar resultado
       console.log(responsePedido.data);
+      console.log(response.data.id)
+      setIdOrden(response.data.id);
     } catch (error) {
       console.log(
         "Error creando pedido:",
         error.response ? error.response.data : error.message
       );
     }
-    */
 
-    console.log(fotoBlob);
     try {
       const formData = new FormData();
       formData.append("file", fotoBlob);
 
       const response = await axios.post(
-        "http://localhost:8080/orders/1/upload-photo-entrega",
+        `http://localhost:8080/orders/${idOrden}/upload-photo-entrega`,
         formData,
         {
           headers: {
