@@ -34,7 +34,7 @@ export default function CrearOrden({ onClick }) {
       setTimeout(onClick, 300);
     }
     setCameraOn((prevState) => !prevState);
-  };  
+  };
 
   /*ACCEDER A LA CAMARA Y TOMAR FOTO*/
   const webcamRef = useRef(null);
@@ -503,16 +503,22 @@ export default function CrearOrden({ onClick }) {
     }
     */
 
+    console.log(fotoBlob);
     try {
+      const formData = new FormData();
+      formData.append("file", fotoBlob);
+
       const response = await axios.post(
         "http://localhost:8080/orders/1/upload-photo-entrega",
-        fotoBlob,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
+      console.log("Se envio la imagen")
     } catch (error) {
       console.log(error);
     }
