@@ -387,9 +387,9 @@ export default function CrearOrden({ onClick }) {
   let idCliente;
 
   /*MANDAR ORDEN*/
+  let idOrden = null;
   async function enviarOrden(event) {
     event.preventDefault();
-    const [idOrden, setIdOrden] = useState(null)
 
     /*ASIGNAR FECHA ENTREGA*/
     if (isDate(selectedDate)) {
@@ -494,9 +494,8 @@ export default function CrearOrden({ onClick }) {
       );
 
       //Mostrar resultado
-      console.log(responsePedido.data);
-      console.log(response.data.id)
-      setIdOrden(response.data.id);
+      idOrden = (responsePedido.data.id)
+      console.log("EL ID DEL NUEVO PEDIDO ES: ",responsePedido.data.id)
     } catch (error) {
       console.log(
         "Error creando pedido:",
@@ -518,7 +517,7 @@ export default function CrearOrden({ onClick }) {
           },
         }
       );
-      console.log("Se envio la imagen")
+      console.log("Se envio la imagen");
     } catch (error) {
       console.log(error);
     }
