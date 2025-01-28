@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
+import com.farukgenc.boilerplate.springboot.model.Pedido;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import com.farukgenc.boilerplate.springboot.service.PedidoService;
@@ -44,17 +45,16 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createOrder(@RequestBody PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoResponse> createOrder(@RequestBody PedidoDTO pedidoDTO) {
         try {
-            pedidoService.createPedido(pedidoDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Pedido creado correctamente");
+            PedidoResponse pedido = pedidoService.createPedido(pedidoDTO);
+            return ResponseEntity.ok(pedido);
         } catch (Exception e) {
             // Imprime el error en la consola para depuración
             e.printStackTrace();
 
-            // Respuesta detallada para identificar el problema
-            String errorMessage = "Error al crear el pedido: " + e.getMessage();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+            // Devuelve un error 400 con el mensaje de error
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 

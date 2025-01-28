@@ -15,11 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * Created on Ağustos, 2020
- *
- * @author Faruk
- */
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration {
@@ -48,7 +44,7 @@ public class SecurityConfiguration {
 																	      "/swagger-ui.html",
 																	      "/actuator/**")
 													   .permitAll()
-						.requestMatchers(HttpMethod.POST, "/orders").hasAuthority("ADMIN")
+						.requestMatchers(HttpMethod.POST, "/orders/**").hasAuthority("ADMIN")
 													   .anyRequest()
 													   .authenticated())
 				.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
