@@ -474,7 +474,7 @@ export default function CrearOrden({ onClick }) {
         );
         dataPedido.customerId = createResponse.data.id;
         if (createResponse.status === 200) {
-          console.log("Nuevo Cliente creado ID: ", dataPedido.idCliente);
+          console.log("Nuevo Cliente creado ID: ", dataPedido.customerId);
         } else {
           throw new Error("Error en la creación del cliente");
         }
