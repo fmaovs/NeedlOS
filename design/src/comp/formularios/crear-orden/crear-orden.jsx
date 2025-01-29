@@ -123,6 +123,7 @@ export default function CrearOrden({ onClick }) {
           prenda.valor
         );
         vlrUnit.value = valorFormateado;
+        console.log("Valor prenda insertado (NOMBRE)")
       }
     } catch {
       console.log("Error encontrando el valor de la prenda", error.message);
@@ -160,6 +161,7 @@ export default function CrearOrden({ onClick }) {
         valorPrenda
       );
       txtValorPrenda.value = valorPrendaFormat;
+      console.log("Prenda insertada(BOTON)")
     } catch (error) {
       console.log(error);
     }
@@ -481,6 +483,7 @@ export default function CrearOrden({ onClick }) {
       }
     }
 
+    /*TRY PARA CREAR EL PEDIDO*/
     try {
       const responsePedido = await axios.post(
         "http://localhost:8080/orders",
@@ -503,6 +506,7 @@ export default function CrearOrden({ onClick }) {
       );
     }
 
+    /*TRY PARA ASIGNAR LA FOTO AL PEDIDO*/
     try {
       const formData = new FormData();
       formData.append("file", fotoBlob);
