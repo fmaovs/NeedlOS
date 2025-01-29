@@ -29,6 +29,10 @@ public class CustomerService {
 
     @Transactional
     public Customer save(CustomerDTO customer) {
+        if (customerRepository.findByPhone(customer.getPhone()).isPresent()) {
+            throw new RuntimeException("customer with phone " + customer.getPhone() + " already exists");
+        }
+
         Customer newCustomer = new Customer();
         BeanUtils.copyProperties(customer, newCustomer);
         newCustomer.setFecha_registro(new Date());
