@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { isDate } from "date-fns";
 import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import axios from "axios";
+import WebCam from "react-webcam";
 import "./crear-orden.css";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro";
 import SepYNegro from "../../separadores/sep-y-negro/sep-y-negro";
@@ -20,19 +21,52 @@ export default function CrearOrden({ onClick }) {
 
   /*ANIMACION MOSTRAR FORMULARIO*/
   useEffect(() => {
-    // Al cargar el componente, aseguramos que la animación de entrada se ejecute
     setIsVisible(true);
     mostrarPrendas();
     mostrarUsers();
+    setCameraOn((prevState) => !prevState);
   }, []);
 
   /*SALIR DEL FORMULARIO*/
   const handleExit = (event) => {
-    // Verifica si el clic fue directamente en el contenedor "salir"
     if (event.target.classList.contains("salir")) {
       setIsVisible(false);
-      setTimeout(onClick, 500); // Llama onClick después de que la animación termine
+      setTimeout(onClick, 300);
     }
+    setCameraOn((prevState) => !prevState);
+  };
+
+  /*ACCEDER A LA CAMARA Y TOMAR FOTO*/
+  const webcamRef = useRef(null);
+  const [foto, setFoto] = useState(null);
+  const [fotoBlob, setFotoBlob] = useState(null);
+  const [cameraOn, setCameraOn] = useState(false);
+  const capturarFoto = (event) => {
+    event.preventDefault();
+    const imgSrc = webcamRef.current.getScreenshot();
+    setFoto(imgSrc);
+
+    // Pausar el video
+    const videoElement = webcamRef.current.video;
+    if (videoElement) {
+      videoElement.pause();
+    }
+
+    /*Convertir base64 a blob*/
+    /*Remover el prefijo data url*/
+    const base64Data = imgSrc.split(",")[1];
+    // Convertir base64 a array de bytes
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    // Crear Blob
+    const blob = new Blob([byteArray], { type: "image/jpeg" });
+    setFotoBlob(blob);
   };
 
   /*INSERTAR NOMBRE SEGUN TELEFONO*/
@@ -75,7 +109,7 @@ export default function CrearOrden({ onClick }) {
 
   /*INSERTAR VALOR UNITARIO SEGUN NOMBRE PRENDA*/
   async function insertarValor() {
-    const namePrenda = document.getElementById("producto").value;
+    const namePrenda = document.getElementById("producto").value.toLowerCase();
     let vlrUnit = document.getElementById("vlr-uni");
     try {
       const response = await axios.get("http://localhost:8080/prendas/all", {
@@ -89,6 +123,7 @@ export default function CrearOrden({ onClick }) {
           prenda.valor
         );
         vlrUnit.value = valorFormateado;
+        console.log("Valor prenda insertado (NOMBRE)");
       }
     } catch {
       console.log("Error encontrando el valor de la prenda", error.message);
@@ -110,6 +145,28 @@ export default function CrearOrden({ onClick }) {
     }
   };
 
+  /*BOTON PRENDAS*/
+  const botonPrenda = async (id) => {
+    const txtNamePrenda = document.getElementById("producto");
+    const txtValorPrenda = document.getElementById("vlr-uni");
+    try {
+      const response = await axios.get(`http://localhost:8080/prendas/${id}`, {
+        headers: {
+          Authorization: `Bearer ${tokenPass}`,
+        },
+      });
+      txtNamePrenda.value = response.data.descripcion;
+      const valorPrenda = response.data.valor;
+      const valorPrendaFormat = new Intl.NumberFormat("es-CO").format(
+        valorPrenda
+      );
+      txtValorPrenda.value = valorPrendaFormat;
+      console.log("Prenda insertada(BOTON)");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   /*TRY ASIGANR ID SASTRE*/
   const [users, setUsers] = useState([]);
   const mostrarUsers = async () => {
@@ -128,8 +185,23 @@ export default function CrearOrden({ onClick }) {
   /*SELECCIONAR FECHA*/
   const [selectedDate, setSelectedDate] = useState(null);
 
+  /*ASIGNAR DIAS RESTANTES*/
+  const [numeroDias, setNumeroDias] = useState("0");
+  function diasRestantes(date) {
+    if (fechaPedido > date) {
+      return;
+    }
+
+    const diferencia = date.getTime() - fechaPedido.getTime();
+
+    const diasDiferencia = Math.ceil(
+      diferencia / (1000 * 3600 * 24)
+    ).toString();
+
+    setNumeroDias(diasDiferencia);
+  }
+
   /*LISTA DETALLES Y OBJETO A ENVIAR (VACIOS)*/
-  let fechaPedidotoISO = new Date().toISOString();
   const [filas, setFilas] = useState([]);
   let [dataPedido, setDataPedido] = useState({
     date: new Date(),
@@ -138,7 +210,54 @@ export default function CrearOrden({ onClick }) {
     fechaEntrega: null,
   });
 
-  useEffect(() => {}, [dataPedido]); // Observa los cambios en dataPedido
+  /*ASIGNAR VALORES PIEZAS, SUBTOTAL, TOTAL*/
+  const [piezasTotal, setPiezasTotal] = useState(null);
+  const [subTotal, setSubtotal] = useState("");
+  const [total, setTotal] = useState("");
+  const [triggerEffect, setTriggerEffect] = useState(0);
+
+  useEffect(() => {
+    /* Asignar valor piezas */
+    const piezasTotal = document.querySelectorAll(".td-cantidad");
+    let totalPiezas = 0;
+
+    piezasTotal.forEach((celdaPzs) => {
+      const nPiezas = celdaPzs.textContent.trim();
+      const nPiezasInt = parseInt(nPiezas, 10);
+
+      totalPiezas += nPiezasInt;
+    });
+    setPiezasTotal(totalPiezas);
+
+    /* Asignar valor subtotal */
+    const valorTotal = document.querySelectorAll(".td-valor-total");
+    let total = 0;
+
+    valorTotal.forEach((celda) => {
+      const valor = celda.textContent.trim().replace(/\./g, "");
+      const valorInt = parseInt(valor, 10);
+
+      total += valorInt;
+    });
+    const pesoCop = new Intl.NumberFormat("es-CO").format(total);
+    setSubtotal(`$ ${pesoCop}`);
+
+    /* Restar abono */
+    const abonoValue = document.getElementById("abono")?.value || "";
+    if (abonoValue !== "" && !isNaN(Number(abonoValue))) {
+      const abono = +abonoValue;
+      const resta = total - abono;
+      const pesoCop = new Intl.NumberFormat("es-CO").format(resta);
+      setTotal(`$ ${pesoCop}`);
+    } else {
+      setTotal(`$ ${pesoCop}`);
+    }
+  }, [dataPedido, triggerEffect]);
+
+  /*CARGAR EL ABONO*/
+  function calcTotal() {
+    setTriggerEffect((prev) => prev + 1); // Forzar la ejecución del useEffect
+  }
 
   /*FUNCION PARA AGREGAR LOS VALORES DE DETALLES A LA LISTA*/
   async function agregarDetalles(event) {
@@ -265,13 +384,29 @@ export default function CrearOrden({ onClick }) {
     }, 150);
   }
 
+  /*VARIBLES PARA LAS ORDENES*/
+  let fechaPedido = new Date(dataPedido.date);
+  let idCliente;
+
   /*MANDAR ORDEN*/
+  let idOrden = null;
   async function enviarOrden(event) {
     event.preventDefault();
 
-    /*VARIBLES PARA LAS ORDENES*/
-    let fechaPedido = new Date(dataPedido.date);
-    let idCliente;
+    /*ASIGNAR FECHA ENTREGA*/
+    if (isDate(selectedDate)) {
+      /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
+      if (selectedDate.getTime() < fechaPedido.getTime()) {
+        alert("No se aceptan fechas anteriores al dia actual");
+        return;
+      } else {
+        dataPedido.date = fechaPedido.toISOString();
+        dataPedido.fechaEntrega = selectedDate.toISOString();
+      }
+    } else {
+      alert("Ingrese una fecha");
+      return;
+    }
 
     /*EXTRAER NOMBRE, APELLIIDO, TELEFONO, ID*/
     try {
@@ -295,12 +430,9 @@ export default function CrearOrden({ onClick }) {
 
       // Si encontramos el cliente, asignamos su ID
       dataPedido.customerId = response.data.id;
-    } catch (error) {
+    } catch {
       // Si no se encontró el cliente (error 404), creamos uno nuevo
-      console.error(
-        "Error al buscar cliente, creando uno nuevo:",
-        error.message
-      );
+      console.log("No se encontro al cliente, Creando uno nuevo");
 
       // Obtener y validar campos
       const valueNombre = document
@@ -329,6 +461,7 @@ export default function CrearOrden({ onClick }) {
         phone: valueTelefono,
       };
 
+      console.log(dataPedido)
       try {
         const createResponse = await axios.post(
           "http://localhost:8080/customers",
@@ -339,10 +472,9 @@ export default function CrearOrden({ onClick }) {
             },
           }
         );
-        console.log(createResponse.data);
+        dataPedido.customerId = createResponse.data.id;
         if (createResponse.status === 200) {
-          idCliente = createResponse.data.id; // Asignar ID del cliente creado
-          console.log("Nuevo Cliente creado ID: ", idCliente);
+          console.log("Nuevo Cliente creado ID: ", dataPedido.idCliente);
         } else {
           throw new Error("Error en la creación del cliente");
         }
@@ -351,45 +483,44 @@ export default function CrearOrden({ onClick }) {
       }
     }
 
-    /*ASIGNAR FECHA ENTREGA*/
-    if (isDate(selectedDate)) {
-      /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
-      if (selectedDate.getTime() < fechaPedido.getTime()) {
-        alert("No se aceptan fechas anteriores al dia actual");
-        return;
-      } else {
-        dataPedido.date = fechaPedido.toISOString();
-        dataPedido.fechaEntrega = selectedDate.toISOString();
-      }
-    } else {
-      alert("Ingrese una fecha");
-      return;
-    }
-
-    console.log(dataPedido);
-
-    /*
+    /*TRY PARA CREAR EL PEDIDO*/
     try {
       const responsePedido = await axios.post(
         "http://localhost:8080/orders",
         dataPedido,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${tokenPass}`,
           },
         }
       );
 
       //Mostrar resultado
-      console.log("Pedido Creado", responsePedido.dataPedido);
-    } catch (error) {
-      console.log(
-        "Error creando pedido:",
-        error.response ? error.response.data : error.message
-      );
+      console.log("EL ID DEL NUEVO PEDIDO ES: ", responsePedido.data.id);
+      idOrden = responsePedido.data.id;
+    } catch {
+      console.log("No se pudo crear el pedido");
     }
-    */
+
+    /*TRY PARA ASIGNAR LA FOTO AL PEDIDO*/
+    try {
+      const formData = new FormData();
+      formData.append("file", fotoBlob);
+
+      const response = await axios.post(
+        `http://localhost:8080/orders/${idOrden}/upload-photo-entrega`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Se envio la imagen");
+    } catch {
+      console.log("No se pudo asignar la foto al pedido");
+    }
   }
 
   return (
@@ -441,7 +572,6 @@ export default function CrearOrden({ onClick }) {
                 className={"box-form five"}
                 placeholder={"Vlr. Unit..."}
                 id={"vlr-uni"}
-                onBlur={insertarValor}
               />
             </ContTxtForm>
             <ContTxtForm className={"tres"}>
@@ -461,7 +591,7 @@ export default function CrearOrden({ onClick }) {
             </ContTxtForm>
             <SepXNegro />
             <div className="tb-lista">
-              <table className="tb-detalles">
+              <table className="tb-detalles" id="tb-detalles">
                 <thead>
                   <tr className="sep-fila-detalles-2"></tr>
                   <tr>
@@ -485,11 +615,15 @@ export default function CrearOrden({ onClick }) {
                         } 
           ${fila.isAnimada ? "fila-animada" : ""}`}
                       >
-                        <td className="td-detalles">{fila.cantidad}</td>
+                        <td className="td-detalles td-cantidad">
+                          {fila.cantidad}
+                        </td>
                         <td className="td-detalles">{fila.detalles}</td>
                         <td className="td-detalles">{fila.producto}</td>
                         <td className="td-detalles">{fila.vlrUnit}</td>
-                        <td className="td-detalles">{fila.vlrTotal}</td>
+                        <td className="td-detalles td-valor-total">
+                          {fila.vlrTotal}
+                        </td>
                         <td
                           className="td-detalles"
                           onClick={() => eliminarFila(index)}
@@ -509,17 +643,22 @@ export default function CrearOrden({ onClick }) {
             </div>
             <SepXNegro />
             <div className="cont-dateEtc">
-              <video
-                className="camara"
-                id="camara"
-                autoPlay
-                playsInline
-                muted
-              ></video>
+              <div className="camara">
+                <WebCam
+                  audio={false}
+                  ref={webcamRef}
+                  screenshotFormat="image/png"
+                  height={206}
+                  width={206}
+                />
+              </div>
               <div className="div-column-2">
                 <CustomDateInput
                   selected={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  onChange={(date) => {
+                    setSelectedDate(date);
+                    diasRestantes(date);
+                  }}
                 />
                 <select className="select-form" id="select-sastre">
                   <option className="option" value="null">
@@ -534,26 +673,32 @@ export default function CrearOrden({ onClick }) {
               </div>
               <div className="div-column-full">
                 <div className="div-row">
-                  <SpanForm txt={"Dias:"} id={"dias"} insert={"8"} />
-                  <SpanForm txt={"Pzs:"} id={"piezas"} insert={"7"} />
+                  <SpanForm txt={"Dias:"} id={"dias"} insert={numeroDias} />
+                  <SpanForm txt={"Pzs:"} id={"piezas"} insert={piezasTotal} />
                 </div>
-                <SpanForm
-                  txt={"Subtotal:"}
-                  id={"subtotal"}
-                  insert={"$ 85.000"}
-                />
+                <SpanForm txt={"Subtotal:"} id={"subtotal"} insert={subTotal} />
                 <SpanForm
                   txt={"Abono:"}
                   onHover={"on"}
                   label={"abono"}
                   cursor={"onCursor"}
                 >
-                  <input type="number" id="abono" className="inp-abono" />
+                  <input
+                    type="number"
+                    id="abono"
+                    className="inp-abono"
+                    onBlur={calcTotal}
+                    placeholder="$ 0.000"
+                  />
                 </SpanForm>
-                <SpanForm txt={"Total:"} id={""} insert={"$ 65.000"} />
+                <SpanForm txt={"Total:"} id={"total"} insert={total} />
               </div>
               <div className="div-column">
-                <button className="clean-print">Limpiar</button>
+                <button className="clean-print" onClick={capturarFoto}>
+                  Tomar
+                  <br />
+                  Foto
+                </button>
                 <button className="clean-print" onClick={enviarOrden}>
                   Imprimir
                 </button>
@@ -568,6 +713,7 @@ export default function CrearOrden({ onClick }) {
                 id={prenda.id}
                 name={prenda.descripcion}
                 imgPrenda={`${prendasUbi}${prenda.descripcion}.png`}
+                onClick={() => botonPrenda(prenda.id)}
               />
             ))}
           </div>
