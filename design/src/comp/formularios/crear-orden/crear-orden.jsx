@@ -123,7 +123,7 @@ export default function CrearOrden({ onClick }) {
           prenda.valor
         );
         vlrUnit.value = valorFormateado;
-        console.log("Valor prenda insertado (NOMBRE)")
+        console.log("Valor prenda insertado (NOMBRE)");
       }
     } catch {
       console.log("Error encontrando el valor de la prenda", error.message);
@@ -161,7 +161,7 @@ export default function CrearOrden({ onClick }) {
         valorPrenda
       );
       txtValorPrenda.value = valorPrendaFormat;
-      console.log("Prenda insertada(BOTON)")
+      console.log("Prenda insertada(BOTON)");
     } catch (error) {
       console.log(error);
     }
@@ -430,9 +430,9 @@ export default function CrearOrden({ onClick }) {
 
       // Si encontramos el cliente, asignamos su ID
       dataPedido.customerId = response.data.id;
-    } catch (error) {
+    } catch {
       // Si no se encontró el cliente (error 404), creamos uno nuevo
-      console.error("No se encontro el cliente, Creando nuevo");
+      console.log("No se encontro al cliente, Creando uno nuevo");
 
       // Obtener y validar campos
       const valueNombre = document
@@ -461,6 +461,7 @@ export default function CrearOrden({ onClick }) {
         phone: valueTelefono,
       };
 
+      console.log(dataPedido)
       try {
         const createResponse = await axios.post(
           "http://localhost:8080/customers",
@@ -471,10 +472,9 @@ export default function CrearOrden({ onClick }) {
             },
           }
         );
-        console.log(createResponse.data);
+        dataPedido.customerId = createResponse.data.id;
         if (createResponse.status === 200) {
-          idCliente = createResponse.data.id; // Asignar ID del cliente creado
-          console.log("Nuevo Cliente creado ID: ", idCliente);
+          console.log("Nuevo Cliente creado ID: ", dataPedido.idCliente);
         } else {
           throw new Error("Error en la creación del cliente");
         }
@@ -490,20 +490,16 @@ export default function CrearOrden({ onClick }) {
         dataPedido,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${tokenPass}`,
           },
         }
       );
 
       //Mostrar resultado
-      idOrden = (responsePedido.data.id)
-      console.log("EL ID DEL NUEVO PEDIDO ES: ",responsePedido.data.id)
-    } catch (error) {
-      console.log(
-        "Error creando pedido:",
-        error.response ? error.response.data : error.message
-      );
+      console.log("EL ID DEL NUEVO PEDIDO ES: ", responsePedido.data.id);
+      idOrden = responsePedido.data.id;
+    } catch {
+      console.log("No se pudo crear el pedido");
     }
 
     /*TRY PARA ASIGNAR LA FOTO AL PEDIDO*/
@@ -522,8 +518,8 @@ export default function CrearOrden({ onClick }) {
         }
       );
       console.log("Se envio la imagen");
-    } catch (error) {
-      console.log(error);
+    } catch {
+      console.log("No se pudo asignar la foto al pedido");
     }
   }
 
