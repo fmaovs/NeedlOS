@@ -208,6 +208,11 @@ export default function CrearOrden({ onClick }) {
     fechaEntrega: null,
   });
 
+  /*IMPRIMIR EL NUEVO ESTADO DEL PEDIDO*/
+  useEffect(() => {
+    console.log(dataPedido);
+  }, [dataPedido]);
+
   /*ASIGNAR VALORES PIEZAS, SUBTOTAL, TOTAL*/
   const [piezasTotal, setPiezasTotal] = useState(null);
   const [subTotal, setSubtotal] = useState("");
@@ -386,6 +391,44 @@ export default function CrearOrden({ onClick }) {
   let fechaPedido = new Date(dataPedido.date);
   let idCliente;
 
+  /*REINICIAR DATAPEDIDO*/
+  function limpiarPedido() {
+    /*Actualizar el estado del pedido a vacio*/
+    console.log("Dato reiniciados");
+    setDataPedido({
+      date: new Date(),
+      customerId: null,
+      detalles: [],
+      fechaEntrega: null,
+    });
+
+    /*Vaciar campos nombre, apellido, telefono*/
+    document.getElementById("nombre").value = ""
+    document.getElementById("apellido").value = "";
+    document.getElementById("telefono").value = "";
+    
+    /*Eliminar filas de la tabla*/
+    setFilas((filasActuales) =>
+      filasActuales.map((fila) => ({ ...fila, isEliminado: true }))
+    );
+
+    // Después de un tiempo, eliminar todas las filas completamente
+    setTimeout(() => {
+      setFilas([]);
+      setDataPedido((prevData) => ({
+        ...prevData,
+        detalles: [],
+      }));
+    }, 150);
+
+    /*Eliminar fecha entrega*/
+    setNumeroDias("0")
+    setSelectedDate(null)
+    
+    /*Eliminar foto*/
+    setFotoBlob(null)
+  }
+
   /*MANDAR ORDEN*/
   let idOrden = null;
   async function enviarOrden(event) {
@@ -428,7 +471,10 @@ export default function CrearOrden({ onClick }) {
 
       // Si encontramos el cliente, asignamos su ID
       dataPedido.customerId = response.data.id;
-    } catch {
+    } catch (error) {
+      console.error("Cliente no encontrado, Creando...");
+      console.log("------------------------------");
+
       // Obtener y validar campos
       const valueNombre = document
         .getElementById("nombre")
@@ -467,6 +513,8 @@ export default function CrearOrden({ onClick }) {
           }
         );
         dataPedido.customerId = createResponse.data.id;
+        console.error("Cliente creado ID = ", createResponse.data.id);
+        console.log("------------------------------");
       } catch (creationError) {
         console.error("Error al crear cliente:", creationError.message);
       }
@@ -474,6 +522,11 @@ export default function CrearOrden({ onClick }) {
 
     /*TRY PARA CREAR EL PEDIDO*/
     try {
+      if (fotoBlob instanceof Blob) {
+      } else {
+        alert("Debes tomar una foto");
+        return;
+      }
       const responsePedido = await axios.post(
         "http://localhost:8080/orders",
         dataPedido,
@@ -485,33 +538,52 @@ export default function CrearOrden({ onClick }) {
         }
       );
 
-      idOrden = responsePedido.data.id;
+      if (responsePedido.status >= 200 && responsePedido.status < 300) {
+        idOrden = responsePedido.data.id;
+        console.log(
+          "Pedido creado correctamente. ID =",
+          responsePedido.data.id
+        );
+        console.log("------------------------------");
+
+        /*TRY PARA ASIGNAR LA FOTO AL PEDIDO*/
+        try {
+          const formData = new FormData();
+          formData.append("file", fotoBlob);
+
+          const response = await axios.post(
+            `http://localhost:8080/orders/${idOrden}/upload-photo-entrega`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${tokenPass}`,
+              },
+            }
+          );
+          console.log("Foto asignada");
+          console.log("------------------------------");
+        } catch (error) {
+          console.error("Foto NO asignada");
+          console.log("------------------------------");
+          return;
+        }
+      }
     } catch (error) {
       console.error(
         "Error al crear el pedido:",
         error.response?.data || error.message
       );
+      return;
     }
 
-    /*TRY PARA ASIGNAR LA FOTO AL PEDIDO*/
-    try {
-      const formData = new FormData();
-      formData.append("file", fotoBlob);
+    /*BORRAR DATOS RECOLECTADOS Y LIMPIAR FORMULARIO*/
+    console.log("Datos enviados");
+    console.log(dataPedido);
+    console.log("--------------------");
 
-      const response = await axios.post(
-        `http://localhost:8080/orders/${idOrden}/upload-photo-entrega`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${tokenPass}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.log("No se pudo asignar la foto al pedido");
-      console.log(error)
-    }
+    /*EJECUTAR FUNCION DE LIIMPIAR DATOS*/
+    limpiarPedido();
   }
 
   return (
