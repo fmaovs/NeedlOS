@@ -30,7 +30,7 @@ export default function TbTodo() {
   const [mensajeErr, setMensajeErr] = useState(null);
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
-  const [mostarDt, setMostrarDt] = useState(false);
+  const [mostrarDt, setMostrarDt] = useState(false);
   const mostrarDetalles = async (id) => {
     try {
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
@@ -44,13 +44,12 @@ export default function TbTodo() {
       setDetallesVisible(true);
       setTimeout(() => {
         setMostrarDt(true);
-      }, 0);
+      }, 15);
     } catch (error) {
       console.log(error);
       setMensajeErr("No se puede acceder a los datos");
     }
   };
-
 
   /*OCULTAR DETALLES ORDEN*/
   const ocultarDetalles = () => {
@@ -61,109 +60,111 @@ export default function TbTodo() {
   };
 
   return (
-    <div className="cont-tabla">
+    <>
       {setMensajeErr && <span>{mensajeErr}</span>}
       {detallesVisible && (
-        <CardDetallePedido estado={mostarDt} onClick={ocultarDetalles}/>
+        <CardDetallePedido estado={mostrarDt} onClick={ocultarDetalles} />
       )}
-      <table className="tabla">
-        {orders.length > 0 ? (
-          <>
-            <thead className="th-tabla">
-              <tr className="separacion-fila-head"></tr>
-              <tr className="tr-encabezado">
-                <th className="th">N°</th>
-                <th className="th"> Cliente </th>
-                <th className="th"> Telefono </th>
-                <th className="th">Fecha radicacion</th>
-                <th className="th">Fecha entrega</th>
-                <th className="th"> Valor </th>
-                <th className="th">Prenda</th>
-                <th className="th">Estado</th>
-              </tr>
-              <tr className="separacion-fila-head"></tr>
-            </thead>
+      <div className="cont-tabla">
+        <table className="tabla">
+          {orders.length > 0 ? (
+            <>
+              <thead className="th-tabla">
+                <tr className="separacion-fila-head"></tr>
+                <tr className="tr-encabezado">
+                  <th className="th">N°</th>
+                  <th className="th"> Cliente </th>
+                  <th className="th"> Telefono </th>
+                  <th className="th">Fecha radicacion</th>
+                  <th className="th">Fecha entrega</th>
+                  <th className="th"> Valor </th>
+                  <th className="th">Prenda</th>
+                  <th className="th">Estado</th>
+                </tr>
+                <tr className="separacion-fila-head"></tr>
+              </thead>
+              <tbody className="body-tabla">
+                {orders.map((order) => (
+                  <React.Fragment key={order.id}>
+                    <tr className="tr-body">
+                      <td className="td">{order.id}</td>
+                      <td className="td">{order.customerName}</td>
+                      <td className="td">{order.telefono}</td>
+                      <td className="td">
+                        {new Date(order.fechaPedido)
+                          .toLocaleString("es-CO", {
+                            year: "numeric",
+                            month: "numeric",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                          .replace(",", " -")
+                          .replace("a. m.", "AM")
+                          .replace("p. m.", "PM")}
+                      </td>
+                      <td className="td">
+                        {new Date(order.fechaEntrega)
+                          .toLocaleString("es-CO", {
+                            year: "numeric",
+                            month: "numeric",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                          .replace(",", " -")
+                          .replace("a. m.", "AM")
+                          .replace("p. m.", "PM")}
+                      </td>
+                      <td className="td">
+                        {new Intl.NumberFormat("es-CO", {
+                          style: "decimal",
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }).format(order.saldo)}
+                      </td>
+                      <td className="td">
+                        {order.prenda
+                          .slice(0, 2)
+                          .map((p) => p.descripcion)
+                          .join(", ") + (order.prenda.length > 2 ? "..." : "")}
+                      </td>
+                      <td
+                        className="td"
+                        onClick={() => mostrarDetalles(order.id)}
+                      >
+                        {(() => {
+                          switch (order.estado) {
+                            case "PENDIENTE":
+                              return <DetallesOrden clase={"en-proceso"} />;
+                            case "FINALIZADO":
+                              return <DetallesOrden clase={"finalizado"} />;
+                            case "ENTREGADO":
+                              return <DetallesOrden clase={"entregado"} />;
+                            case "ANULADO":
+                              return <DetallesOrden clase={"anulado"} />;
+                            default:
+                              return null;
+                          }
+                        })()}
+                      </td>
+                    </tr>
+                    <tr className="separacion-fila"></tr>
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </>
+          ) : (
             <tbody className="body-tabla">
-              {orders.map((order) => (
-                <React.Fragment key={order.id}>
-                  <tr className="tr-body">
-                    <td className="td">{order.id}</td>
-                    <td className="td">{order.customerName}</td>
-                    <td className="td">{order.telefono}</td>
-                    <td className="td">
-                      {new Date(order.fechaPedido)
-                        .toLocaleString("es-CO", {
-                          year: "numeric",
-                          month: "numeric",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                        .replace(",", " -")
-                        .replace("a. m.", "AM")
-                        .replace("p. m.", "PM")}
-                    </td>
-                    <td className="td">
-                      {new Date(order.fechaEntrega)
-                        .toLocaleString("es-CO", {
-                          year: "numeric",
-                          month: "numeric",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                        .replace(",", " -")
-                        .replace("a. m.", "AM")
-                        .replace("p. m.", "PM")}
-                    </td>
-                    <td className="td">
-                      {new Intl.NumberFormat("es-CO", {
-                        style: "decimal",
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      }).format(order.saldo)}
-                    </td>
-                    <td className="td">
-                      {order.prenda
-                        .slice(0, 2)
-                        .map((p) => p.descripcion)
-                        .join(", ") + (order.prenda.length > 2 ? "..." : "")}
-                    </td>
-                    <td
-                      className="td"
-                      onClick={() => mostrarDetalles(order.id)}
-                    >
-                      {(() => {
-                        switch (order.estado) {
-                          case "PENDIENTE":
-                            return <DetallesOrden clase={"en-proceso"} />;
-                          case "FINALIZADO":
-                            return <DetallesOrden clase={"finalizado"} />;
-                          case "ENTREGADO":
-                            return <DetallesOrden clase={"entregado"} />;
-                          case "ANULADO":
-                            return <DetallesOrden clase={"anulado"} />;
-                          default:
-                            return null;
-                        }
-                      })()}
-                    </td>
-                  </tr>
-                  <tr className="separacion-fila"></tr>
-                </React.Fragment>
-              ))}
+              <tr className="no-orders">
+                <td colSpan="8">
+                  <img src={noEncontrado} className="cont-mess-err" />
+                </td>
+              </tr>
             </tbody>
-          </>
-        ) : (
-          <tbody className="body-tabla">
-            <tr className="no-orders">
-              <td colSpan="8">
-                <img src={noEncontrado} className="cont-mess-err" />
-              </td>
-            </tr>
-          </tbody>
-        )}
-      </table>
-    </div>
+          )}
+        </table>
+      </div>
+    </>
   );
 }

@@ -1,33 +1,18 @@
-import { useEffect } from "react";
 import "./detalle-pedido.css";
 import ContDetalle from "./cont-detalle";
+const cerrar = '../../../../public/media/img/cerrar.png'
 
 export default function CardDetallePedido({ estado, onClick }) {
-  useEffect(() => {
-    const hijo = document.getElementById("hijo-tarjeta-detalles");
-    if (hijo) {
-      hijo.addEventListener("click", (event) => {
-        event.stopPropagation();
-      });
-    }
-
-    return () => {
-      if (hijo) {
-        hijo.removeEventListener("click", (event) => {
-          event.stopPropagation();
-        });
-      }
-    };
-  }, []);
-
   return (
-    <section
-      className={`salir-detalles ${
-        estado ? "detalles-visible" : "detalles-oculto"
+    <div
+      className={`cont-tarjeta-detalles ${
+        estado ? "cont-tarjeta-detalles-visible" : ""
       }`}
-      onClick={onClick}
     >
-      <div className="tarjet-detalles" id="hijo-tarjeta-detalles">
+      <div className="tarjeta-detalles">
+        <button className="salir-tarjeta-detalles" onClick={onClick}>
+          <img src={cerrar}/>
+        </button>
         <section className="fila-detalles-ordenes">
           <ContDetalle titulo={"Nombre:"} txt={"pablo"} />
           <ContDetalle titulo={"Apellido:"} txt={"rivas"} />
@@ -100,6 +85,6 @@ export default function CardDetallePedido({ estado, onClick }) {
         </section>
         <button className="boton-finalizar-estado">Finalizado</button>
       </div>
-    </section>
+    </div>
   );
 }

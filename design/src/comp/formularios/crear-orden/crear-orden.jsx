@@ -15,6 +15,10 @@ import basura from "../../../../public/media/img/basura.png";
 
 /*CARPETA PRENDAS*/
 const prendasUbi = "../../../../public/media/img/prendas/";
+const Aprobado = "../../../../public/media/img/aprobado.png";
+const ErrorMP3 = "../../../../public/media/sounds/error.mp3";
+const fotoSonido = "../../../../public/media/sounds/foto.mp3";
+const PedidoCreado = "../../../../public/media/sounds/pedidoCreado.mp3";
 
 export default function CrearOrden({ onClick }) {
   const [isVisible, setIsVisible] = useState(true);
@@ -36,6 +40,12 @@ export default function CrearOrden({ onClick }) {
     setCameraOn((prevState) => !prevState);
   };
 
+  /*FUNCION SONIDO ERROR*/
+  function sonidoError() {
+    const soundError = new Audio(ErrorMP3);
+    soundError.play();
+  }
+
   /*ACCEDER A LA CAMARA Y TOMAR FOTO*/
   const webcamRef = useRef(null);
   const [foto, setFoto] = useState(null);
@@ -50,6 +60,10 @@ export default function CrearOrden({ onClick }) {
     const videoElement = webcamRef.current.video;
     if (videoElement) {
       videoElement.pause();
+
+      // Reproducir sonido
+      const sonido = new Audio(fotoSonido);
+      sonido.play();
     }
 
     /*Convertir base64 a blob*/
@@ -297,7 +311,10 @@ export default function CrearOrden({ onClick }) {
         vlrUnit = prenda.valor;
         vlrTotal = vlrUnit * cantidad;
       } else {
-        alert("La prenda debe ser valida");
+        sonidoError();
+        setTimeout(() => {
+          alert("La prenda debe ser valida");
+        }, 10);
         return;
       }
     } catch {
@@ -307,19 +324,28 @@ export default function CrearOrden({ onClick }) {
 
     /*IF PARA QUE LA CANTIDAD NO PUEDE SER NAN O 0*/
     if (cantidad <= 0 || isNaN(cantidad)) {
-      alert("Cantidad posee dato inválido");
+      sonidoError();
+      setTimeout(() => {
+        alert("Cantidad posee dato inválido");
+      }, 10);
       return;
     }
 
     /*IF PARA QUE LOS DETALLES NO SEAN NULOS*/
     if (concepto.trim() === "") {
-      alert("Los detalles no pueden ir vacios");
+      sonidoError();
+      setTimeout(() => {
+        alert("Los detalles no pueden ir vacios");
+      }, 10);
       return;
     }
 
     /*IF PARA ASEGURARNOS QUE EL SASTRE ESTE SELECCIONADO*/
     if (!isFinite(idSastre)) {
-      alert("Selecciona un sastre");
+      sonidoError();
+      setTimeout(() => {
+        alert("Selecciona un sastre");
+      }, 10);
       return;
     }
 
@@ -403,10 +429,10 @@ export default function CrearOrden({ onClick }) {
     });
 
     /*Vaciar campos nombre, apellido, telefono*/
-    document.getElementById("nombre").value = ""
+    document.getElementById("nombre").value = "";
     document.getElementById("apellido").value = "";
     document.getElementById("telefono").value = "";
-    
+
     /*Eliminar filas de la tabla*/
     setFilas((filasActuales) =>
       filasActuales.map((fila) => ({ ...fila, isEliminado: true }))
@@ -422,12 +448,19 @@ export default function CrearOrden({ onClick }) {
     }, 150);
 
     /*Eliminar fecha entrega*/
-    setNumeroDias("0")
-    setSelectedDate(null)
-    
+    setNumeroDias("0");
+    setSelectedDate(null);
+
     /*Eliminar foto*/
-    setFotoBlob(null)
+    setFotoBlob(null);
   }
+
+  /*Mostrar notifiicacion*/
+  const [notificacion, setNotificacion] = useState(false);
+  const [notVisible, setNotVisible] = useState(false);
+
+  /*Sonido notificacion*/
+  const sonidoPedido = new Audio(PedidoCreado);
 
   /*MANDAR ORDEN*/
   let idOrden = null;
@@ -438,14 +471,20 @@ export default function CrearOrden({ onClick }) {
     if (isDate(selectedDate)) {
       /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
       if (selectedDate.getTime() < fechaPedido.getTime()) {
-        alert("No se aceptan fechas anteriores al dia actual");
+        sonidoError();
+        setTimeout(() => {
+          alert("No se aceptan fechas anteriores al dia actual");
+        });
         return;
       } else {
         dataPedido.date = fechaPedido.toISOString();
         dataPedido.fechaEntrega = selectedDate.toISOString();
       }
     } else {
-      alert("Ingrese una fecha");
+      sonidoError();
+      setTimeout(() => {
+        alert("Ingrese una fecha");
+      }, 10);
       return;
     }
 
@@ -524,7 +563,10 @@ export default function CrearOrden({ onClick }) {
     try {
       if (fotoBlob instanceof Blob) {
       } else {
-        alert("Debes tomar una foto");
+        sonidoError();
+        setTimeout(() => {
+          alert("Debes tomar una foto");
+        }, 10);
         return;
       }
       const responsePedido = await axios.post(
@@ -545,6 +587,20 @@ export default function CrearOrden({ onClick }) {
           responsePedido.data.id
         );
         console.log("------------------------------");
+
+        /*Aparecer notificacion*/
+        setNotificacion(true);
+        setTimeout(() => {
+          setNotVisible(true);
+          sonidoPedido.play();
+        }, 0);
+        /*Desaparecer notificacion*/
+        setTimeout(() => {
+          setNotVisible(false);
+          setTimeout(() => {
+            setNotificacion(false);
+          }, 300);
+        }, 3000);
 
         /*TRY PARA ASIGNAR LA FOTO AL PEDIDO*/
         try {
@@ -589,6 +645,16 @@ export default function CrearOrden({ onClick }) {
   return (
     <div className={"salir"} onClick={handleExit}>
       <div className={`cont-form-crearOrden ${!isVisible ? "exit" : ""}`}>
+        {notificacion && (
+          <div
+            className={`notificacion-orden ${
+              notVisible ? "notiVisible" : "notiNotVisible"
+            }`}
+          >
+            <img src={Aprobado} className="pedido-aprobado-img" />
+            <span>Orden creada</span>
+          </div>
+        )}
         <div className="cont-tit-creandoP">
           <span className="tit-creandoP">Creando pedido</span>
         </div>

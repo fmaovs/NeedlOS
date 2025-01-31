@@ -422,10 +422,9 @@
   background-color: transparent;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
 }
-.inp-abono::placeholder{
-  color: #D2D2D2;
+.inp-abono::placeholder {
+  color: #d2d2d2;
 }
-
 
 .inp-abono {
   -webkit-appearance: none;
@@ -440,4 +439,42 @@
 .inp-abono::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.notificacion-orden {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 1vh;
+  font-size: calc((0.2vw + 3.2vh) * 0.6);
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.2);
+  bottom: 4vh;
+  right: 6vh;
+  z-index: 5;
+  width: 22vh;
+  height: 6vh;
+  border-radius: 1.2vh;
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+  transform: translateX(1vh);
+}
+
+.notiVisible{
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notiNotVisible{
+  transform: translateX(1vh);
+}
+
+.pedido-aprobado-img {
+  height: 60%;
+  width: auto;
+  object-fit: contain;
+  margin-right: 1vh;
 }
