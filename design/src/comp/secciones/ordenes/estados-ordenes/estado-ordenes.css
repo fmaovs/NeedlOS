@@ -76,6 +76,10 @@
   cursor: pointer;
 }
 
+.td:last-child:active button{
+  scale: 0.8;
+}
+
 .tr-body {
   text-align: center;
 }

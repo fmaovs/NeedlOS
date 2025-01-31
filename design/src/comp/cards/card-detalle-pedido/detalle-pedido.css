@@ -111,7 +111,7 @@
   color: #d2d2d2;
 }
 
-.tabla-card-detalles-pedido tbody tr {
+.tabla-card-detalles-pedido tbody tr:not(.last-row-tb-tarjeta-detalles) {
   height: 4vh;
 }
 
@@ -154,4 +154,20 @@
 
 .boton-finalizar-estado:active::before {
   transform: translateX(0);
+}
+
+.tabla-card-detalles-pedido td{
+  background-color: #F8F8F8;
+}
+
+.tabla-card-detalles-pedido td:first-child{
+  border-radius: 1.2vh 0 0 1.2vh;
+}
+
+.tabla-card-detalles-pedido td:last-child{
+  border-radius: 0 1.2vh 1.2vh 0;
+}
+
+.last-row-tb-tarjeta-detalles{
+  height: 1.2vh;
 }

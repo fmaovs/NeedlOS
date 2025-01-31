@@ -165,6 +165,8 @@
 .tb-lista {
   width: 100%;
   flex: 1;
+  max-height: 45vh;
+  overflow: auto;
 }
 
 .cont-dateEtc {

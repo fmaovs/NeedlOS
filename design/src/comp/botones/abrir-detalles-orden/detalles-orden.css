@@ -4,6 +4,7 @@
     border-radius: 1vh;
     width: 80%;
     margin: 0;
+    transition: 0.08s ease-in-out;
 }
 
 .abrir-detalles:hover {

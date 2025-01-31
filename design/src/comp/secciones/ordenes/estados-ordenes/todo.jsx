@@ -20,7 +20,11 @@ export default function TbTodo() {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
-      setOrders(response.data);
+      const sortedOrders = response.data.sort(
+        (a, b) => new Date(b.fechaPedido) - new Date(a.fechaPedido)
+      );
+
+      setOrders(sortedOrders);
     } catch {
       console.log("Error accediendo a las ordenes");
     }
@@ -38,15 +42,22 @@ export default function TbTodo() {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
-      setDetalles(response.data);
 
-      /*Animacion de entrada*/
-      setDetallesVisible(true);
-      setTimeout(() => {
-        setMostrarDt(true);
-      }, 15);
+      if (mostrarDt) {
+        setMostrarDt(false);
+        setTimeout(() => {
+          setDetalles(response.data);
+          setMostrarDt(true);
+        }, 300);
+      } else {
+        setDetallesVisible(true);
+        setTimeout(() => {
+          setDetalles(response.data);
+          setMostrarDt(true);
+        }, 15);
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error obteniendo detalles:", error);
       setMensajeErr("No se puede acceder a los datos");
     }
   };
@@ -62,8 +73,63 @@ export default function TbTodo() {
   return (
     <>
       {setMensajeErr && <span>{mensajeErr}</span>}
-      {detallesVisible && (
-        <CardDetallePedido estado={mostrarDt} onClick={ocultarDetalles} />
+      {detallesVisible && detalles && (
+        <CardDetallePedido
+          estado={mostrarDt}
+          onClick={ocultarDetalles}
+          nombre={detalles.customerName || "Desconocido"}
+          telefono={detalles.telefono || "N/A"}
+          sastreAsignado={detalles.sastre || "Sin asignar"}
+          tipoArreglo={detalles.concepto || "No especificado"}
+          estadoPedido={detalles.estado || "Desconocido"}
+          fechaPedido={
+            detalles.fechaPedido
+              ? new Date(detalles.fechaPedido)
+                  .toLocaleString("es-CO", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                  .replace(",", " -")
+                  .replace("a. m.", "AM")
+                  .replace("p. m.", "PM")
+              : "No disponible"
+          }
+          fechaEntrega={
+            detalles.fechaEntrega
+              ? new Date(detalles.fechaEntrega)
+                  .toLocaleString("es-CO", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                  .replace(",", " -")
+                  .replace("a. m.", "AM")
+                  .replace("p. m.", "PM")
+              : "No disponible"
+          }
+        >
+          {detalles.prenda?.map((prenda, index) => (
+            <>
+              <tr key={index}>
+                <td>{prenda.cantidad}</td>
+                <td>detalles</td>
+                <td>{prenda.descripcion}</td>
+                <td>{new Intl.NumberFormat("es-CO").format(prenda.valor)}</td>
+                <td>
+                  {new Intl.NumberFormat("es-CO").format(
+                    prenda.valor * prenda.cantidad
+                  )}
+                </td>
+              </tr>
+              <tr className="last-row-tb-tarjeta-detalles"></tr>
+            </>
+          ))}
+        </CardDetallePedido>
       )}
       <div className="cont-tabla">
         <table className="tabla">
@@ -143,8 +209,6 @@ export default function TbTodo() {
                               return <DetallesOrden clase={"entregado"} />;
                             case "ANULADO":
                               return <DetallesOrden clase={"anulado"} />;
-                            default:
-                              return null;
                           }
                         })()}
                       </td>
