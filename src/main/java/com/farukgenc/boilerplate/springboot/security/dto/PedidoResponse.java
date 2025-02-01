@@ -14,7 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PedidoResponse {
     private Long id; // Identificador del pedido
-    private String customerName; // Nombre del cliente asociado
+    private String customerName;// Nombre del cliente asociado
+    private String customerLastName; // Apellido del cliente asociado
     private Long telefono; // Telefono del cliente asociado
     private Date fechaPedido; // Fecha de realizacion del pedido
     private Date fechaEntrega; // Fecha de entrega de la prenda

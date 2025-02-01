@@ -188,8 +188,8 @@ public class PedidoService {
             }
 
             pedidoResponse.setId(detallePedido.getPedido().getId());
-            String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
-            pedidoResponse.setCustomerName(nombreCompleto);
+            pedidoResponse.setCustomerName(detallePedido.getPedido().getCustomer().getName());;
+            pedidoResponse.setCustomerLastName(detallePedido.getPedido().getCustomer().getLastname());
             pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
             pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
             pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
@@ -210,8 +210,8 @@ public class PedidoService {
         List<DetallePedido> detallePedidoList = detallePedidoRepository.findByPedido_Id(pedido.getId());
         List<PrendaDTO> prendasPedido = new ArrayList<>();
         pedidoResponse.setId(pedido.getId());
-        String nombreCompleto = pedido.getCustomer().getName() + " " + pedido.getCustomer().getLastname();
-        pedidoResponse.setCustomerName(nombreCompleto);
+        pedidoResponse.setCustomerName(pedido.getCustomer().getName());
+        pedidoResponse.setCustomerLastName(pedido.getCustomer().getLastname());
         pedidoResponse.setTelefono(pedido.getCustomer().getPhone());
         pedidoResponse.setFechaPedido(pedido.getDate());
         pedidoResponse.setFechaEntrega(detallePedidoList.get(0).getFechaEntrega());
