@@ -26,7 +26,4 @@ public class Abono {
     @Enumerated(EnumType.STRING)
     private MetodoPago metodoPago;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private DetallePedido detallePedido;
-
 }

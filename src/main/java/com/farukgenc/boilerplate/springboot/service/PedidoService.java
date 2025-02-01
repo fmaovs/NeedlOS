@@ -84,7 +84,7 @@ public class PedidoService {
 
             // Crear el estado inicial para este detalle
             EstadoPedido estadoInicial = new EstadoPedido();
-            estadoInicial.setEstado(Estado.PENDIENTE);
+            estadoInicial.setEstado(Estado.EN_PROCESO);
             estadoInicial.setFechaCambio(LocalDateTime.now());
             estadoInicial.setDetallePedido(detalle); // Ahora el 'detalle' ya está en la base de datos
             estadoPedidoRepository.save(estadoInicial);
@@ -114,6 +114,7 @@ public class PedidoService {
         pedidoResponse.setFechaPedido(pedido.getDate());
         pedidoResponse.setFechaEntrega(pedido.getDetalles().get(0).getFechaEntrega());
         pedidoResponse.setSaldo(pedido.getSaldo());
+        pedidoResponse.setTotalAbonos(pedido.getTotalAbonos());
         List<PrendaDTO> prendasPedido = new ArrayList<>();
         for (DetallePedido detallePedido: pedido.getDetalles()) {
             PrendaDTO prendaDTO = new PrendaDTO();
@@ -141,13 +142,13 @@ public class PedidoService {
                 // Crear un nuevo PedidoResponse si no existe
                 pedidoResponse = new PedidoResponse();
                 pedidoResponse.setId(pedidoId);
-                String nombreCompleto = detallePedido.getPedido().getCustomer().getName()
-                        + " " + detallePedido.getPedido().getCustomer().getLastname();
-                pedidoResponse.setCustomerName(nombreCompleto);
+                pedidoResponse.setCustomerName(detallePedido.getPedido().getCustomer().getName());
+                pedidoResponse.setCustomerLastName(detallePedido.getPedido().getCustomer().getLastname());
                 pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
                 pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
                 pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
                 pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+                pedidoResponse.setTotalAbonos(detallePedido.getPedido().getTotalAbonos());
                 pedidoResponse.setPrenda(new ArrayList<>());
                 pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
                 pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
@@ -194,6 +195,7 @@ public class PedidoService {
             pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
             pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
             pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+            pedidoResponse.setTotalAbonos(detallePedido.getPedido().getTotalAbonos());
             pedidoResponse.setPrenda(prendasPedido);
             pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
             pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
@@ -216,6 +218,7 @@ public class PedidoService {
         pedidoResponse.setFechaPedido(pedido.getDate());
         pedidoResponse.setFechaEntrega(detallePedidoList.get(0).getFechaEntrega());
         pedidoResponse.setSaldo(pedido.getSaldo());
+        pedidoResponse.setTotalAbonos(pedido.getTotalAbonos());
         for (DetallePedido detallePedido: detallePedidoList) {
             PrendaDTO prendaDTO = new PrendaDTO();
             prendaDTO.setDescripcion(detallePedido.getPrenda().getDescripcion());
@@ -295,12 +298,13 @@ public class PedidoService {
                 }
 
                 pedidoResponse.setId(detallePedido.getPedido().getId());
-                String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
-                pedidoResponse.setCustomerName(nombreCompleto);
+                pedidoResponse.setCustomerName(detallePedido.getPedido().getCustomer().getName());
+                pedidoResponse.setCustomerLastName(detallePedido.getPedido().getCustomer().getLastname());
                 pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
                 pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
                 pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
                 pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+                pedidoResponse.setTotalAbonos(detallePedido.getPedido().getTotalAbonos());
                 pedidoResponse.setPrenda(prendasPedido);
                 pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
                 pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
@@ -323,11 +327,13 @@ public class PedidoService {
             if (nombreCompleto.equals(customer)) {
                 PedidoResponse pedidoResponse = new PedidoResponse();
                 pedidoResponse.setId(pedido.getId());
-                pedidoResponse.setCustomerName(nombreCompleto);
+                pedidoResponse.setCustomerName(pedido.getCustomer().getName());
+                pedidoResponse.setCustomerLastName(pedido.getCustomer().getLastname());
                 pedidoResponse.setTelefono(pedido.getCustomer().getPhone());
                 pedidoResponse.setFechaPedido(pedido.getDate());
                 pedidoResponse.setFechaEntrega(pedido.getDetalles().get(0).getFechaEntrega());
                 pedidoResponse.setSaldo(pedido.getSaldo());
+                pedidoResponse.setTotalAbonos(pedido.getTotalAbonos());
                 List<PrendaDTO> prendasPedido = new ArrayList<>();
                 for (DetallePedido detallePedido: pedido.getDetalles()) {
                     PrendaDTO prendaDTO = new PrendaDTO();
@@ -361,12 +367,13 @@ public class PedidoService {
             }
 
             pedidoResponse.setId(detallePedido.getPedido().getId());
-            String nombreCompleto = detallePedido.getPedido().getCustomer().getName() + " " + detallePedido.getPedido().getCustomer().getLastname();
-            pedidoResponse.setCustomerName(nombreCompleto);
+            pedidoResponse.setCustomerName(detallePedido.getPedido().getCustomer().getName());
+            pedidoResponse.setCustomerLastName(detallePedido.getPedido().getCustomer().getLastname());
             pedidoResponse.setTelefono(detallePedido.getPedido().getCustomer().getPhone());
             pedidoResponse.setFechaPedido(detallePedido.getPedido().getDate());
             pedidoResponse.setFechaEntrega(detallePedido.getFechaEntrega());
             pedidoResponse.setSaldo(detallePedido.getPedido().getSaldo());
+            pedidoResponse.setTotalAbonos(detallePedido.getPedido().getTotalAbonos());
             pedidoResponse.setPrenda(prendasPedido);
             pedidoResponse.setSastre(detallePedido.getUser().getName() + " " + detallePedido.getUser().getLastname());
             pedidoResponse.setEstado(detallePedido.getEstadoActual().getEstado());
@@ -391,12 +398,13 @@ public class PedidoService {
             }
 
             pedidoResponse.setId(pedido.getId());
-            String nombreCompleto = pedido.getCustomer().getName() + " " + pedido.getCustomer().getLastname();
-            pedidoResponse.setCustomerName(nombreCompleto);
+            pedidoResponse.setCustomerName(pedido.getCustomer().getName());
+            pedidoResponse.setCustomerLastName(pedido.getCustomer().getLastname());
             pedidoResponse.setTelefono(pedido.getCustomer().getPhone());
             pedidoResponse.setFechaPedido(pedido.getDate());
             pedidoResponse.setFechaEntrega(detallePedidoList.get(0).getFechaEntrega());
             pedidoResponse.setSaldo(pedido.getSaldo());
+            pedidoResponse.setTotalAbonos(pedido.getTotalAbonos());
             pedidoResponse.setPrenda(prendasPedido);
             pedidoResponse.setSastre(detallePedidoList.get(0).getUser().getName() + " " + detallePedidoList.get(0).getUser().getLastname());
             pedidoResponse.setEstado(detallePedidoList.get(0).getEstadoActual().getEstado());
@@ -406,10 +414,13 @@ public class PedidoService {
         return pedidos;
     };
 
-
-
-
-
+    public void updateSaldo(Long id, double monto) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+        pedido.setSaldo(pedido.getSaldo() - monto);
+        pedido.setTotalAbonos(pedido.getTotalAbonos() + monto);
+        pedidoRepository.save(pedido);
+    }
 
 
 }

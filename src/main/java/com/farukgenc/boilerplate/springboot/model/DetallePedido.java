@@ -53,9 +53,6 @@ public class DetallePedido {
 
     private Date fechaEntrega;
 
-    @OneToMany(mappedBy = "detallePedido", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Abono> abono;
-
     public void calcularValorTotal() {
         if (prenda != null) {
             this.valorTotal = prenda.getValor() * cantidad;

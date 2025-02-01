@@ -20,6 +20,7 @@ public class PedidoResponse {
     private Date fechaPedido; // Fecha de realizacion del pedido
     private Date fechaEntrega; // Fecha de entrega de la prenda
     private double saldo; // Saldo pendiente del pedido
+    private double totalAbonos; // Total de abonos realizados
     private List<PrendaDTO> prenda; // Nombre de la prenda asociada
     private String sastre; // Sastre encargado del pedido
     private Estado estado; // Estado actual del pedido

@@ -3,8 +3,10 @@ package com.farukgenc.boilerplate.springboot.service;
 import com.farukgenc.boilerplate.springboot.model.Abono;
 import com.farukgenc.boilerplate.springboot.model.DetallePedido;
 import com.farukgenc.boilerplate.springboot.model.MetodoPago;
+import com.farukgenc.boilerplate.springboot.model.Pedido;
 import com.farukgenc.boilerplate.springboot.repository.AbonoRepository;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ public class AbonoService {
     @Autowired
     private DetallePedidoService detallePedidoService;
 
+    @Autowired
+    private PedidoService pedidoService;
+
     public Optional<Abono> findById(Long id) {
         return Optional.of(abonoRepository.findById(id).get());
     }
@@ -33,14 +38,14 @@ public class AbonoService {
 
     @Transactional
     public Abono createAbono(AbonoDTO abonoDTO) throws ParseException {
-        DetallePedido detallePedido = detallePedidoService.findById(abonoDTO.getDetallePedidoId())
+        PedidoResponse pedidoResponse = pedidoService.findById(abonoDTO.getIdPedido())
                 .orElseThrow(() -> new IllegalArgumentException("Detalle de pedido no encontrado"));
 
-        if (detallePedido.getPedido().getSaldo() <= 0) {
+        if (pedidoResponse.getSaldo() <= 0) {
             throw new IllegalArgumentException("El pedido ya está pagado");
         }
 
-        if (abonoDTO.getMonto() > detallePedido.getPedido().getSaldo()) {
+        if (abonoDTO.getMonto() > pedidoResponse.getSaldo()) {
             throw new IllegalArgumentException("El monto del abono es mayor al saldo del pedido");
         }
 
@@ -49,10 +54,8 @@ public class AbonoService {
         abono.setFecha(fecha);
         abono.setMonto(abonoDTO.getMonto());
         abono.setMetodoPago(MetodoPago.valueOf(abonoDTO.getMetodoPago()));
-        abono.setDetallePedido(detallePedido);
 
-        detallePedido.getPedido().setTotalAbonos(detallePedido.getPedido().getTotalAbonos() + abonoDTO.getMonto());
-        detallePedido.getPedido().setSaldo(detallePedido.getPedido().getSaldo() - abonoDTO.getMonto());
+        pedidoService.updateSaldo(pedidoResponse.getId(), abonoDTO.getMonto());
 
 
         return abonoRepository.save(abono);
