@@ -15,11 +15,14 @@ export default function TbTodo() {
   const [orders, setOrders] = useState([]);
   const mostrarPedido = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/orders/estado/finalizado", {
-        headers: {
-          Authorization: `Bearer ${tokenPass}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:8080/orders/estado/finalizado",
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
       const sortedOrders = response.data.sort(
         (a, b) => new Date(b.fechaPedido) - new Date(a.fechaPedido)
       );
@@ -114,17 +117,20 @@ export default function TbTodo() {
           }
         >
           {detalles.prenda?.map((prenda, index) => (
-            <tr key={index}>
-              <td>{prenda.cantidad}</td>
-              <td>detalles</td>
-              <td>{prenda.descripcion}</td>
-              <td>{new Intl.NumberFormat("es-CO").format(prenda.valor)}</td>
-              <td>
-                {new Intl.NumberFormat("es-CO").format(
-                  prenda.valor * prenda.cantidad
-                )}
-              </td>
-            </tr>
+            <>
+              <tr key={index}>
+                <td>{prenda.cantidad}</td>
+                <td>detalles</td>
+                <td>{prenda.descripcion}</td>
+                <td>{new Intl.NumberFormat("es-CO").format(prenda.valor)}</td>
+                <td>
+                  {new Intl.NumberFormat("es-CO").format(
+                    prenda.valor * prenda.cantidad
+                  )}
+                </td>
+              </tr>
+              <tr className="last-row-tb-tarjeta-detalles"></tr>
+            </>
           ))}
         </CardDetallePedido>
       )}

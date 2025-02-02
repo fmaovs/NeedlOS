@@ -26,15 +26,15 @@
   text-align: center;
 }
 
-.div-txt-tit.on{
+.div-txt-tit.on {
   transition: 0.3s ease-in-out;
 }
 
-.div-txt-tit.on:focus-within{
+.div-txt-tit.on:focus-within {
   border-color: rgb(113, 113, 113);
 }
 
-.onCursor{
+.onCursor {
   display: flex;
   align-items: center;
   cursor: text;

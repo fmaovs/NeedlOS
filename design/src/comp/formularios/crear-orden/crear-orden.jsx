@@ -17,7 +17,6 @@ import basura from "../../../../public/media/img/basura.png";
 const prendasUbi = "../../../../public/media/img/prendas/";
 const Aprobado = "../../../../public/media/img/aprobado.png";
 const ErrorMP3 = "../../../../public/media/sounds/error.mp3";
-const fotoSonido = "../../../../public/media/sounds/foto.mp3";
 const PedidoCreado = "../../../../public/media/sounds/pedidoCreado.mp3";
 
 export default function CrearOrden({ onClick }) {
@@ -56,16 +55,6 @@ export default function CrearOrden({ onClick }) {
     const imgSrc = webcamRef.current.getScreenshot();
     setFoto(imgSrc);
 
-    // Pausar el video
-    const videoElement = webcamRef.current.video;
-    if (videoElement) {
-      videoElement.pause();
-
-      // Reproducir sonido
-      const sonido = new Audio(fotoSonido);
-      sonido.play();
-    }
-
     /*Convertir base64 a blob*/
     /*Remover el prefijo data url*/
     const base64Data = imgSrc.split(",")[1];
@@ -82,6 +71,13 @@ export default function CrearOrden({ onClick }) {
     const blob = new Blob([byteArray], { type: "image/jpeg" });
     setFotoBlob(blob);
   };
+
+  /*OBSERVAR EL CAMBIO DE FOTO Y ENVIA LA ORDEN*/
+  useEffect(() => {
+    if (fotoBlob) {
+      enviarOrden();
+    }
+  }, [fotoBlob]);
 
   /*INSERTAR NOMBRE SEGUN TELEFONO*/
   async function insertarNombre() {
@@ -224,7 +220,7 @@ export default function CrearOrden({ onClick }) {
 
   /*IMPRIMIR EL NUEVO ESTADO DEL PEDIDO*/
   useEffect(() => {
-    console.log(dataPedido);
+    /*console.log(dataPedido);*/
   }, [dataPedido]);
 
   /*ASIGNAR VALORES PIEZAS, SUBTOTAL, TOTAL*/
@@ -420,7 +416,6 @@ export default function CrearOrden({ onClick }) {
   /*REINICIAR DATAPEDIDO*/
   function limpiarPedido() {
     /*Actualizar el estado del pedido a vacio*/
-    console.log("Dato reiniciados");
     setDataPedido({
       date: new Date(),
       customerId: null,
@@ -451,6 +446,9 @@ export default function CrearOrden({ onClick }) {
     setNumeroDias("0");
     setSelectedDate(null);
 
+    /*Elimina el abono*/
+    document.getElementById("abono").value = "";
+
     /*Eliminar foto*/
     setFotoBlob(null);
   }
@@ -464,10 +462,9 @@ export default function CrearOrden({ onClick }) {
 
   /*MANDAR ORDEN*/
   let idOrden = null;
-  async function enviarOrden(event) {
-    event.preventDefault();
-
+  async function enviarOrden() {
     /*ASIGNAR FECHA ENTREGA*/
+    console.log(fotoBlob)
     if (isDate(selectedDate)) {
       /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
       if (selectedDate.getTime() < fechaPedido.getTime()) {
@@ -484,6 +481,49 @@ export default function CrearOrden({ onClick }) {
       sonidoError();
       setTimeout(() => {
         alert("Ingrese una fecha");
+      }, 10);
+      return;
+    }
+
+    /*TRAE EL VALOR DE ABONO SI ES NULLO LO CONVIIERTE A 0*/
+    let abono = +document.getElementById("abono").value;
+    let valor = +subTotal.replace("$", "").replace(".", "").trim();
+    if (abono > valor) {
+      sonidoError();
+      setTimeout(() => {
+        alert("El abono no puede superar el subtotal");
+      }, 10);
+      return;
+    }
+
+    if (abono === null) {
+      abono = 0;
+    }
+    if (abono % 50 == 0) {
+    } else {
+      sonidoError();
+      setTimeout(() => {
+        alert("La cantidad del abono no es multiplo de 50");
+      }, 10);
+      return;
+    }
+
+    /*VERIFICAR EL METODO DE PAGO*/
+    let tipoPago = document.getElementById("tipoPago").value;
+    if (tipoPago === "null") {
+      sonidoError();
+      setTimeout(() => {
+        alert("Elige un metodo de pago");
+      }, 10);
+      return;
+    }
+
+    /*VERIIFICA SI SE HA TOMADO LA FOTO*/
+    if (fotoBlob instanceof Blob) {
+    } else {
+      sonidoError();
+      setTimeout(() => {
+        alert("Debes tomar una foto");
       }, 10);
       return;
     }
@@ -561,14 +601,6 @@ export default function CrearOrden({ onClick }) {
 
     /*TRY PARA CREAR EL PEDIDO*/
     try {
-      if (fotoBlob instanceof Blob) {
-      } else {
-        sonidoError();
-        setTimeout(() => {
-          alert("Debes tomar una foto");
-        }, 10);
-        return;
-      }
       const responsePedido = await axios.post(
         "http://localhost:8080/orders",
         dataPedido,
@@ -582,11 +614,11 @@ export default function CrearOrden({ onClick }) {
 
       if (responsePedido.status >= 200 && responsePedido.status < 300) {
         idOrden = responsePedido.data.id;
+        console.log("------------------------------");
         console.log(
           "Pedido creado correctamente. ID =",
           responsePedido.data.id
         );
-        console.log("------------------------------");
 
         /*Aparecer notificacion*/
         setNotificacion(true);
@@ -618,11 +650,34 @@ export default function CrearOrden({ onClick }) {
             }
           );
           console.log("Foto asignada");
-          console.log("------------------------------");
         } catch (error) {
           console.error("Foto NO asignada");
           console.log("------------------------------");
           return;
+        }
+
+        /*VARIABLES PARA EL ABONO*/
+        let DatosAbono = {
+          idPedido: idOrden,
+          monto: abono,
+          fecha: dataPedido.date,
+          metodoPago: tipoPago,
+        };
+
+        /*Asignar abono al pedido*/
+        try {
+          const response = await axios.post(
+            "http://localhost:8080/abonos",
+            DatosAbono,
+            {
+              headers: {
+                Authorization: `Bearer ${tokenPass}`,
+              },
+            }
+          );
+          console.log("Abono asignado");
+        } catch {
+          console.log("Error Asignando abono");
         }
       }
     } catch (error) {
@@ -636,7 +691,7 @@ export default function CrearOrden({ onClick }) {
     /*BORRAR DATOS RECOLECTADOS Y LIMPIAR FORMULARIO*/
     console.log("Datos enviados");
     console.log(dataPedido);
-    console.log("--------------------");
+    console.log("------------------------------");
 
     /*EJECUTAR FUNCION DE LIIMPIAR DATOS*/
     limpiarPedido();
@@ -823,12 +878,14 @@ export default function CrearOrden({ onClick }) {
                 <SpanForm txt={"Total:"} id={"total"} insert={total} />
               </div>
               <div className="div-column">
+                <select className="tipoPago" id="tipoPago">
+                  <option value="null">Met. Pago</option>
+                  <option value="EFECTIVO">Efectivo</option>
+                  <option value="NEQUI">Nequi</option>
+                  <option value="DAVIPLATA">Daviplata</option>
+                  <option value="BANCOLOMBIA">BanColom</option>
+                </select>
                 <button className="clean-print" onClick={capturarFoto}>
-                  Tomar
-                  <br />
-                  Foto
-                </button>
-                <button className="clean-print" onClick={enviarOrden}>
                   Imprimir
                 </button>
               </div>
