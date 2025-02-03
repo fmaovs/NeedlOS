@@ -59,7 +59,10 @@ export default function CardDetallePedido({
           <ContDetalle titulo={"Fecha Pedido:"} txt={fechaPedido} />
           <ContDetalle titulo={"Fecha Entrega:"} txt={fechaEntrega} />
         </section>
-        <button className="boton-finalizar-estado">Finalizado</button>
+        <section className="fila-detalles-ordenes">
+          <button className="boton-finalizar-estado pedido-anulado">Anular</button>
+          <button className="boton-finalizar-estado"></button>
+        </section>
       </div>
     </div>
   );

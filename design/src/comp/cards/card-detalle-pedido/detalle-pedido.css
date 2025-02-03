@@ -118,7 +118,7 @@
 
 .tabla-card-detalles-pedido td {
   text-align: center;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
   font-size: calc((0.2vw + 3.2vh) * 0.48);
 }
 
@@ -127,9 +127,9 @@
   width: 100%;
   height: 4.5vh;
   border-radius: 1.2vh;
-  border: none;
-  margin: 1vh 0 0 0;
   border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  margin: 1vh 0 0 0;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
   overflow: hidden;
   background-color: transparent;
@@ -138,20 +138,33 @@
 }
 
 .boton-finalizar-estado:hover {
-  border-color: black;
+  text-decoration: underline;
+  cursor: pointer;
+  text-underline-offset: 0.2vh;
+  letter-spacing: 0.02vw;
+}
+
+.boton-finalizar-estado:active {
+  border-color: transparent;
+  text-decoration: none;
 }
 
 .boton-finalizar-estado::before {
-  content: "";
+  content: "Finalizado";
   position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: white;
   left: 0;
   bottom: 0;
-  width: calc(100%);
+  width: 100%;
   height: 4.5vh;
-  background-color: #0050b86a;
+  background-color: #5599ff;
   border-radius: 1.2vh;
   transform: translateX(-101%);
-  transition: 1s;
+  transition: 0.5s ease-in-out;
   z-index: 1;
 }
 
@@ -159,14 +172,32 @@
   transform: translateX(0);
 }
 
-.tabla-card-detalles-pedido td:first-child{
+.boton-finalizar-estado.pedido-anulado::before {
+  content: "Anulado";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4.5vh;
+  background-color: #FC615D;
+  border-radius: 1.2vh;
+  transform: translateX(-101%);
+  transition: 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.boton-finalizar-estado:active.pedido-anulado::before {
+  transform: translateX(0);
+}
+
+.tabla-card-detalles-pedido td:first-child {
   border-radius: 1.2vh 0 0 1.2vh;
 }
 
-.tabla-card-detalles-pedido td:last-child{
+.tabla-card-detalles-pedido td:last-child {
   border-radius: 0 1.2vh 1.2vh 0;
 }
 
-.last-row-tb-tarjeta-detalles{
+.last-row-tb-tarjeta-detalles {
   height: 1.2vh;
 }
