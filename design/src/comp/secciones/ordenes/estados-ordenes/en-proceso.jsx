@@ -85,6 +85,8 @@ export default function TbTodo() {
           sastreAsignado={detalles.sastre || "Sin asignar"}
           tipoArreglo={detalles.concepto || "No especificado"}
           estadoPedido={detalles.estado || "Desconocido"}
+          abono={detalles.totalAbonos}
+          totalPedido={detalles.saldo}
           fechaPedido={
             detalles.fechaPedido
               ? new Date(detalles.fechaPedido)

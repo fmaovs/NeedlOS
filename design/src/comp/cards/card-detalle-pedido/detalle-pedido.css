@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   left: 50%;
+  top: -8%;
   transform: translateX(-50%);
   align-items: center;
   justify-content: center;
@@ -117,6 +118,8 @@
 
 .tabla-card-detalles-pedido td {
   text-align: center;
+  background-color: #F8F8F8;
+  font-size: calc((0.2vw + 3.2vh) * 0.48);
 }
 
 .boton-finalizar-estado {
@@ -154,10 +157,6 @@
 
 .boton-finalizar-estado:active::before {
   transform: translateX(0);
-}
-
-.tabla-card-detalles-pedido td{
-  background-color: #F8F8F8;
 }
 
 .tabla-card-detalles-pedido td:first-child{

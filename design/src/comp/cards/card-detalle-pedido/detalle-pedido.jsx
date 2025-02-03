@@ -11,6 +11,8 @@ export default function CardDetallePedido({
   sastreAsignado,
   tipoArreglo,
   estadoPedido,
+  abono,
+  totalPedido,
   fechaPedido,
   fechaEntrega,
   children,
@@ -46,14 +48,16 @@ export default function CardDetallePedido({
                 <th>Vlr.Total</th>
               </tr>
             </thead>
-            <tbody>
-              {children}
-            </tbody>
+            <tbody>{children}</tbody>
           </table>
         </div>
         <section className="fila-detalles-ordenes">
-          <ContDetalle titulo={"Fecha Pedido"} txt={fechaPedido} />
-          <ContDetalle titulo={"Fecha Entrega"} txt={fechaEntrega} />
+          <ContDetalle titulo={"Abono:"} txt={abono} />
+          <ContDetalle titulo={"Total:"} txt={totalPedido} />
+        </section>
+        <section className="fila-detalles-ordenes">
+          <ContDetalle titulo={"Fecha Pedido:"} txt={fechaPedido} />
+          <ContDetalle titulo={"Fecha Entrega:"} txt={fechaEntrega} />
         </section>
         <button className="boton-finalizar-estado">Finalizado</button>
       </div>
