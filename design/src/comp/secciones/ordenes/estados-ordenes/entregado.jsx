@@ -7,7 +7,7 @@ import CardDetallePedido from "../../../cards/card-detalle-pedido/detalle-pedido
 
 const noEncontrado = "../../../../../public/media/img/no-encontrado.png";
 
-export default function TbTodo() {
+export default function TbEntregado() {
   useEffect(() => {
     mostrarPedido();
   }, []);
@@ -76,15 +76,23 @@ export default function TbTodo() {
   return (
     <>
       {setMensajeErr && <span>{mensajeErr}</span>}
+      {console.log(detalles)}
       {detallesVisible && detalles && (
         <CardDetallePedido
           estado={mostrarDt}
           onClick={ocultarDetalles}
           nombre={detalles.customerName || "Desconocido"}
+          apelliido={detalles.customerLastName || "Desconocido"}
           telefono={detalles.telefono || "N/A"}
           sastreAsignado={detalles.sastre || "Sin asignar"}
           tipoArreglo={detalles.concepto || "No especificado"}
-          estadoPedido={detalles.estado || "Desconocido"}
+          estadoPedido={(detalles.estado || "Desconocido").replace(/_/g, " ")}
+          abono={
+            "$ " + new Intl.NumberFormat("es-CO").format(detalles.totalAbonos)
+          }
+          totalPedido={
+            "$ " + new Intl.NumberFormat("es-CO").format(detalles.saldo)
+          }
           fechaPedido={
             detalles.fechaPedido
               ? new Date(detalles.fechaPedido)
@@ -117,20 +125,23 @@ export default function TbTodo() {
           }
         >
           {detalles.prenda?.map((prenda, index) => (
-            <>
-              <tr key={index}>
+            <React.Fragment key={prenda.id || index}>
+              <tr>
                 <td>{prenda.cantidad}</td>
                 <td>detalles</td>
                 <td>{prenda.descripcion}</td>
-                <td>{new Intl.NumberFormat("es-CO").format(prenda.valor)}</td>
                 <td>
-                  {new Intl.NumberFormat("es-CO").format(
-                    prenda.valor * prenda.cantidad
-                  )}
+                  {"$ " +
+                    new Intl.NumberFormat("es-CO").format(
+                      prenda.valor / prenda.cantidad
+                    )}
+                </td>
+                <td>
+                  {"$ " + new Intl.NumberFormat("es-CO").format(prenda.valor)}
                 </td>
               </tr>
               <tr className="last-row-tb-tarjeta-detalles"></tr>
-            </>
+            </React.Fragment>
           ))}
         </CardDetallePedido>
       )}

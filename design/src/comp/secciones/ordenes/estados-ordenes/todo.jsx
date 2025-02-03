@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { tokenPass } from "../../../formularios/iniciar-sesion/iniciar-sesion";
 import DetallesOrden from "../../../botones/abrir-detalles-orden/detalles-orden";
 import CardDetallePedido from "../../../cards/card-detalle-pedido/detalle-pedido";
-import { intlFormat } from "date-fns";
 
 const noEncontrado = "../../../../../public/media/img/no-encontrado.png";
 
@@ -85,8 +84,12 @@ export default function TbTodo() {
           sastreAsignado={detalles.sastre || "Sin asignar"}
           tipoArreglo={detalles.concepto || "No especificado"}
           estadoPedido={(detalles.estado || "Desconocido").replace(/_/g, " ")}
-          abono={new Intl.NumberFormat("es-CO").format(detalles.totalAbonos)}
-          totalPedido={new Intl.NumberFormat("es-CO").format(detalles.saldo)}
+          abono={
+            "$ " + new Intl.NumberFormat("es-CO").format(detalles.totalAbonos)
+          }
+          totalPedido={
+            "$ " + new Intl.NumberFormat("es-CO").format(detalles.saldo)
+          }
           fechaPedido={
             detalles.fechaPedido
               ? new Date(detalles.fechaPedido)
@@ -125,11 +128,14 @@ export default function TbTodo() {
                 <td>detalles</td>
                 <td>{prenda.descripcion}</td>
                 <td>
-                  {new Intl.NumberFormat("es-CO").format(
-                    prenda.valor / prenda.cantidad
-                  )}
+                  {"$ " +
+                    new Intl.NumberFormat("es-CO").format(
+                      prenda.valor / prenda.cantidad
+                    )}
                 </td>
-                <td>{new Intl.NumberFormat("es-CO").format(prenda.valor)}</td>
+                <td>
+                  {"$ " + new Intl.NumberFormat("es-CO").format(prenda.valor)}
+                </td>
               </tr>
               <tr className="last-row-tb-tarjeta-detalles"></tr>
             </React.Fragment>
