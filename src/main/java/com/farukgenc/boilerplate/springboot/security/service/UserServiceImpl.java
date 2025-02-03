@@ -173,5 +173,15 @@ public class UserServiceImpl implements UserService {
 		return id;
 	}
 
+	public void updatePassword(Long id, String contrasena) {
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		System.out.println("Contraseña: " + contrasena);
+		System.out.println("User: " + user.getName());
+		user.setPassword(bCryptPasswordEncoder.encode(contrasena));
+		userRepository.save(user);
+		System.out.println(user.getPassword());
+	}
+
+
 
 }

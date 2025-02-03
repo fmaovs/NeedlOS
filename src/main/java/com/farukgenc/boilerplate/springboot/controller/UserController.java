@@ -8,6 +8,7 @@ import com.farukgenc.boilerplate.springboot.security.dto.UserResponse;
 import com.farukgenc.boilerplate.springboot.security.service.UserService;
 import com.farukgenc.boilerplate.springboot.security.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -38,5 +39,11 @@ public class UserController {
     @PutMapping("/update/{id}")
     public User updateUser(Long id, UserDTO user) {
         return userServiceImpl.updateUser(id, user);
+    }
+
+    @PatchMapping("/password/{id}")
+    public ResponseEntity<String> updatePassword(@PathVariable Long id,  String password) {
+        userServiceImpl.updatePassword(id, password);
+        return ResponseEntity.ok("Password updated successfully");
     }
 }
