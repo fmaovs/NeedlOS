@@ -425,6 +425,23 @@ public class PedidoService {
         pedidoRepository.save(pedido);
     }
 
+    @Transactional
+    public String cambiarEstado(Long id, String estado) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+        Estado estadoEnum = Estado.valueOf(estado.toUpperCase());
+        for (DetallePedido detallePedido : pedido.getDetalles()) {
+            EstadoPedido estadoPedido = new EstadoPedido();
+            estadoPedido.setEstado(estadoEnum);
+            estadoPedido.setFechaCambio(LocalDateTime.now());
+            estadoPedido.setDetallePedido(detallePedido);
+            estadoPedidoRepository.save(estadoPedido);
+            detallePedido.setEstadoActual(estadoPedido);
+            detallePedidoRepository.save(detallePedido);
+        }
+        return "Estado actualizado";
+    }
+
 
 }
 

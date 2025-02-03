@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
+import com.farukgenc.boilerplate.springboot.model.Estado;
 import com.farukgenc.boilerplate.springboot.model.Pedido;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
@@ -164,6 +165,12 @@ public class PedidoController {
     @GetMapping("/Customer/phone/{phone}")
     public ResponseEntity<List<PedidoResponse>> getOrdersByCustomerPhone(@PathVariable Long phone) {
         return ResponseEntity.ok(pedidoService.findPedidosByCustomerPhone(phone));
+    }
+
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<String> cambiarEstado(@PathVariable Long id, @RequestBody Estado estado) {
+        pedidoService.cambiarEstado(id, String.valueOf(estado));
+        return ResponseEntity.ok("Estado cambiado correctamente");
     }
 
 }

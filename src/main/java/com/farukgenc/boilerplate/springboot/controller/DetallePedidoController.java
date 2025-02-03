@@ -17,11 +17,7 @@ public class DetallePedidoController {
     @Autowired
     private DetallePedidoService detallePedidoService;
 
-    @PatchMapping("/{id}/estado")
-    public ResponseEntity<String> cambiarEstado(@PathVariable Long id, @RequestBody Estado nuevoEstado) {
-        detallePedidoService.cambiarEstado(id, nuevoEstado);
-        return ResponseEntity.ok("Estado cambiado correctamente");
-    }
+
 
 
 
