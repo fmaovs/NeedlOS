@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/prendas")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 public class PrendaController {
     @Autowired
     private PrendaService prendaService;

@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*") /*Cambio de crossORIGIN*/
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/login")
+@CrossOrigin(origins = "*") /*Cambio de crossORIGIN*/
 public class LoginController {
 
 	private final JwtTokenService jwtTokenService;
