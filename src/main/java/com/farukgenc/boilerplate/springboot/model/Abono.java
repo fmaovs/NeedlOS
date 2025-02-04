@@ -26,4 +26,8 @@ public class Abono {
     @Enumerated(EnumType.STRING)
     private MetodoPago metodoPago;
 
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    private Pedido pedido;
+
 }

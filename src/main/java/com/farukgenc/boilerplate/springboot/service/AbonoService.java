@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -37,9 +39,11 @@ public class AbonoService {
     }
 
     @Transactional
-    public Abono createAbono(AbonoDTO abonoDTO) throws ParseException {
+    public String createAbono(AbonoDTO abonoDTO) throws ParseException {
         PedidoResponse pedidoResponse = pedidoService.findById(abonoDTO.getIdPedido())
                 .orElseThrow(() -> new IllegalArgumentException("Detalle de pedido no encontrado"));
+
+        ;
 
         if (pedidoResponse.getSaldo() <= 0) {
             throw new IllegalArgumentException("El pedido ya está pagado");
@@ -49,16 +53,17 @@ public class AbonoService {
             throw new IllegalArgumentException("El monto del abono es mayor al saldo del pedido");
         }
 
-        Date fecha = abonoDTO.getFecha();
+
         Abono abono = new Abono();
-        abono.setFecha(fecha);
+        abono.setPedido(pedidoService.convertPedidoResponseToPedido(pedidoResponse));
+        abono.setFecha(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         abono.setMonto(abonoDTO.getMonto());
         abono.setMetodoPago(MetodoPago.valueOf(abonoDTO.getMetodoPago()));
 
         pedidoService.updateSaldo(pedidoResponse.getId(), abonoDTO.getMonto());
 
-
-        return abonoRepository.save(abono);
+        abonoRepository.save(abono);
+        return "Abono creado";
     }
 
 }

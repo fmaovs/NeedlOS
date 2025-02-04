@@ -1,20 +1,27 @@
 package com.farukgenc.boilerplate.springboot;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableJpaRepositories
 @EnableAspectJAutoProxy
-public class
+public class SpringBootBoilerplateApplication {
 
-
-SpringBootBoilerplateApplication {
+	@PostConstruct
+	void init() {
+		// Establecer la zona horaria de la aplicación en America/Bogota
+		TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
+		System.out.println("Zona horaria establecida en: " + TimeZone.getDefault().getID());
+	}
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(SpringBootBoilerplateApplication.class, args);
 	}
 }
+

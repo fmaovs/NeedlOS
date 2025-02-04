@@ -8,7 +8,6 @@ import java.util.Date;
 public class AbonoDTO {
     private Long idPedido;
     private double monto;
-    private Date fecha;
     private String metodoPago;
 
 

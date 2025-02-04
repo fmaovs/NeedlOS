@@ -455,6 +455,31 @@ public class PedidoService {
         return "Sastre actualizado";
     }
 
+    public Pedido convertPedidoResponseToPedido(PedidoResponse pedidoResponse) {
+        Pedido pedido = new Pedido();
+        pedido.setId(pedidoResponse.getId());
+        pedido.setDate(pedidoResponse.getFechaPedido());
+        pedido.setTotalAbonos(pedidoResponse.getTotalAbonos());
+        pedido.setSaldo(pedidoResponse.getSaldo());
+        Customer customer = new Customer();
+        customer.setName(pedidoResponse.getCustomerName());
+        customer.setLastname(pedidoResponse.getCustomerLastName());
+        customer.setPhone(pedidoResponse.getTelefono());
+        pedido.setCustomer(customer);
+        List<DetallePedido> detalles = new ArrayList<>();
+        for (PrendaDTO prendaDTO : pedidoResponse.getPrenda()) {
+            DetallePedido detallePedido = new DetallePedido();
+            Prenda prenda = new Prenda();
+            prenda.setDescripcion(prendaDTO.getDescripcion());
+            detallePedido.setPrenda(prenda);
+            detallePedido.setCantidad(prendaDTO.getCantidad());
+            detallePedido.setValorTotal(prendaDTO.getValor());
+            detalles.add(detallePedido);
+        }
+        pedido.setDetalles(detalles);
+        return pedido;
+    }
+
 
 }
 

@@ -18,7 +18,7 @@ public class AbonoController {
     private AbonoService abonoService;
 
     @PostMapping
-    public Abono createAbono(@RequestBody AbonoDTO abonoDTO) throws ParseException {
+    public String createAbono(@RequestBody AbonoDTO abonoDTO) throws ParseException {
         return abonoService.createAbono(abonoDTO);
     }
 

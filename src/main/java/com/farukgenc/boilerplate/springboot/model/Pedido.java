@@ -43,6 +43,9 @@ public class Pedido {
     @Column(name = "foto_entrega", nullable = true)
     private String fotoEntrega; // Ruta o nombre del archivo de la foto
 
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Abono> abonos;
+
     public double getTotalAbonos() {
         return total_abonos;
     }
