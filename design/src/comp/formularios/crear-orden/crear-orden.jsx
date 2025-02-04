@@ -464,7 +464,7 @@ export default function CrearOrden({ onClick }) {
   let idOrden = null;
   async function enviarOrden() {
     /*ASIGNAR FECHA ENTREGA*/
-    console.log(fotoBlob)
+    console.log(fotoBlob);
     if (isDate(selectedDate)) {
       /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
       if (selectedDate.getTime() < fechaPedido.getTime()) {
@@ -481,39 +481,6 @@ export default function CrearOrden({ onClick }) {
       sonidoError();
       setTimeout(() => {
         alert("Ingrese una fecha");
-      }, 10);
-      return;
-    }
-
-    /*TRAE EL VALOR DE ABONO SI ES NULLO LO CONVIIERTE A 0*/
-    let abono = +document.getElementById("abono").value;
-    let valor = +subTotal.replace("$", "").replace(".", "").trim();
-    if (abono > valor) {
-      sonidoError();
-      setTimeout(() => {
-        alert("El abono no puede superar el subtotal");
-      }, 10);
-      return;
-    }
-
-    if (abono === null) {
-      abono = 0;
-    }
-    if (abono % 50 == 0) {
-    } else {
-      sonidoError();
-      setTimeout(() => {
-        alert("La cantidad del abono no es multiplo de 50");
-      }, 10);
-      return;
-    }
-
-    /*VERIFICAR EL METODO DE PAGO*/
-    let tipoPago = document.getElementById("tipoPago").value;
-    if (tipoPago === "null") {
-      sonidoError();
-      setTimeout(() => {
-        alert("Elige un metodo de pago");
       }, 10);
       return;
     }
@@ -656,28 +623,71 @@ export default function CrearOrden({ onClick }) {
           return;
         }
 
-        /*VARIABLES PARA EL ABONO*/
+        /*TRAE EL VALOR DE ABONO SI ES NULLO LO CONVIIERTE A 0*/
+        let abono = +document.getElementById("abono").value;
+        let valorSubtotal = +subTotal.replace("$", "").replace(".", "").trim();
+        let tipoPago = document.getElementById("tipoPago").value;
+
+        /*Variables Abono*/
         let DatosAbono = {
           idPedido: idOrden,
           monto: abono,
-          fecha: dataPedido.date,
           metodoPago: tipoPago,
         };
 
-        /*Asignar abono al pedido*/
-        try {
-          const response = await axios.post(
-            "http://localhost:8080/abonos",
-            DatosAbono,
-            {
-              headers: {
-                Authorization: `Bearer ${tokenPass}`,
-              },
+        /*Verifica si el abono es un numero o es diferente de 0*/
+        if (Number.isInteger(abono) || abono != 0) {
+          /*Verifca que el abono no sea un numero negativo*/
+          if (abono > 0) {
+            /*Verifica que el abono no supere al Subtotal*/
+            if (abono < valorSubtotal) {
+              /*Verifica que el abono sea un multiplo de 50*/
+              if (abono % 50 == 0) {
+                /*Verifica el metodo de pago*/
+                if (tipoPago != "null") {
+                  /*Asignar abono al pedido*/
+                  try {
+                    const response = await axios.post(
+                      "http://localhost:8080/abonos",
+                      DatosAbono,
+                      {
+                        headers: {
+                          Authorization: `Bearer ${tokenPass}`,
+                        },
+                      }
+                    );
+                    console.log("Abono asignado");
+                  } catch {
+                    console.log("Error Asignando abono");
+                  }
+                }else{
+                  sonidoError();
+                  setTimeout(() => {
+                    alert("Elige un metodo de pago");
+                  }, 10);
+                  return;
+                }
+              } else {
+                sonidoError();
+                setTimeout(() => {
+                  alert("La cantidad del abono no es multiplo de 50");
+                }, 10);
+                return;
+              }
+            } else {
+              sonidoError();
+              setTimeout(() => {
+                alert("El Abono no puede ser mayor al subtotal");
+              }, 10);
+              return;
             }
-          );
-          console.log("Abono asignado");
-        } catch {
-          console.log("Error Asignando abono");
+          } else {
+            sonidoError();
+            setTimeout(() => {
+              alert("El abono no puede ser negativo");
+            }, 10);
+            return;
+          }
         }
       }
     } catch (error) {
