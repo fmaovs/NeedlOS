@@ -24,24 +24,7 @@ public class DetallePedidoService {
     private UserServiceImpl userService;
 
 
-    @Transactional
-    public void cambiarSastre(Long detallePedidoId, Long userId) {
-        // 1. Buscar el detalle del pedido
-        DetallePedido detallePedido = detallePedidoRepository.findById(detallePedidoId)
-                .orElseThrow(() -> new IllegalArgumentException("DetallePedido no encontrado"));
-        // 2. Buscar el usuario
-        try {
-            User user = userService.findById(userId);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Usuario no encontrado");
-        }
-        // 2. Cambiar el usuario sastre
 
-        detallePedido.setUser(userService.findById(userId));
-
-        // 3. Guardar los cambios
-        detallePedidoRepository.save(detallePedido);
-    }
 
     public Optional<DetallePedido> findById(Long id) {
         return Optional.of(detallePedidoRepository.findById(id).get());

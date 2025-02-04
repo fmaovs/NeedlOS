@@ -12,5 +12,6 @@ import java.util.List;
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findPedidosByCustomer_Phone(Long phone);
     List<Pedido> findByDetalles_EstadoActual_Estado(Estado estado);
+    List<Pedido> findPedidosByDetalles_User_Name(String name);
 
 }

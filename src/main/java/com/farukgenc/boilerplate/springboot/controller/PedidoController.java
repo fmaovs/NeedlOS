@@ -159,7 +159,7 @@ public class PedidoController {
 
     @GetMapping("/sastre/{sastre}")
     public ResponseEntity<List<PedidoResponse>> getOrdersBySastre(@PathVariable String sastre) {
-        return ResponseEntity.ok(pedidoService.findPedidosByDetalleSastreName(sastre));
+        return ResponseEntity.ok(pedidoService.findPedidosByDetalleUserName(sastre));
     }
 
     @GetMapping("/Customer/phone/{phone}")
@@ -171,6 +171,12 @@ public class PedidoController {
     public ResponseEntity<String> cambiarEstado(@PathVariable Long id, @RequestBody Estado estado) {
         pedidoService.cambiarEstado(id, String.valueOf(estado));
         return ResponseEntity.ok("Estado cambiado correctamente");
+    }
+
+    @PatchMapping("/reasignar-sastre/{id}")
+    public ResponseEntity<String> reasignarSastre(@PathVariable Long id, @RequestBody Long sastre) {
+        pedidoService.cambiarSastre(id, sastre);
+        return ResponseEntity.ok("Sastre reasignado correctamente");
     }
 
 }
