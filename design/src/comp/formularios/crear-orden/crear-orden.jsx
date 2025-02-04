@@ -464,7 +464,6 @@ export default function CrearOrden({ onClick }) {
   let idOrden = null;
   async function enviarOrden() {
     /*ASIGNAR FECHA ENTREGA*/
-    console.log(fotoBlob);
     if (isDate(selectedDate)) {
       /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
       if (selectedDate.getTime() < fechaPedido.getTime()) {
@@ -636,7 +635,7 @@ export default function CrearOrden({ onClick }) {
         };
 
         /*Verifica si el abono es un numero o es diferente de 0*/
-        if (Number.isInteger(abono) || abono != 0) {
+        if (Number.isInteger(abono) && abono != 0) {
           /*Verifca que el abono no sea un numero negativo*/
           if (abono > 0) {
             /*Verifica que el abono no supere al Subtotal*/
