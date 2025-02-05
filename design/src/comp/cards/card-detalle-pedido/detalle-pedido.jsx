@@ -16,6 +16,13 @@ export default function CardDetallePedido({
   fechaPedido,
   fechaEntrega,
   children,
+  mostrarAnulado,
+  estadoBoton,
+  color,
+  onClickAnulado,
+  onMouseDown,
+  onMouseUp,
+  onMouseLeave,
 }) {
   return (
     <div
@@ -60,8 +67,20 @@ export default function CardDetallePedido({
           <ContDetalle titulo={"Fecha Entrega:"} txt={fechaEntrega} />
         </section>
         <section className="fila-detalles-ordenes">
-          <button className="boton-finalizar-estado pedido-anulado">Anular</button>
-          <button className="boton-finalizar-estado"></button>
+          <button
+            className={`boton-finalizar-estado ${mostrarAnulado}`}
+            onClick={onClickAnulado}
+          >
+            Anular?
+          </button>
+          <button
+            className={`boton-finalizar-estado ${estadoBoton} ${color}`}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseLeave}
+          >
+            Terminar?
+          </button>
         </section>
       </div>
     </div>

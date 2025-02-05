@@ -35,6 +35,7 @@ export default function TbTodo() {
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
+  const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
     try {
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
@@ -42,6 +43,10 @@ export default function TbTodo() {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
+      
+      if(primerEstado === null) {
+        setPrimerEstado(response.data.estado)
+      }
 
       if (mostrarDt) {
         setMostrarDt(false);
@@ -67,13 +72,81 @@ export default function TbTodo() {
     setMostrarDt(false);
     setTimeout(() => {
       setDetallesVisible(false);
+      setCambiarColor("");
+      setPrimerEstado(null);
     }, 300);
   };
+
+  const [tiempoPresionado, setTiempoPresionado] = useState(null);
+  const [cambiarColor, setCambiarColor] = useState("");
+
+  /*CAMBIAR ESTADO DE ORDEN*/
+  const cambiarEstado = async (estado) => {
+    if (estado === "EN_PROCESO") {
+      try {
+        const response = await axios.patch(
+          `http://localhost:8080/orders/${detalles.id}/estado`,
+          "FINALIZADO",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log(response.data);
+        setCambiarColor("oprimido");
+        await mostrarPedido();
+        setDetalles((prevDetalles) => ({
+          ...prevDetalles,
+          estado: "FINALIZADO",
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (estado === "FINALIZADO") {
+      try {
+        const response = await axios.patch(
+          `http://localhost:8080/orders/${detalles.id}/estado`,
+          "ENTREGADO",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log(response.data);
+        setCambiarColor("oprimido");
+        await mostrarPedido();
+        setDetalles((prevDetalles) => ({
+          ...prevDetalles,
+          estado: "ENTREGADO",
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const botonPresionado = () => {
+    setTiempoPresionado(Date.now());
+  };
+
+  const botonNOPresionado = () => {
+    if (tiempoPresionado && Date.now() - tiempoPresionado > 300) {
+      cambiarEstado(detalles.estado);
+    }
+    setTiempoPresionado(null);
+  };
+
+  /*CAMBIAR ESTADO A ANULADO*/
+  const cambiarEstadoAnulado = (estado) => {};
 
   return (
     <>
       {setMensajeErr && <span>{mensajeErr}</span>}
-      {console.log(detalles)}
       {detallesVisible && detalles && (
         <CardDetallePedido
           estado={mostrarDt}
@@ -120,6 +193,13 @@ export default function TbTodo() {
                   .replace("p. m.", "PM")
               : "No disponible"
           }
+          mostrarAnulado={detalles.estado}
+          onClickAnulado={() => cambiarEstadoAnulado(detalles.estado)}
+          estadoBoton={primerEstado}
+          color={cambiarColor}
+          onMouseDown={botonPresionado}
+          onMouseUp={botonNOPresionado}
+          onMouseLeave={() => setTiempoPresionado(null)}
         >
           {detalles.prenda?.map((prenda, index) => (
             <React.Fragment key={prenda.id || index}>
