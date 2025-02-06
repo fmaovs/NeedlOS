@@ -38,29 +38,23 @@ export default function TbTodo() {
   const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
     try {
+      // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
         headers: {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
-      
-      if(primerEstado === null) {
-        setPrimerEstado(response.data.estado)
+
+      if (primerEstado === null) {
+        setPrimerEstado(response.data.estado);
       }
 
-      if (mostrarDt) {
-        setMostrarDt(false);
-        setTimeout(() => {
-          setDetalles(response.data);
-          setMostrarDt(true);
-        }, 300);
-      } else {
-        setDetallesVisible(true);
-        setTimeout(() => {
-          setDetalles(response.data);
-          setMostrarDt(true);
-        }, 15);
-      }
+      // Mostramos los nuevos detalles
+      setDetallesVisible(true);
+      setTimeout(() => {
+        setDetalles(response.data);
+        setMostrarDt(true);
+      }, 15);
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
       setMensajeErr("No se puede acceder a los datos");
@@ -68,17 +62,20 @@ export default function TbTodo() {
   };
 
   /*OCULTAR DETALLES ORDEN*/
-  const ocultarDetalles = () => {
+  const ocultarDetalles = async () => {
     setMostrarDt(false);
     setTimeout(() => {
       setDetallesVisible(false);
       setCambiarColor("");
+      setColorAnulado("")
       setPrimerEstado(null);
     }, 300);
   };
 
   const [tiempoPresionado, setTiempoPresionado] = useState(null);
+  const [tiempoPresionadoAnulado, setTiempoPresionadoAnulado] = useState(null);
   const [cambiarColor, setCambiarColor] = useState("");
+  const [colorAnulado, setColorAnulado] = useState("");
 
   /*CAMBIAR ESTADO DE ORDEN*/
   const cambiarEstado = async (estado) => {
@@ -133,7 +130,6 @@ export default function TbTodo() {
   const botonPresionado = () => {
     setTiempoPresionado(Date.now());
   };
-
   const botonNOPresionado = () => {
     if (tiempoPresionado && Date.now() - tiempoPresionado > 300) {
       cambiarEstado(detalles.estado);
@@ -141,8 +137,40 @@ export default function TbTodo() {
     setTiempoPresionado(null);
   };
 
-  /*CAMBIAR ESTADO A ANULADO*/
-  const cambiarEstadoAnulado = (estado) => {};
+  /*CAMBIAR ESTADO NULO*/
+  const estadoNulo = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8080/orders/${detalles.id}/estado`,
+        "ANULADO",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setColorAnulado("oprimido");
+      await mostrarPedido();
+      setDetalles((prevDetalles) => ({
+        ...prevDetalles,
+        estado: "ANULADO",
+      }));
+    } catch(error) {
+      console.log(error)
+    }
+  };
+
+  const botonPresionadoAnulado = () => {
+    setTiempoPresionadoAnulado(Date.now());
+  };
+  const botonNOPresionadoAnulado = () => {
+    if (tiempoPresionadoAnulado && Date.now() - tiempoPresionadoAnulado > 300) {
+      estadoNulo(detalles.id);
+    }
+    setTiempoPresionadoAnulado(null);
+  };
 
   return (
     <>
@@ -194,7 +222,11 @@ export default function TbTodo() {
               : "No disponible"
           }
           mostrarAnulado={detalles.estado}
-          onClickAnulado={() => cambiarEstadoAnulado(detalles.estado)}
+          colorAnulado={colorAnulado}
+          pedidoAnulado={detalles.estado}
+          onMouseDownAnulado={botonPresionadoAnulado}
+          onMouseUpAnulado={botonNOPresionadoAnulado}
+          onMouseLeaveAnulado={() => setTiempoPresionadoAnulado(null)}
           estadoBoton={primerEstado}
           color={cambiarColor}
           onMouseDown={botonPresionado}

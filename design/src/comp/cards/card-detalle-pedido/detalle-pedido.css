@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   left: 50%;
-  top: -8%;
+  top: -3.1%;
   transform: translateX(-50%);
   align-items: center;
   justify-content: center;
@@ -187,24 +187,27 @@
 }
 
 /*Pedido finalizado*/
-.boton-finalizar-estado.EN_PROCESO::before {
+.boton-finalizar-estado.EN_PROCESO.EN_PROCESO::before {
   content: "Finalizado";
   background-color: #48ea60;
   border: 0.1vh solid #48ea60;
 }
 
-.boton-finalizar-estado.EN_PROCESO.oprimido::before {
+.boton-finalizar-estado.EN_PROCESO.oprimido.FINALIZADO::before {
+  content: "Finalizado";
+  background-color: #48ea60;
+  border: 0.1vh solid #48ea60;
   transform: translateX(0);
 }
 
 /*Pedido entregado*/
-.boton-finalizar-estado.FINALIZADO::before {
+.boton-finalizar-estado.FINALIZADO.FINALIZADO::before {
   content: "Entregado";
   background-color: #fdbc40;
   border: 0.1vh solid #fdbc40;
 }
 
-.boton-finalizar-estado.FINALIZADO.oprimido::before {
+.boton-finalizar-estado.FINALIZADO.oprimido.ENTREGADO::before {
   transform: translateX(0);
 }
 
@@ -214,4 +217,79 @@
 
 .boton-finalizar-estado.ANULADO{
   display: none;
+}
+
+.boton-finalizar-estado-anulado{
+  position: relative;
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  margin: 1vh 0 0 0;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  overflow: hidden;
+  background-color: transparent;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.boton-finalizar-estado-anulado.ANULADO.oprimido{
+  border: hidden;
+}
+
+.boton-finalizar-estado-anulado:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  text-underline-offset: 0.2vh;
+  letter-spacing: 0.02vw;
+}
+
+.boton-finalizar-estado-anulado:active {
+  border-color: transparent;
+  text-decoration: none;
+}
+
+.boton-finalizar-estado-anulado::before {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  transform: translateX(-101%);
+  transition: 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.boton-finalizar-estado-anulado:active::before {
+  transform: translateX(0);
+}
+
+/*Anular Pedido*/
+.boton-finalizar-estado-anulado.ENTREGADO{
+  display: none;
+}
+
+.boton-finalizar-estado-anulado.ANULADO{
+  display: none;
+}
+
+.boton-finalizar-estado-anulado.EN_PROCESO.ANULADO{
+  display: none;
+}
+
+.boton-finalizar-estado-anulado::before{
+  content: "Anulado";
+  background-color: #FC615D;
+  border: 0.1vh solid #FC615D;
+}
+
+.boton-finalizar-estado-anulado.oprimido::before{
+  transform: translateX(0);
 }

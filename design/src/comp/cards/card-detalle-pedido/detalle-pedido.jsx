@@ -17,9 +17,13 @@ export default function CardDetallePedido({
   fechaEntrega,
   children,
   mostrarAnulado,
+  colorAnulado,
+  onMouseDownAnulado,
+  onMouseUpAnulado,
+  onMouseLeaveAnulado,
   estadoBoton,
   color,
-  onClickAnulado,
+  pedidoAnulado,
   onMouseDown,
   onMouseUp,
   onMouseLeave,
@@ -68,13 +72,15 @@ export default function CardDetallePedido({
         </section>
         <section className="fila-detalles-ordenes">
           <button
-            className={`boton-finalizar-estado ${mostrarAnulado}`}
-            onClick={onClickAnulado}
+            className={`boton-finalizar-estado-anulado ${mostrarAnulado} ${colorAnulado}`}
+            onMouseDown={onMouseDownAnulado}
+            onMouseUp={onMouseUpAnulado}
+            onMouseLeave={onMouseLeaveAnulado}
           >
             Anular?
           </button>
           <button
-            className={`boton-finalizar-estado ${estadoBoton} ${color}`}
+            className={`boton-finalizar-estado ${estadoBoton} ${color} ${pedidoAnulado}`}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseLeave}
