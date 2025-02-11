@@ -13,6 +13,7 @@ export default function TbTodo() {
   }, []);
 
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const mostrarPedido = async () => {
     try {
       const response = await axios.get("http://localhost:8080/orders/all", {
@@ -27,6 +28,8 @@ export default function TbTodo() {
       setOrders(sortedOrders);
     } catch {
       console.log("Error accediendo a las ordenes");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,7 +70,7 @@ export default function TbTodo() {
     setTimeout(() => {
       setDetallesVisible(false);
       setCambiarColor("");
-      setColorAnulado("")
+      setColorAnulado("");
       setPrimerEstado(null);
     }, 300);
   };
@@ -157,8 +160,8 @@ export default function TbTodo() {
         ...prevDetalles,
         estado: "ANULADO",
       }));
-    } catch(error) {
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -256,7 +259,7 @@ export default function TbTodo() {
       )}
       <div className="cont-tabla">
         <table className="tabla">
-          {orders.length > 0 ? (
+          {isLoading ? null : orders.length > 0 ? (
             <>
               <thead className="th-tabla">
                 <tr className="separacion-fila-head"></tr>

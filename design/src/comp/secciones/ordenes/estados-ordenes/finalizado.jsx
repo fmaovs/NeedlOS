@@ -13,13 +13,17 @@ export default function TbFinalizado() {
   }, []);
 
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const mostrarPedido = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/orders/estado/finalizado", {
-        headers: {
-          Authorization: `Bearer ${tokenPass}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:8080/orders/estado/finalizado",
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
       const sortedOrders = response.data.sort(
         (a, b) => new Date(b.fechaPedido) - new Date(a.fechaPedido)
       );
@@ -27,6 +31,8 @@ export default function TbFinalizado() {
       setOrders(sortedOrders);
     } catch {
       console.log("Error accediendo a las ordenes");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -35,27 +41,26 @@ export default function TbFinalizado() {
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
+  const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
     try {
+      // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
         headers: {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
 
-      if (mostrarDt) {
-        setMostrarDt(false);
-        setTimeout(() => {
-          setDetalles(response.data);
-          setMostrarDt(true);
-        }, 300);
-      } else {
-        setDetallesVisible(true);
-        setTimeout(() => {
-          setDetalles(response.data);
-          setMostrarDt(true);
-        }, 15);
+      if (primerEstado === null) {
+        setPrimerEstado(response.data.estado);
       }
+
+      // Mostramos los nuevos detalles
+      setDetallesVisible(true);
+      setTimeout(() => {
+        setDetalles(response.data);
+        setMostrarDt(true);
+      }, 15);
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
       setMensajeErr("No se puede acceder a los datos");
@@ -63,17 +68,119 @@ export default function TbFinalizado() {
   };
 
   /*OCULTAR DETALLES ORDEN*/
-  const ocultarDetalles = () => {
+  const ocultarDetalles = async () => {
     setMostrarDt(false);
     setTimeout(() => {
       setDetallesVisible(false);
+      setCambiarColor("");
+      setColorAnulado("");
+      setPrimerEstado(null);
     }, 300);
+  };
+
+  const [tiempoPresionado, setTiempoPresionado] = useState(null);
+  const [tiempoPresionadoAnulado, setTiempoPresionadoAnulado] = useState(null);
+  const [cambiarColor, setCambiarColor] = useState("");
+  const [colorAnulado, setColorAnulado] = useState("");
+
+  /*CAMBIAR ESTADO DE ORDEN*/
+  const cambiarEstado = async (estado) => {
+    if (estado === "EN_PROCESO") {
+      try {
+        const response = await axios.patch(
+          `http://localhost:8080/orders/${detalles.id}/estado`,
+          "FINALIZADO",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log(response.data);
+        setCambiarColor("oprimido");
+        await mostrarPedido();
+        setDetalles((prevDetalles) => ({
+          ...prevDetalles,
+          estado: "FINALIZADO",
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (estado === "FINALIZADO") {
+      try {
+        const response = await axios.patch(
+          `http://localhost:8080/orders/${detalles.id}/estado`,
+          "ENTREGADO",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log(response.data);
+        setCambiarColor("oprimido");
+        await mostrarPedido();
+        setDetalles((prevDetalles) => ({
+          ...prevDetalles,
+          estado: "ENTREGADO",
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const botonPresionado = () => {
+    setTiempoPresionado(Date.now());
+  };
+  const botonNOPresionado = () => {
+    if (tiempoPresionado && Date.now() - tiempoPresionado > 300) {
+      cambiarEstado(detalles.estado);
+    }
+    setTiempoPresionado(null);
+  };
+
+  /*CAMBIAR ESTADO NULO*/
+  const estadoNulo = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8080/orders/${detalles.id}/estado`,
+        "ANULADO",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setColorAnulado("oprimido");
+      await mostrarPedido();
+      setDetalles((prevDetalles) => ({
+        ...prevDetalles,
+        estado: "ANULADO",
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const botonPresionadoAnulado = () => {
+    setTiempoPresionadoAnulado(Date.now());
+  };
+  const botonNOPresionadoAnulado = () => {
+    if (tiempoPresionadoAnulado && Date.now() - tiempoPresionadoAnulado > 300) {
+      estadoNulo(detalles.id);
+    }
+    setTiempoPresionadoAnulado(null);
   };
 
   return (
     <>
       {setMensajeErr && <span>{mensajeErr}</span>}
-      {console.log(detalles)}
       {detallesVisible && detalles && (
         <CardDetallePedido
           estado={mostrarDt}
@@ -120,6 +227,17 @@ export default function TbFinalizado() {
                   .replace("p. m.", "PM")
               : "No disponible"
           }
+          mostrarAnulado={detalles.estado}
+          colorAnulado={colorAnulado}
+          pedidoAnulado={detalles.estado}
+          onMouseDownAnulado={botonPresionadoAnulado}
+          onMouseUpAnulado={botonNOPresionadoAnulado}
+          onMouseLeaveAnulado={() => setTiempoPresionadoAnulado(null)}
+          estadoBoton={primerEstado}
+          color={cambiarColor}
+          onMouseDown={botonPresionado}
+          onMouseUp={botonNOPresionado}
+          onMouseLeave={() => setTiempoPresionado(null)}
         >
           {detalles.prenda?.map((prenda, index) => (
             <React.Fragment key={prenda.id || index}>
@@ -144,7 +262,7 @@ export default function TbFinalizado() {
       )}
       <div className="cont-tabla">
         <table className="tabla">
-          {orders.length > 0 ? (
+          {isLoading ? null : orders.length > 0 ? (
             <>
               <thead className="th-tabla">
                 <tr className="separacion-fila-head"></tr>

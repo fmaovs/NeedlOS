@@ -13,6 +13,7 @@ export default function TbEntregado() {
   }, []);
 
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const mostrarPedido = async () => {
     try {
       const response = await axios.get(
@@ -30,6 +31,8 @@ export default function TbEntregado() {
       setOrders(sortedOrders);
     } catch {
       console.log("Error accediendo a las ordenes");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -40,25 +43,19 @@ export default function TbEntregado() {
   const [mostrarDt, setMostrarDt] = useState(false);
   const mostrarDetalles = async (id) => {
     try {
+      // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
         headers: {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
 
-      if (mostrarDt) {
-        setMostrarDt(false);
-        setTimeout(() => {
-          setDetalles(response.data);
-          setMostrarDt(true);
-        }, 300);
-      } else {
-        setDetallesVisible(true);
-        setTimeout(() => {
-          setDetalles(response.data);
-          setMostrarDt(true);
-        }, 15);
-      }
+      // Mostramos los nuevos detalles
+      setDetallesVisible(true);
+      setTimeout(() => {
+        setDetalles(response.data);
+        setMostrarDt(true);
+      }, 15);
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
       setMensajeErr("No se puede acceder a los datos");
@@ -66,7 +63,7 @@ export default function TbEntregado() {
   };
 
   /*OCULTAR DETALLES ORDEN*/
-  const ocultarDetalles = () => {
+  const ocultarDetalles = async () => {
     setMostrarDt(false);
     setTimeout(() => {
       setDetallesVisible(false);
@@ -76,7 +73,6 @@ export default function TbEntregado() {
   return (
     <>
       {setMensajeErr && <span>{mensajeErr}</span>}
-      {console.log(detalles)}
       {detallesVisible && detalles && (
         <CardDetallePedido
           estado={mostrarDt}
@@ -123,6 +119,8 @@ export default function TbEntregado() {
                   .replace("p. m.", "PM")
               : "No disponible"
           }
+          mostrarAnulado={detalles.estado}
+          pedidoAnulado={detalles.estado}
         >
           {detalles.prenda?.map((prenda, index) => (
             <React.Fragment key={prenda.id || index}>
@@ -147,7 +145,7 @@ export default function TbEntregado() {
       )}
       <div className="cont-tabla">
         <table className="tabla">
-          {orders.length > 0 ? (
+          {isLoading ? null : orders.length > 0 ? (
             <>
               <thead className="th-tabla">
                 <tr className="separacion-fila-head"></tr>

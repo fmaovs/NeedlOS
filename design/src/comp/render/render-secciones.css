@@ -2,7 +2,7 @@
     width: 87.32%;
     height: 100%;
     box-sizing: border-box;
-    overflow: auto;
+    overflow-y: scroll;
     opacity: 1;
     transition: 0.3s ease-in-out;
     overflow-x: hidden;
