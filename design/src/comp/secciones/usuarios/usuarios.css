@@ -3,5 +3,98 @@
     height: 8%;
     margin: 1vh 1vh 3.5vh 1vh;
     display: flex;
-    flex-direction: row;
 }
+
+.tablas {
+    display: flex;
+    justify-content: space-between;
+    padding: 2vh;
+    gap: 2vw;
+  }
+  
+  .tabla-container {
+    margin: 0.5vh 1vh 0 1vh;
+    border-radius: 1.2vh 1.2vh 0 0;
+    border-top: 0.18rem solid #0050b8;
+    border-right: 0.18rem solid #0050b8;
+    border-left: 0.18rem solid #0050b8;
+    box-sizing: border-box;
+    min-height: 77.9vh;
+    height: auto;
+    width: calc(100% - 2vh);
+    padding: 0 0.8vh;
+    overflow: auto;
+  }
+  
+  .tabla-header {
+    background: #f9fafb;
+    padding: 1.2vh 2vw;
+    border-bottom: 0.1vh solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 0.8vw;
+  }
+  
+  .tabla {
+    width: 100%;
+    font-size: calc((0.2vw + 3.2vh) * 0.5);
+    border-collapse: collapse;
+  }
+  .th-tabla {
+    font-size: calc((0.2vw + 3.2vh) * 0.6);
+  }
+
+  .th {
+    padding: 0.8vh;
+    font-weight: 500;
+    white-space: pre-wrap;
+  }
+
+  .th:first-child {
+    border-right: 0.05 solid #bababa;
+  }
+  .th:not(:first-child):not(:last-child) {
+    border-right: 0.05vh solid #dbd7d7;
+    border-left: 0.05vh solid #bababa;
+  }
+  
+  .th:last-child {
+    border-left: 0.05 solid #bababa;
+  }
+  .separacion-fila {
+    height: 0.9vh;
+  }
+  
+  .separacion-fila-head {
+    height: 1.6vh;
+  }
+  
+  .acciones {
+    display: flex;
+    gap: 0.8vw;
+  }
+  
+  .btn-editar {
+    color: #0050b8;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.4vh;
+  }
+  
+  .btn-editar:hover {
+    color: #0050b8;
+  }
+  
+  .btn-eliminar {
+    color: #dc2626;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.4vh;
+  }
+  
+  .btn-eliminar:hover {
+    color: #b91c1c;
+  }
+  
