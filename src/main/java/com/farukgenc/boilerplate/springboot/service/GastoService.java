@@ -58,5 +58,4 @@ public class GastoService {
                                 .mapToDouble(Gastos::getMonto)
                                 .sum();
     }
-
 }
