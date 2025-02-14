@@ -15,7 +15,6 @@ public class SpringBootBoilerplateApplication {
 
 	@PostConstruct
 	void init() {
-		// Establecer la zona horaria de la aplicación en America/Bogota
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
 		System.out.println("Zona horaria establecida en: " + TimeZone.getDefault().getID());
 	}

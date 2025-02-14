@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +66,16 @@ public class AbonoService {
 
         abonoRepository.save(abono);
         return "Abono creado";
+    }
+
+    public List<Abono> getAbonosByDate(String dateString) {
+        LocalDate localDate = LocalDate.parse(dateString);
+
+        // Convertimos LocalDate a Date con 00:00:00 y 23:59:59
+        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endOfDay = Date.from(localDate.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
+
+        return abonoRepository.findByFechaBetween(startOfDay, endOfDay);
     }
 
 }
