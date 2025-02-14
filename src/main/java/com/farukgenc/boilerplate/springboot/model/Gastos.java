@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -35,7 +36,7 @@ public class Gastos {
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = false)
-    private Date fecha;
+    private LocalDate fecha;
 
     @Enumerated(EnumType.STRING)
     private CategoriaGasto categoria;

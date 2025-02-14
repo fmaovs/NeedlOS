@@ -9,7 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +49,14 @@ public class GastoService {
                         gasto.getIdGasto()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Double obtenervalorTotalEnRango(LocalDate fechaInicio, LocalDate fechaFin){
+        return gastoRepository.findByfechaBetween(fechaInicio, fechaFin)
+                                .stream()
+                                .mapToDouble(Gastos::getMonto)
+                                .sum();
     }
 
 }
