@@ -12,6 +12,6 @@ public interface GastoRepository extends JpaRepository<Gastos, Long> {
 
     List<Gastos> findByfechaBetween(LocalDate fechaInicio, LocalDate fechaFin);
 
-
+    List<Gastos> findByfecha(LocalDate fecha);
 
 }

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,4 +32,20 @@ public class GastoController {
     public ResponseEntity<List<GastosRequest>> obtenerTodosLosGastos() {
         return ResponseEntity.ok(gastosService.obtenerGastos());
     }
+
+    @GetMapping("/EntreFechas")
+    public double obtenervalorTotalEnRango(@RequestParam("fechaInicio")String fechaInicio,
+                                           @RequestParam("fechaFin")String fechaFin ){
+        LocalDate inicio = LocalDate.parse(fechaInicio);
+        LocalDate fin = LocalDate.parse(fechaFin);
+        return gastosService.obtenervalorTotalEnRango(inicio, fin);
+    }
+
+    @GetMapping("/dias")
+    public double obtenerValorToalDiario(@RequestParam("Día")String fecha){
+
+        LocalDate Dia = LocalDate.parse(fecha);
+        return gastosService.obtenervalorTotalDia(Dia);
+    }
+
 }

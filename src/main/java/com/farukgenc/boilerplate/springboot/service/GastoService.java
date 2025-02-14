@@ -52,6 +52,15 @@ public class GastoService {
     }
 
     @Transactional
+    public Double obtenervalorTotalDia(LocalDate fecha){
+        return gastoRepository.findByfecha(fecha)
+                .stream()
+                .mapToDouble(Gastos::getMonto)
+                .sum();
+    }
+
+
+    @Transactional
     public Double obtenervalorTotalEnRango(LocalDate fechaInicio, LocalDate fechaFin){
         return gastoRepository.findByfechaBetween(fechaInicio, fechaFin)
                                 .stream()
