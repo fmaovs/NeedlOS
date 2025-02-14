@@ -6,6 +6,7 @@ import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -14,4 +15,5 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByDetalles_EstadoActual_Estado(Estado estado);
     List<Pedido> findPedidosByDetalles_User_Name(String name);
 
+    List<Pedido> findPedidosByDateBetween(Date fechaInicio, Date fechaFin);
 }
