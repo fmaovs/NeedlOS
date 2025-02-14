@@ -1,0 +1,108 @@
+.cont-form-inventario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  transform: translateX(2vh);
+}
+
+.cont-form-inventario.inventario-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.form-inventario {
+  cursor: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 1.2vh;
+  padding: 1vh;
+  margin-bottom: 8vh;
+  box-sizing: border-box;
+  border: 0.18rem solid #0050b8;
+  box-shadow: 0 0 4vh rgba(101, 101, 101, 0.3);
+}
+
+.form-inventario.editar-material {
+  position: absolute;
+  left: 50%;
+  top: 30vh;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+
+.form-inventario.editar-material.inventario-visible {
+  opacity: 1;
+}
+
+.form-inventario span:not(.fila-detalles-ordenes span) {
+  text-align: center;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+  margin: 1vh 0 2vh 0;
+}
+
+.form-inventario button {
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  margin: 1vh 0 0 0;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  overflow: hidden;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: 0.1s ease-in-out;
+}
+
+.form-inventario.editar-material button:first-child {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6vh;
+  margin: 0;
+  top: 1vh;
+  right: 1vh;
+  width: auto;
+  height: auto;
+  border-radius: 0.8vh;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+}
+
+.form-inventario.editar-material button:first-child:hover {
+  background-color: #f3f3f3;
+}
+
+.form-inventario.editar-material button:first-child img {
+  height: 1.8vh;
+  opacity: 0.6;
+}
+
+.form-inventario button:hover {
+  border-color: rgb(113, 113, 113);
+  text-decoration: underline;
+}
+
+.form-inventario button:active {
+  text-decoration: none;
+}
+
+.form-inventario button:focus {
+  border-color: rgb(113, 113, 113);
+}

@@ -75,6 +75,7 @@ export default function TbEntregado() {
       {setMensajeErr && <span>{mensajeErr}</span>}
       {detallesVisible && detalles && (
         <CardDetallePedido
+          nPedido={detalles.id}
           estado={mostrarDt}
           onClick={ocultarDetalles}
           nombre={detalles.customerName || "Desconocido"}

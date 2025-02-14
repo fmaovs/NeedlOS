@@ -75,6 +75,7 @@ export default function TbAnulado() {
       {setMensajeErr && <span>{mensajeErr}</span>}
       {detallesVisible && detalles && (
         <CardDetallePedido
+          nPedido={detalles.id}
           estado={mostrarDt}
           onClick={ocultarDetalles}
           nombre={detalles.customerName || "Desconocido"}

@@ -1,8 +1,10 @@
 import "./detalle-pedido.css";
 import ContDetalle from "./cont-detalle";
+import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro";
 const cerrar = "../../../../public/media/img/cerrar.png";
 
 export default function CardDetallePedido({
+  nPedido,
   estado,
   onClick,
   nombre,
@@ -35,6 +37,8 @@ export default function CardDetallePedido({
       }`}
     >
       <div className="tarjeta-detalles">
+        <span className="nPedido">Orden #{nPedido}</span>
+        <SepXNegro />
         <button className="salir-tarjeta-detalles" onClick={onClick}>
           <img src={cerrar} />
         </button>

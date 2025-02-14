@@ -183,6 +183,7 @@ export default function TbEnProceso() {
       {setMensajeErr && <span>{mensajeErr}</span>}
       {detallesVisible && detalles && (
         <CardDetallePedido
+          nPedido={detalles.id}
           estado={mostrarDt}
           onClick={ocultarDetalles}
           nombre={detalles.customerName || "Desconocido"}

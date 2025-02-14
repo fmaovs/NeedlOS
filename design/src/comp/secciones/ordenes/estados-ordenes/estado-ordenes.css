@@ -12,6 +12,11 @@
   overflow: auto;
 }
 
+.cont-tabla.tb-inventario{
+  min-height: 86.9vh; 
+  margin-top: 1vh;
+}
+
 .tabla {
   width: 100%;
   font-size: calc((0.2vw + 3.2vh) * 0.5);

@@ -24,6 +24,7 @@
   cursor: default;
   border-radius: 1.2vh;
   border: 0.18rem solid #0050b8;
+  box-shadow: 0 0 4vh rgba(101, 101, 101, 0.3), 0 0 20px rgba(0, 0, 0, 0.2);
   opacity: 0;
   animation: existe 0.5s forwards;
 }
