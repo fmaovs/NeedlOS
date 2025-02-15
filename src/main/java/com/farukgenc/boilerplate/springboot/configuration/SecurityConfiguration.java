@@ -3,6 +3,7 @@ package com.farukgenc.boilerplate.springboot.configuration;
 import com.farukgenc.boilerplate.springboot.security.jwt.JwtAuthenticationEntryPoint;
 import com.farukgenc.boilerplate.springboot.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -44,6 +45,7 @@ public class SecurityConfiguration {
 																	      "/swagger-ui.html",
 																	      "/actuator/**")
 													   .permitAll()
+                        .requestMatchers("/arqueo/**").hasAuthority("ADMIN")
 													   .anyRequest()
 													   .authenticated())
 				.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
