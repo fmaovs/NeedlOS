@@ -77,6 +77,9 @@ public class MaterialInventarioService {
         return materialRepository.findAll();
     }
 
+    public Optional<Material> getMaterialById(Long id) {
+        return materialRepository.findById(id);
+    }
 
     public List<Material> obtenerMaterialesBajaCantidad() {
         return materialRepository.findByCantidadBaja(5);
