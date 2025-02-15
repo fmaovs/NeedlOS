@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/inventario")
@@ -53,5 +54,13 @@ public class InventarioController {
     public ResponseEntity<List<Material>> listarMaterialesConBajaCantidad() {
         List<Material> materiales = inventario.obtenerMaterialesBajaCantidad();
         return ResponseEntity.ok(materiales);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(tags = "inventario", description = "muestra los materiales por Id")
+    public ResponseEntity<Material> getMaterialById(@RequestParam("id")Long id) {
+        Optional<Material> material = inventario.getMaterialById(id);
+        return material.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
