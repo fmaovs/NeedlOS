@@ -34,7 +34,6 @@ public class InventarioController {
         return ResponseEntity.ok(inventario.inventarioActual());
     }
 
-
     @PutMapping("/ingresando")
     @Operation(tags = "inventario", description = "agrega la cantida del material")
     public ResponseEntity<String> ingresarMaterial(@RequestBody MaterialIngresadoRequest request){

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +26,14 @@ public class Material {
 
     @Column(nullable = false, length = 255)
     private String  descripcion;
+
+    @Column(updatable = false, nullable = false)
+    @CreationTimestamp
+    private LocalDateTime fecha;
+
+    @Column(updatable = false, nullable = false)
+    @Positive(message = "El precio debe ser un número positivo")
+    private Double precio;
 
     @Column(nullable = false)
     @Positive(message = "el stock_actual debe ser un número positivo")
