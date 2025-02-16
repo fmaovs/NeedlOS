@@ -37,7 +37,6 @@ export default function TbEnProceso() {
   };
 
   /*MOSTRAR DETALLES ORDEN*/
-  const [mensajeErr, setMensajeErr] = useState(null);
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
@@ -63,7 +62,6 @@ export default function TbEnProceso() {
       }, 15);
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
-      setMensajeErr("No se puede acceder a los datos");
     }
   };
 
@@ -180,7 +178,6 @@ export default function TbEnProceso() {
 
   return (
     <>
-      {setMensajeErr && <span>{mensajeErr}</span>}
       {detallesVisible && detalles && (
         <CardDetallePedido
           nPedido={detalles.id}

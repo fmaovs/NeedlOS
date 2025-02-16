@@ -100,3 +100,8 @@
   padding: 3vh;
   border-radius: 2vh;
 }
+
+/*Cont Camara*/
+.cont-camara-recibida{
+  position: absolute;
+}

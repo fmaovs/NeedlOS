@@ -37,7 +37,6 @@ export default function TbAnulado() {
   };
 
   /*MOSTRAR DETALLES ORDEN*/
-  const [mensajeErr, setMensajeErr] = useState(null);
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
@@ -58,7 +57,6 @@ export default function TbAnulado() {
       }, 15);
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
-      setMensajeErr("No se puede acceder a los datos");
     }
   };
 
@@ -72,7 +70,6 @@ export default function TbAnulado() {
 
   return (
     <>
-      {setMensajeErr && <span>{mensajeErr}</span>}
       {detallesVisible && detalles && (
         <CardDetallePedido
           nPedido={detalles.id}

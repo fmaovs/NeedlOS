@@ -1,7 +1,8 @@
 import "./estado-ordenes.css";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { tokenPass } from "../../../formularios/iniciar-sesion/iniciar-sesion";
+import WebCam from "react-webcam";
 import DetallesOrden from "../../../botones/abrir-detalles-orden/detalles-orden";
 import CardDetallePedido from "../../../cards/card-detalle-pedido/detalle-pedido";
 
@@ -34,12 +35,12 @@ export default function TbTodo() {
   };
 
   /*MOSTRAR DETALLES ORDEN*/
-  const [mensajeErr, setMensajeErr] = useState(null);
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
   const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
+    setCamaraFotoEntrega(true);
     try {
       // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
@@ -60,7 +61,6 @@ export default function TbTodo() {
       }, 15);
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
-      setMensajeErr("No se puede acceder a los datos");
     }
   };
 
@@ -79,6 +79,10 @@ export default function TbTodo() {
   const [tiempoPresionadoAnulado, setTiempoPresionadoAnulado] = useState(null);
   const [cambiarColor, setCambiarColor] = useState("");
   const [colorAnulado, setColorAnulado] = useState("");
+
+  /*TOMAR FOTO*/
+  const [camaraFotoEntrega, setCamaraFotoEntrega] = useState(false);
+  const webcamRef = useRef(null);
 
   /*CAMBIAR ESTADO DE ORDEN*/
   const cambiarEstado = async (estado) => {
@@ -177,7 +181,6 @@ export default function TbTodo() {
 
   return (
     <>
-      {setMensajeErr && <span>{mensajeErr}</span>}
       {detallesVisible && detalles && (
         <CardDetallePedido
           nPedido={detalles.id}
@@ -257,6 +260,17 @@ export default function TbTodo() {
             </React.Fragment>
           ))}
         </CardDetallePedido>
+      )}
+      {camaraFotoEntrega && (
+        <div className="cont-camara-recibida">
+          <WebCam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/png"
+            height={206}
+            width={206}
+          />
+        </div>
       )}
       <div className="cont-tabla">
         <table className="tabla">
