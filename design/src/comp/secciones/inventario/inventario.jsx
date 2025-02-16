@@ -7,6 +7,7 @@ import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import DetallesOrden from "../../botones/abrir-detalles-orden/detalles-orden.jsx";
 import ContTxt from "../../cards/card-detalle-pedido/cont-txt.jsx";
 import ContDetalle from "../../cards/card-detalle-pedido/cont-detalle.jsx";
+import ContSelect from "../../cards/card-detalle-pedido/cont-select.jsx";
 
 const cerrarInventario = "../../../../public/media/img/cerrar.png";
 const ErrorMP3 = "../../../../public/media/sounds/error.mp3";
@@ -16,6 +17,7 @@ const InventarioActualizado =
 export default function Inventario() {
   useEffect(() => {
     mostrarInventario();
+    insertarPrendas();
   }, []);
 
   /*Funcion mostrar error*/
@@ -34,8 +36,11 @@ export default function Inventario() {
         },
       });
 
-      setInventarios(response.data);
-      console.log(response.data);
+      const inventariosOrdenados = response.data.sort(
+        (a, b) => new Date(b.fecha) - new Date(a.fecha)
+      );
+
+      setInventarios(inventariosOrdenados);
     } catch {
       console.log("Error accediendo a inventario");
     }
@@ -104,6 +109,9 @@ export default function Inventario() {
   const [descripcion, setDescripcion] = useState("");
   const [producto, setProducto] = useState("");
   const [stockActual, setStockActual] = useState("");
+
+  /*Variable que almacenará el valor unitario del producto seleccionado*/
+  const [valorUnitario, setValorUnitario] = useState(null);
   async function editarInventario(id_material) {
     if (id_material === idMaterial) {
       return;
@@ -111,6 +119,7 @@ export default function Inventario() {
 
     setCalculoPresionado("");
     setStockActual("");
+    setValorUnitario(null);
 
     if (showEditarInventario) {
       // Primero iniciamos la animación de desaparición
@@ -125,6 +134,8 @@ export default function Inventario() {
       /*Reiniciar botones de suma/resta*/
       setIsResta(false);
       setIsSuma(false);
+      setIsAñadir(undefined);
+      setInicial(true);
 
       // Esperamos un momento mínimo
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -148,12 +159,10 @@ export default function Inventario() {
 
         /* Esperar a que el DOM se actualice */
         setTimeout(() => {
-          const precioUnit = document.getElementById("precio-unitario");
-
           setProducto(response.data.nombre);
           setDescripcion(response.data.descripcion);
           setStockActual(response.data.stock_actual);
-          precioUnit.value = response.data.precio;
+          setValorUnitario(response.data.precio);
 
           setEditarInvVisible(true);
         }, 0);
@@ -187,12 +196,10 @@ export default function Inventario() {
 
         /* Esperar a que el DOM se actualice */
         setTimeout(() => {
-          const precioUnit = document.getElementById("precio-unitario");
-
           setProducto(response.data.nombre);
           setDescripcion(response.data.descripcion);
           setStockActual(response.data.stock_actual);
-          precioUnit.value = response.data.precio;
+          setValorUnitario(response.data.precio);
 
           setEditarInvVisible(true);
         }, 0);
@@ -214,28 +221,58 @@ export default function Inventario() {
       setShowEditarInventario(false);
       setIsResta(false);
       setIsSuma(false);
+      setIsAñadir(undefined);
+      setInicial(true);
+      setValorUnitario(null);
     }, 300);
   }
+
+  /*Mostrar Prendas en el select*/
+  const [prendas, setPrendas] = useState([]);
+  const insertarPrendas = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/prendas/all", {
+        headers: {
+          Authorization: `Bearer ${tokenPass}`,
+        },
+      });
+      setPrendas(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /*Que mostrar dependiendo el caso*/
+  const [isAñadir, setIsAñadir] = useState(undefined);
+  const [inicial, setInicial] = useState(true);
 
   const [calculoPresionado, setCalculoPresionado] = useState("");
   const [isSuma, setIsSuma] = useState(false);
   const [isResta, setIsResta] = useState(false);
-  function asignarCalculo(operacion) {
+  async function asignarCalculo(operacion) {
     setCalculoPresionado(operacion);
 
     if (operacion === "-") {
       setIsSuma(false);
       setIsResta(true);
+      setIsAñadir(false);
+      setInicial(false);
     }
 
     if (operacion === "+") {
       setIsResta(false);
       setIsSuma(true);
+      setIsAñadir(true);
+      setInicial(false);
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      const precioUnit = document.getElementById("precio-unitario");
+      precioUnit.value = valorUnitario;
     }
   }
 
   async function aplicarEditar() {
-    console.log(calculoPresionado);
     if (calculoPresionado != "-" && calculoPresionado != "+") {
       sonidoError();
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -245,23 +282,52 @@ export default function Inventario() {
       return;
     }
 
-    const precioUnit = +document.getElementById("precio-unitario").value;
     const stock = +document.getElementById("stock").value;
 
-    console.log(precioUnit);
+    if (calculoPresionado === "-") {
+      const idPrenda = document.getElementById(
+        "select-inventario-prenda"
+      ).value;
+      if (idPrenda === "null") {
+        sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        setTimeout(() => {
+          alert("Seleccione una prenda");
+        }, 15);
+        return;
+      }
+      const idPrendaInt = parseInt(idPrenda);
+
+      const retiroMaterial = {
+        id_prenda: idPrendaInt,
+        id_material: idMaterial,
+        cantidad_usada: stock,
+      };
+      console.log(retiroMaterial);
+      try {
+        const response = await axios.put(
+          "http://localhost:8080/inventario/Usando",
+          retiroMaterial,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log("Material Retirado");
+        await mostrarInventario();
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     const ingresoMaterial = {
       id_material: idMaterial,
       id_ingreso: 1,
-      precio: precioUnit,
+      precio: valorUnitario,
       cantidad_ingresada: stock,
     };
-
-    console.log(ingresoMaterial);
-
-    if (calculoPresionado === "-") {
-      console.log("Retirando");
-    }
 
     if (calculoPresionado === "+") {
       try {
@@ -281,6 +347,8 @@ export default function Inventario() {
         console.error(error);
       }
     }
+
+    hidenEditarInventario();
   }
 
   return (
@@ -344,11 +412,25 @@ export default function Inventario() {
             <ContDetalle titulo={"Descripcion:"} txt={descripcion} />
           </section>
           <section className="fila-detalles-ordenes">
-            <ContTxt
-              type={"number"}
-              titulo={"Vlr. Uni:"}
-              id={"precio-unitario"}
-            />
+            {isAñadir === true ? (
+              <ContTxt
+                type={"number"}
+                titulo={"Vlr. Uni:"}
+                id={"precio-unitario"}
+              />
+            ) : isAñadir === false ? (
+              <ContSelect titulo={"Prenda:"} id={"select-inventario-prenda"}>
+                <option value="null">Prenda...</option>
+                {prendas.map((prenda) => (
+                  <React.Fragment key={prenda.id}>
+                    <option
+                      value={prenda.id}
+                    >{`${prenda.id}. ${prenda.descripcion}`}</option>
+                  </React.Fragment>
+                ))}
+              </ContSelect>
+            ) : null}
+            {inicial && <ContDetalle titulo={""} txt={""} />}
             <ContTxt
               type={"number"}
               titulo={`Cantidad actual: ${stockActual}`}

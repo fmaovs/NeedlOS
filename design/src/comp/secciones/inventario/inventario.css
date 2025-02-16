@@ -21,6 +21,7 @@
 
 .form-inventario {
   cursor: auto;
+  min-width: 54vh;
   display: flex;
   flex-direction: column;
   background-color: white;
