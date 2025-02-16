@@ -40,8 +40,9 @@ export default function TbTodo() {
   const [mostrarDt, setMostrarDt] = useState(false);
   const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
-    setCamaraFotoEntrega(true);
     try {
+      await ocultarDetalles();
+
       // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
         headers: {
@@ -49,9 +50,7 @@ export default function TbTodo() {
         },
       });
 
-      if (primerEstado === null) {
-        setPrimerEstado(response.data.estado);
-      }
+      setPrimerEstado(response.data.estado);
 
       // Mostramos los nuevos detalles
       setDetallesVisible(true);
@@ -59,20 +58,32 @@ export default function TbTodo() {
         setDetalles(response.data);
         setMostrarDt(true);
       }, 15);
+
+      if (response.data.estado === "FINALIZADO") {
+        setCamaraFotoEntrega(true);
+        setTimeout(() => {
+          setCamaraVisible(true);
+        }, 0);
+      }
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
     }
   };
 
   /*OCULTAR DETALLES ORDEN*/
-  const ocultarDetalles = async () => {
-    setMostrarDt(false);
-    setTimeout(() => {
-      setDetallesVisible(false);
-      setCambiarColor("");
-      setColorAnulado("");
-      setPrimerEstado(null);
-    }, 300);
+  const ocultarDetalles = () => {
+    return new Promise((resolve) => {
+      setMostrarDt(false);
+      setCamaraVisible(false);
+      setTimeout(() => {
+        setDetallesVisible(false);
+        setCambiarColor("");
+        setColorAnulado("");
+        setPrimerEstado(null);
+        setCamaraFotoEntrega(false);
+        resolve();
+      }, 300);
+    });
   };
 
   const [tiempoPresionado, setTiempoPresionado] = useState(null);
@@ -82,10 +93,35 @@ export default function TbTodo() {
 
   /*TOMAR FOTO*/
   const [camaraFotoEntrega, setCamaraFotoEntrega] = useState(false);
+  const [camaraVisible, setCamaraVisible] = useState(false);
   const webcamRef = useRef(null);
+
+  const tomarFoto = () => {
+    if (webcamRef.current) {
+      const imagenSrc = webcamRef.current.getScreenshot();
+
+      if (imagenSrc) {
+        const byteCharacters = atob(imagenSrc.split(",")[1]);
+        const byteArrays = new Uint8Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteArrays[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const blob = new Blob([byteArrays], { type: "image/png" });
+
+        const formData = new FormData();
+        formData.append("file", blob, "foto.png");
+
+        return formData;
+      }
+    }
+    return null;
+  };
 
   /*CAMBIAR ESTADO DE ORDEN*/
   const cambiarEstado = async (estado) => {
+    const fotoData = tomarFoto();
     if (estado === "EN_PROCESO") {
       try {
         const response = await axios.patch(
@@ -131,7 +167,29 @@ export default function TbTodo() {
       } catch (error) {
         console.log(error);
       }
+
+      try {
+        const response = await axios.post(
+          `http://localhost:8080/orders/${detalles.id}/upload-photo-recogida`,
+          fotoData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log("Foto entrega asignada");
+      } catch (error) {
+        console.log(error);
+      }
     }
+
+    /*
+    setTimeout(() => {
+      ocultarDetalles();
+    }, 1000);
+    */
   };
 
   const botonPresionado = () => {
@@ -262,15 +320,20 @@ export default function TbTodo() {
         </CardDetallePedido>
       )}
       {camaraFotoEntrega && (
-        <div className="cont-camara-recibida">
-          <WebCam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/png"
-            height={206}
-            width={206}
-          />
-        </div>
+        <>
+          <div
+            className={`cont-camara-recibida ${
+              camaraVisible ? "camara-isVisible" : ""
+            }`}
+          >
+            <WebCam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/png"
+              className={"camara-foto-recogida"}
+            />
+          </div>
+        </>
       )}
       <div className="cont-tabla">
         <table className="tabla">

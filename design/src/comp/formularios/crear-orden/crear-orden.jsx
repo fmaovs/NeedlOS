@@ -490,17 +490,6 @@ export default function CrearOrden({ onClick }) {
       return;
     }
 
-    /*VERIIFICA SI SE HA TOMADO LA FOTO*/
-    if (fotoBlob instanceof Blob) {
-    } else {
-      sonidoError();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      setTimeout(() => {
-        alert("Debes tomar una foto");
-      }, 10);
-      return;
-    }
-
     /*EXTRAER NOMBRE, APELLIIDO, TELEFONO, ID*/
     try {
       const valueTelefono = +document.getElementById("telefono").value;
