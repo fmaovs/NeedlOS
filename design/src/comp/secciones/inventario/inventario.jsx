@@ -6,13 +6,23 @@ import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import DetallesOrden from "../../botones/abrir-detalles-orden/detalles-orden.jsx";
 import ContTxt from "../../cards/card-detalle-pedido/cont-txt.jsx";
+import ContDetalle from "../../cards/card-detalle-pedido/cont-detalle.jsx";
 
 const cerrarInventario = "../../../../public/media/img/cerrar.png";
+const ErrorMP3 = "../../../../public/media/sounds/error.mp3";
+const InventarioActualizado =
+  "../../../../public/media/sounds/pedidoCreado.mp3";
 
 export default function Inventario() {
   useEffect(() => {
     mostrarInventario();
   }, []);
+
+  /*Funcion mostrar error*/
+  function sonidoError() {
+    const soundError = new Audio(ErrorMP3);
+    soundError.play();
+  }
 
   /*Traer inventario*/
   const [inventarios, setInventarios] = useState([]);
@@ -30,12 +40,6 @@ export default function Inventario() {
       console.log("Error accediendo a inventario");
     }
   };
-
-  /*Datos inventario*/
-  const material = document.getElementById("material");
-  const descripcion = document.getElementById("descripcion-material");
-  const stock = document.getElementById("stock");
-  const precioUnit = document.getElementById("precio-unitario");
 
   /*Mostrar formulario de crear inventario*/
   const [formularioInventario, setFormularioInventario] = useState(false);
@@ -59,7 +63,36 @@ export default function Inventario() {
   }
 
   /*Creacion del inventario*/
-  function crearInventario() {
+  async function crearInventario() {
+    /*Datos inventario*/
+    const material = document.getElementById("material").value;
+    const descripcion = document.getElementById("descripcion-material").value;
+    const stock = +document.getElementById("stock").value;
+    const precioUnit = +document.getElementById("precio-unitario").value;
+
+    const nuevoMaterial = {
+      nombre: material.toLowerCase(),
+      descripcion: descripcion.toLowerCase(),
+      precio: precioUnit,
+      stock_actual: stock,
+    };
+
+    console.log(nuevoMaterial);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/inventario/nuevo",
+        nuevoMaterial,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      await mostrarInventario();
+    } catch (error) {
+      console.log("No se pudo crear el materal", error);
+    }
     mostrarCrearInventario();
   }
 
@@ -67,10 +100,18 @@ export default function Inventario() {
   const [showEditarInventario, setShowEditarInventario] = useState(false);
   const [editarInvVisible, setEditarInvVisible] = useState(false);
   const [idMaterial, setIdMaterial] = useState(undefined);
+
+  const [descripcion, setDescripcion] = useState("");
+  const [producto, setProducto] = useState("");
+  const [stockActual, setStockActual] = useState("");
   async function editarInventario(id_material) {
     if (id_material === idMaterial) {
       return;
     }
+
+    setCalculoPresionado("");
+    setStockActual("");
+
     if (showEditarInventario) {
       // Primero iniciamos la animación de desaparición
       setEditarInvVisible(false);
@@ -81,23 +122,85 @@ export default function Inventario() {
       // Ocultamos el contenedor
       setShowEditarInventario(false);
 
+      /*Reiniciar botones de suma/resta*/
+      setIsResta(false);
+      setIsSuma(false);
+
       // Esperamos un momento mínimo
       await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Volvemos a mostrar el contenedor
       setShowEditarInventario(true);
 
+      /*Mostrar detalles actuales*/
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/inventario/{id}?id=${id_material}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+
+        console.log(response.data);
+
+        /* Esperar a que el DOM se actualice */
+        setTimeout(() => {
+          const precioUnit = document.getElementById("precio-unitario");
+
+          setProducto(response.data.nombre);
+          setDescripcion(response.data.descripcion);
+          setStockActual(response.data.stock_actual);
+          precioUnit.value = response.data.precio;
+
+          setEditarInvVisible(true);
+        }, 0);
+      } catch {
+        console.log("No se pudo acceder al material");
+      }
+
       // Iniciamos la animación de aparición
       setTimeout(() => {
         setEditarInvVisible(true);
       }, 300);
     } else {
-      // Si no se está mostrando, simplemente lo mostramos
+      /*Reiniciar botones de suma/resta*/
+      setIsResta(false);
+      setIsSuma(false);
+      // Mostramos el formulario de edición
       setShowEditarInventario(true);
-      setTimeout(() => {
-        setEditarInvVisible(true);
-      }, 0);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/inventario/{id}?id=${id_material}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+
+        console.log(response.data);
+
+        /* Esperar a que el DOM se actualice */
+        setTimeout(() => {
+          const precioUnit = document.getElementById("precio-unitario");
+
+          setProducto(response.data.nombre);
+          setDescripcion(response.data.descripcion);
+          setStockActual(response.data.stock_actual);
+          precioUnit.value = response.data.precio;
+
+          setEditarInvVisible(true);
+        }, 0);
+      } catch {
+        console.log("No se pudo acceder al material");
+      }
     }
+
     setIdMaterial(id_material);
   }
 
@@ -105,9 +208,79 @@ export default function Inventario() {
   function hidenEditarInventario() {
     setEditarInvVisible(false);
     setIdMaterial(undefined);
+    setCalculoPresionado("");
+    setStockActual("");
     setTimeout(() => {
       setShowEditarInventario(false);
+      setIsResta(false);
+      setIsSuma(false);
     }, 300);
+  }
+
+  const [calculoPresionado, setCalculoPresionado] = useState("");
+  const [isSuma, setIsSuma] = useState(false);
+  const [isResta, setIsResta] = useState(false);
+  function asignarCalculo(operacion) {
+    setCalculoPresionado(operacion);
+
+    if (operacion === "-") {
+      setIsSuma(false);
+      setIsResta(true);
+    }
+
+    if (operacion === "+") {
+      setIsResta(false);
+      setIsSuma(true);
+    }
+  }
+
+  async function aplicarEditar() {
+    console.log(calculoPresionado);
+    if (calculoPresionado != "-" && calculoPresionado != "+") {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("Indique una accion Retirar/Añadir");
+      }, 15);
+      return;
+    }
+
+    const precioUnit = +document.getElementById("precio-unitario").value;
+    const stock = +document.getElementById("stock").value;
+
+    console.log(precioUnit);
+
+    const ingresoMaterial = {
+      id_material: idMaterial,
+      id_ingreso: 1,
+      precio: precioUnit,
+      cantidad_ingresada: stock,
+    };
+
+    console.log(ingresoMaterial);
+
+    if (calculoPresionado === "-") {
+      console.log("Retirando");
+    }
+
+    if (calculoPresionado === "+") {
+      try {
+        const response = await axios.put(
+          "http://localhost:8080/inventario/ingresando",
+          ingresoMaterial,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log("Material añadido");
+        await mostrarInventario();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
   return (
@@ -136,20 +309,20 @@ export default function Inventario() {
             <span>Creando nuevo material</span>
             <SepXNegro />
             <section className="fila-detalles-ordenes">
-              <ContTxt type={"text"} titulo={"Material:"} id={"material"} />
+              <ContTxt type={"text"} titulo={"Producto:"} id={"material"} />
               <ContTxt
                 type={"text"}
-                titulo={"Descripcion"}
+                titulo={"Descripcion:"}
                 id={"descripcion-material"}
               />
             </section>
             <section className="fila-detalles-ordenes">
-              <ContTxt type={"number"} titulo={"Stock Actual:"} id={"stock"} />
               <ContTxt
                 type={"number"}
-                titulo={"Precio Unit"}
+                titulo={"Vlr. Uni:"}
                 id={"precio-unitario"}
               />
+              <ContTxt type={"number"} titulo={"Cantidad:"} id={"stock"} />
             </section>
             <button onClick={crearInventario}>Crear</button>
           </div>
@@ -167,22 +340,36 @@ export default function Inventario() {
           <span>Editando material</span>
           <SepXNegro />
           <section className="fila-detalles-ordenes">
-            <ContTxt type={"text"} titulo={"Material:"} id={"material"} />
+            <ContDetalle titulo={"Producto:"} txt={producto} />
+            <ContDetalle titulo={"Descripcion:"} txt={descripcion} />
+          </section>
+          <section className="fila-detalles-ordenes">
             <ContTxt
-              type={"text"}
-              titulo={"Descripcion"}
-              id={"descripcion-material"}
+              type={"number"}
+              titulo={"Vlr. Uni:"}
+              id={"precio-unitario"}
+            />
+            <ContTxt
+              type={"number"}
+              titulo={`Cantidad actual: ${stockActual}`}
+              id={"stock"}
             />
           </section>
           <section className="fila-detalles-ordenes">
-            <ContTxt type={"number"} titulo={"Stock Actual:"} id={"stock"} />
-            <ContTxt
-              type={"number"}
-              titulo={"Precio Unit"}
-              id={"precio-unitario"}
-            />
+            <button
+              className={`sumar-restar ${isResta ? "resta-presionada" : ""}`}
+              onClick={() => asignarCalculo("-")}
+            >
+              Retirar -
+            </button>
+            <button
+              className={`sumar-restar ${isSuma ? "suma-presionada" : ""}`}
+              onClick={() => asignarCalculo("+")}
+            >
+              Añadir +
+            </button>
           </section>
-          <button>Editar</button>
+          <button onClick={aplicarEditar}>Editar</button>
         </div>
       )}
       <div className="cont-tabla tb-inventario">
@@ -192,6 +379,7 @@ export default function Inventario() {
             <tr className="tr-encabezado">
               <th className="th">Cod. Prdc</th>
               <th className="th">Producto</th>
+              <th className="th">Descripcion</th>
               <th className="th">Vrl. Uni</th>
               <th className="th">Cantidad</th>
               <th className="th">Ult. Actualizacion</th>
@@ -206,8 +394,21 @@ export default function Inventario() {
                   <td className="td">{inventario.id_material}</td>
                   <td className="td">{inventario.nombre}</td>
                   <td className="td">{inventario.descripcion}</td>
+                  <td className="td">{inventario.precio}</td>
                   <td className="td">{inventario.stock_actual}</td>
-                  <td className="td"></td>
+                  <td className="td">
+                    {new Date(inventario.fecha)
+                      .toLocaleString("es-CO", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                      .replace(",", " -")
+                      .replace("a. m.", "AM")
+                      .replace("p. m.", "PM")}
+                  </td>
                   <td
                     className="td"
                     onClick={() => editarInventario(inventario.id_material)}

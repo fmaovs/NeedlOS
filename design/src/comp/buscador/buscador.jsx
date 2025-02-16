@@ -3,9 +3,9 @@ import SepYNegroSmall from "../separadores/sep-y-negro-small/sep-y-negro-small.j
 
 const Buscar = "../../../public/media/img/buscar.png";
 
-export default function Buscador({ opc1 , opc2 , opc3 , opc4 }) {
+export default function Buscador({ opc1, opc2, opc3, opc4, withSearch }) {
   return (
-    <>
+    <div className={`cont-buscador ${withSearch}`}>
       <img src={Buscar} className="img-buscar" />
       <input type="text" className="inp-buscador" placeholder="Buscar..." />
       <SepYNegroSmall />
@@ -18,6 +18,6 @@ export default function Buscador({ opc1 , opc2 , opc3 , opc4 }) {
           <option>{opc4}</option>
         </select>
       </div>
-    </>
+    </div>
   );
 }

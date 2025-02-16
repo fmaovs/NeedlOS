@@ -1,0 +1,45 @@
+.cont-tablas-nomina {
+  display: flex;
+  flex-direction: row;
+  gap: 1vh;
+}
+
+.cont-tabla.tb-nomina:first-child {
+  margin-right: 0;
+  width: calc(40% - 1.5vh);
+}
+
+.cont-tabla.tb-nomina:last-child {
+  margin-left: 0;
+  width: calc(60% - 1.5vh);
+}
+
+.tr-nomina:hover td {
+  background-color: #e6e6e6;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tr-nomina:hover td:active{
+    text-decoration: none;
+}
+
+.td-nomina:last-child:hover {
+  background-color: #f8f8f8;
+  cursor: auto;
+}
+
+.empleado-presionado td {
+  background-color: #e6e6e6;
+  text-decoration: none;
+}
+
+.empleado-presionado:hover td {
+  background-color: #e6e6e6;
+  text-decoration: none;
+}
+
+.empleado-presionado #sastre-td:hover {
+  background-color: #e6e6e6;
+  text-decoration: none;
+}

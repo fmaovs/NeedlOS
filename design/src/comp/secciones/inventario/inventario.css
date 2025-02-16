@@ -51,7 +51,7 @@
   margin: 1vh 0 2vh 0;
 }
 
-.form-inventario button {
+.form-inventario button:not(.sumar-restar) {
   width: 100%;
   height: 4.5vh;
   border-radius: 1.2vh;
@@ -66,7 +66,7 @@
   transition: 0.1s ease-in-out;
 }
 
-.form-inventario.editar-material button:first-child {
+.form-inventario.editar-material button:first-child:not(.sumar-restar) {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -85,7 +85,7 @@
   transition: 0.1s ease-in-out;
 }
 
-.form-inventario.editar-material button:first-child:hover {
+.form-inventario.editar-material button:first-child:not(.sumar-restar):hover {
   background-color: #f3f3f3;
 }
 
@@ -94,7 +94,7 @@
   opacity: 0.6;
 }
 
-.form-inventario button:hover {
+.form-inventario button:not(.sumar-restar):hover {
   border-color: rgb(113, 113, 113);
   text-decoration: underline;
 }
@@ -105,4 +105,61 @@
 
 .form-inventario button:focus {
   border-color: rgb(113, 113, 113);
+}
+
+.sumar-restar {
+  flex: 1;
+  margin-top: 1vh;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  overflow: hidden;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: 0.1s ease-in-out;
+}
+
+.sumar-restar:first-child:hover,
+.sumar-restar:first-child:focus {
+  border-color: rgba(252, 97, 93, 0.1);
+  background-color: rgba(252, 97, 93, 0.4);
+  letter-spacing: 0.02vw;
+}
+
+.sumar-restar:last-child:hover,
+.sumar-restar:last-child:focus {
+  border-color: rgba(72, 234, 96, 0.1);
+  background-color: rgba(72, 234, 96, 0.4);
+  letter-spacing: 0.02vw;
+}
+
+.sumar-restar.resta-presionada {
+  background-color: #fc615d;
+  border: 0.1vh solid #fc615d;
+  color: white;
+}
+
+.sumar-restar.resta-presionada:hover,
+.sumar-restar.resta-presionada:focus {
+  background-color: #fc615d;
+  border: 0.1vh solid #fc615d;
+  color: white;
+  letter-spacing: 0;
+}
+
+.sumar-restar.suma-presionada {
+  background-color: #48ea60;
+  border: 0.1vh solid #48ea60;
+  color: white;
+}
+
+.sumar-restar.suma-presionada:hover,
+.sumar-restar.suma-presionada:focus {
+  background-color: #48ea60;
+  border: 0.1vh solid #48ea60;
+  color: white;
+  letter-spacing: 0;
 }

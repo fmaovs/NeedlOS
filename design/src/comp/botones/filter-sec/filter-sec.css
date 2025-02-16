@@ -1,24 +1,24 @@
-.other-filters{
-    aspect-ratio: 1/1;
-    height: 100%;
-    margin: 0 0 0 0.5vh;
-    box-sizing: border-box;
-    border: 0.18rem solid #0050b8;
-    border-radius: 1.2vh;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background-color: transparent;
-    overflow: hidden;
-    transition: 0.3s ease-in;
+.other-filters {
+  aspect-ratio: 1/1;
+  height: 100%;
+  margin: 0 0 0 1vh;
+  box-sizing: border-box;
+  border: 0.18rem solid #0050b8;
+  border-radius: 1.2vh;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  overflow: hidden;
+  transition: 0.3s ease-in;
 }
 
-.other-filters:hover{
-        background-color: #EDF7FF;
+.other-filters:hover {
+  background-color: #edf7ff;
 }
 
-.img-others-filter{
-    height: 60%;
-    width: auto;
-    object-fit: contain;
+.img-others-filter {
+  height: 60%;
+  width: auto;
+  object-fit: contain;
 }

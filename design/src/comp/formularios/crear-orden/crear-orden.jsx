@@ -308,6 +308,7 @@ export default function CrearOrden({ onClick }) {
         vlrTotal = vlrUnit * cantidad;
       } else {
         sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
         setTimeout(() => {
           alert("La prenda debe ser valida");
         }, 10);
@@ -321,6 +322,7 @@ export default function CrearOrden({ onClick }) {
     /*IF PARA QUE LA CANTIDAD NO PUEDE SER NAN O 0*/
     if (cantidad <= 0 || isNaN(cantidad)) {
       sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
       setTimeout(() => {
         alert("Cantidad posee dato inválido");
       }, 10);
@@ -330,6 +332,7 @@ export default function CrearOrden({ onClick }) {
     /*IF PARA QUE LOS DETALLES NO SEAN NULOS*/
     if (concepto.trim() === "") {
       sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
       setTimeout(() => {
         alert("Los detalles no pueden ir vacios");
       }, 10);
@@ -339,6 +342,7 @@ export default function CrearOrden({ onClick }) {
     /*IF PARA ASEGURARNOS QUE EL SASTRE ESTE SELECCIONADO*/
     if (!isFinite(idSastre)) {
       sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
       setTimeout(() => {
         alert("Selecciona un sastre");
       }, 10);
@@ -468,6 +472,7 @@ export default function CrearOrden({ onClick }) {
       /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
       if (selectedDate.getTime() < fechaPedido.getTime()) {
         sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
         setTimeout(() => {
           alert("No se aceptan fechas anteriores al dia actual");
         });
@@ -478,6 +483,7 @@ export default function CrearOrden({ onClick }) {
       }
     } else {
       sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
       setTimeout(() => {
         alert("Ingrese una fecha");
       }, 10);
@@ -488,6 +494,7 @@ export default function CrearOrden({ onClick }) {
     if (fotoBlob instanceof Blob) {
     } else {
       sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
       setTimeout(() => {
         alert("Debes tomar una foto");
       }, 10);
@@ -582,6 +589,7 @@ export default function CrearOrden({ onClick }) {
               /*Asignar abono al pedido*/
             } else {
               sonidoError();
+              await new Promise((resolve) => setTimeout(resolve, 0));
               setTimeout(() => {
                 alert("Elige un metodo de pago");
               }, 10);
@@ -589,6 +597,7 @@ export default function CrearOrden({ onClick }) {
             }
           } else {
             sonidoError();
+            await new Promise((resolve) => setTimeout(resolve, 0));
             setTimeout(() => {
               alert("La cantidad del abono no es multiplo de 50");
             }, 10);
@@ -596,6 +605,7 @@ export default function CrearOrden({ onClick }) {
           }
         } else {
           sonidoError();
+          await new Promise((resolve) => setTimeout(resolve, 0));
           setTimeout(() => {
             alert("El Abono no puede ser mayor al subtotal");
           }, 10);
@@ -603,6 +613,7 @@ export default function CrearOrden({ onClick }) {
         }
       } else {
         sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
         setTimeout(() => {
           alert("El abono no puede ser negativo");
         }, 10);

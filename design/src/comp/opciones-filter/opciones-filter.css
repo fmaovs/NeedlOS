@@ -10,12 +10,12 @@
   overflow: hidden;
 }
 
-.filter:hover{
-    cursor: pointer;
+.filter:hover {
+  cursor: pointer;
 }
 
-.filter:active{
-    cursor: auto;
+.filter:active {
+  cursor: auto;
 }
 
 .filter::after {
@@ -73,4 +73,15 @@
   width: auto;
   object-fit: contain;
   margin-right: 2vh;
+}
+
+.filter.dos-diez {
+  background: linear-gradient(to right, #e2eeff, #ffffff);
+  max-width: 40%;
+  cursor: auto;
+}
+
+.filter.ocho-diez {
+  background: linear-gradient(to right, #e3ffe7, #ffffff);
+  cursor: auto;
 }

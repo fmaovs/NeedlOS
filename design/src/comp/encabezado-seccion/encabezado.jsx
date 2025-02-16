@@ -11,12 +11,21 @@ export default function Encabezado({
   opc3,
   opc4,
   onClick,
+  withSearch,
+  children,
 }) {
   return (
     <div className="cont-encabezado">
       <span className="tit-encabezado">{titEncabezado}</span>
       <div className="cont-espacio">
-        <Buscador opc1={opc1} opc2={opc2} opc3={opc3} opc4={opc4} />
+        <Buscador
+          opc1={opc1}
+          opc2={opc2}
+          opc3={opc3}
+          opc4={opc4}
+          withSearch={withSearch}
+        />
+        {children}
       </div>
       <CrearNSec visible={conBtCrear} onClick={onClick} />
     </div>

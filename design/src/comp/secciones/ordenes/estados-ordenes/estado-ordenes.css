@@ -43,7 +43,7 @@
 }
 
 .th:last-child {
-  border-left: 0.05 solid #bababa;
+  border-left: 0.05vh solid #bababa;
 }
 
 .body-tabla {
@@ -64,6 +64,7 @@
   font-weight: 300;
   background-color: #f8f8f8;
   text-transform: capitalize;
+  transition: 0.3s ease-in-out;
 }
 
 .td:first-child {
