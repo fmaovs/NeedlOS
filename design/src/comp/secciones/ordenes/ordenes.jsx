@@ -10,7 +10,7 @@ import EspacioRender from "../../espacio-render/espacio-render.jsx";
 import CrearOrden from "../../formularios/crear-orden/crear-orden.jsx";
 
 const EnProceso = "../../../../public/media/img/enProceso.png";
-const Finalziado = "../../../../public/media/img/entregado.png";
+const Finalizado = "../../../../public/media/img/entregado.png";
 const Entregado = "../../../../public/media/img/entregado.png";
 const Anulado = "../../../../public/media/img/anulado.png";
 const Todo = "../../../../public/media/img/historial.png";
@@ -57,7 +57,7 @@ export default function Ordenes() {
         setComponenteSeleccionado(<TbTodo />);
         break;
     }
-  };    
+  };
 
   // Mostrar formulario de crear orden y activar cámara
   const mostrarCrearOrden = async () => {
@@ -92,7 +92,7 @@ export default function Ordenes() {
           />
           <OpcionesFilter
             txtFilter={"Finalizado"}
-            imgFilter={Finalziado}
+            imgFilter={Finalizado}
             clase={filtroSeleccionado === "Finalizado" ? "verde" : ""}
             onClick={() => handleFilterClick("Finalizado")}
           />

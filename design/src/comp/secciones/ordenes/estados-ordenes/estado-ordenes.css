@@ -125,3 +125,29 @@
 .camara-isVisible {
   opacity: 1;
 }
+
+.detalles-txt.detalles-txt-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.detalles-txt-row select {
+  outline: none;
+  border: none;
+  appearance: none;
+  height: 100%;
+  padding: 0 1.2vh;
+  transition: 0.1s ease-in-out;
+  text-align: center;
+  border: 0.1vh solid transparent;
+  border-radius: 0 1.2vh 1.2vh 0;
+}
+
+.detalles-txt-row select:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  border: 0.1vh solid black;
+}

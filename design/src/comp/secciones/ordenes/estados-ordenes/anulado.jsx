@@ -40,14 +40,21 @@ export default function TbAnulado() {
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
+  const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
     try {
+      if (detallesVisible) {
+        await ocultarDetalles();
+      }
+
       // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
         headers: {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
+
+      setPrimerEstado(response.data.estado);
 
       // Mostramos los nuevos detalles
       setDetallesVisible(true);
@@ -61,11 +68,98 @@ export default function TbAnulado() {
   };
 
   /*OCULTAR DETALLES ORDEN*/
-  const ocultarDetalles = async () => {
-    setMostrarDt(false);
+  const ocultarDetalles = () => {
+    return new Promise((resolve) => {
+      setMostrarDt(false);
+      setTimeout(() => {
+        setDetallesVisible(false);
+        setCambiarColor("");
+        setColorAnulado("");
+        setPrimerEstado(null);
+        resolve();
+      }, 300);
+    });
+  };
+
+  const [tiempoPresionado, setTiempoPresionado] = useState(null);
+  const [tiempoPresionadoAnulado, setTiempoPresionadoAnulado] = useState(null);
+  const [cambiarColor, setCambiarColor] = useState("");
+  const [colorAnulado, setColorAnulado] = useState("");
+
+  /*CAMBIAR ESTADO DE ORDEN*/
+  const cambiarEstado = async (estado) => {
+    if (estado === "EN_PROCESO") {
+      try {
+        const response = await axios.patch(
+          `http://localhost:8080/orders/${detalles.id}/estado`,
+          "FINALIZADO",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log(response.data);
+        setCambiarColor("oprimido");
+        await mostrarPedido();
+        setDetalles((prevDetalles) => ({
+          ...prevDetalles,
+          estado: "FINALIZADO",
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     setTimeout(() => {
-      setDetallesVisible(false);
-    }, 300);
+      ocultarDetalles();
+    }, 1000);
+  };
+
+  const botonPresionado = () => {
+    setTiempoPresionado(Date.now());
+  };
+  const botonNOPresionado = () => {
+    if (tiempoPresionado && Date.now() - tiempoPresionado > 300) {
+      cambiarEstado(detalles.estado);
+    }
+    setTiempoPresionado(null);
+  };
+
+  /*CAMBIAR ESTADO NULO*/
+  const estadoNulo = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8080/orders/${detalles.id}/estado`,
+        "ANULADO",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setColorAnulado("oprimido");
+      await mostrarPedido();
+      setDetalles((prevDetalles) => ({
+        ...prevDetalles,
+        estado: "ANULADO",
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const botonPresionadoAnulado = () => {
+    setTiempoPresionadoAnulado(Date.now());
+  };
+  const botonNOPresionadoAnulado = () => {
+    if (tiempoPresionadoAnulado && Date.now() - tiempoPresionadoAnulado > 300) {
+      estadoNulo(detalles.id);
+    }
+    setTiempoPresionadoAnulado(null);
   };
 
   return (
@@ -118,7 +212,16 @@ export default function TbAnulado() {
               : "No disponible"
           }
           mostrarAnulado={detalles.estado}
+          colorAnulado={colorAnulado}
           pedidoAnulado={detalles.estado}
+          onMouseDownAnulado={botonPresionadoAnulado}
+          onMouseUpAnulado={botonNOPresionadoAnulado}
+          onMouseLeaveAnulado={() => setTiempoPresionadoAnulado(null)}
+          estadoBoton={primerEstado}
+          color={cambiarColor}
+          onMouseDown={botonPresionado}
+          onMouseUp={botonNOPresionado}
+          onMouseLeave={() => setTiempoPresionado(null)}
         >
           {detalles.prenda?.map((prenda, index) => (
             <React.Fragment key={prenda.id || index}>

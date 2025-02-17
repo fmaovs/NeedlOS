@@ -43,6 +43,10 @@ export default function TbEnProceso() {
   const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
     try {
+      if (detallesVisible) {
+        await ocultarDetalles();
+      }
+
       // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
         headers: {
@@ -50,9 +54,7 @@ export default function TbEnProceso() {
         },
       });
 
-      if (primerEstado === null) {
-        setPrimerEstado(response.data.estado);
-      }
+      setPrimerEstado(response.data.estado);
 
       // Mostramos los nuevos detalles
       setDetallesVisible(true);
@@ -66,14 +68,17 @@ export default function TbEnProceso() {
   };
 
   /*OCULTAR DETALLES ORDEN*/
-  const ocultarDetalles = async () => {
-    setMostrarDt(false);
-    setTimeout(() => {
-      setDetallesVisible(false);
-      setCambiarColor("");
-      setColorAnulado("");
-      setPrimerEstado(null);
-    }, 300);
+  const ocultarDetalles = () => {
+    return new Promise((resolve) => {
+      setMostrarDt(false);
+      setTimeout(() => {
+        setDetallesVisible(false);
+        setCambiarColor("");
+        setColorAnulado("");
+        setPrimerEstado(null);
+        resolve();
+      }, 300);
+    });
   };
 
   const [tiempoPresionado, setTiempoPresionado] = useState(null);
@@ -106,29 +111,10 @@ export default function TbEnProceso() {
         console.log(error);
       }
     }
-    if (estado === "FINALIZADO") {
-      try {
-        const response = await axios.patch(
-          `http://localhost:8080/orders/${detalles.id}/estado`,
-          "ENTREGADO",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenPass}`,
-            },
-          }
-        );
-        console.log(response.data);
-        setCambiarColor("oprimido");
-        await mostrarPedido();
-        setDetalles((prevDetalles) => ({
-          ...prevDetalles,
-          estado: "ENTREGADO",
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    }
+
+    setTimeout(() => {
+      ocultarDetalles();
+    }, 1000);
   };
 
   const botonPresionado = () => {

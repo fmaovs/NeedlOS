@@ -322,7 +322,7 @@
   transform: translateX(0);
 }
 
-.select{
+.select {
   display: flex;
   flex-direction: row;
   align-items: center;

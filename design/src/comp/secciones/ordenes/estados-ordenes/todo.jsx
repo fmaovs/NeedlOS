@@ -7,6 +7,7 @@ import DetallesOrden from "../../../botones/abrir-detalles-orden/detalles-orden"
 import CardDetallePedido from "../../../cards/card-detalle-pedido/detalle-pedido";
 
 const noEncontrado = "../../../../../public/media/img/no-encontrado.png";
+const ErrorMP3 = "../../../../../public/media/sounds/error.mp3";
 
 export default function TbTodo() {
   useEffect(() => {
@@ -34,6 +35,12 @@ export default function TbTodo() {
     }
   };
 
+  /*FUNCION SONIDO ERROR*/
+  function sonidoError() {
+    const soundError = new Audio(ErrorMP3);
+    soundError.play();
+  }
+
   /*MOSTRAR DETALLES ORDEN*/
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
@@ -41,7 +48,9 @@ export default function TbTodo() {
   const [primerEstado, setPrimerEstado] = useState(null);
   const mostrarDetalles = async (id) => {
     try {
-      await ocultarDetalles();
+      if (detallesVisible) {
+        await ocultarDetalles();
+      }
 
       // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
@@ -60,6 +69,7 @@ export default function TbTodo() {
       }, 15);
 
       if (response.data.estado === "FINALIZADO") {
+        setIsFinalizado(true);
         setCamaraFotoEntrega(true);
         setTimeout(() => {
           setCamaraVisible(true);
@@ -81,6 +91,7 @@ export default function TbTodo() {
         setColorAnulado("");
         setPrimerEstado(null);
         setCamaraFotoEntrega(false);
+        setIsFinalizado(false);
         resolve();
       }, 300);
     });
@@ -120,6 +131,7 @@ export default function TbTodo() {
   };
 
   /*CAMBIAR ESTADO DE ORDEN*/
+  const [isFinalizado, setIsFinalizado] = useState(false);
   const cambiarEstado = async (estado) => {
     const fotoData = tomarFoto();
     if (estado === "EN_PROCESO") {
@@ -146,6 +158,26 @@ export default function TbTodo() {
       }
     }
     if (estado === "FINALIZADO") {
+      //Valor a terminar de pagar
+      const totalPedido = document.getElementById(
+        "total-pedido-detalles"
+      ).textContent;
+      const totalPedidoInt = parseInt(totalPedido.replace(/[\$.]/g, ""), 10);
+
+      //Metodo de pago
+      const metPago = document.getElementById(
+        "select-tipo-pago-entregado"
+      ).value;
+
+      if (metPago === "null") {
+        sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        setTimeout(() => {
+          alert("Seleccione un metodo de pago");
+        }, 10);
+        return;
+      }
+
       try {
         const response = await axios.patch(
           `http://localhost:8080/orders/${detalles.id}/estado`,
@@ -168,6 +200,7 @@ export default function TbTodo() {
         console.log(error);
       }
 
+      // Asignar foto recogida
       try {
         const response = await axios.post(
           `http://localhost:8080/orders/${detalles.id}/upload-photo-recogida`,
@@ -183,13 +216,31 @@ export default function TbTodo() {
       } catch (error) {
         console.log(error);
       }
+
+      //Asignar el resto del abono o pago
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/abonos",
+          {
+            idPedido: detalles.id,
+            monto: totalPedidoInt,
+            metodoPago: metPago,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log("Pago Completado Asignado");
+      } catch (error) {
+        console.error(error);
+      }
     }
 
-    /*
     setTimeout(() => {
       ocultarDetalles();
     }, 1000);
-    */
   };
 
   const botonPresionado = () => {
@@ -255,6 +306,18 @@ export default function TbTodo() {
           }
           totalPedido={
             "$ " + new Intl.NumberFormat("es-CO").format(detalles.saldo)
+          }
+          idTotal={"total-pedido-detalles"}
+          childrenSelect={
+            isFinalizado ? (
+              <select id="select-tipo-pago-entregado">
+                <option value="null">MET. PAGO</option>
+                <option value="EFECTIVO">EFECTIVO</option>
+                <option value="NEQUI">NEQUI</option>
+                <option value="DAVIPLATA">DAVIPLATA</option>
+                <option value="BANCOLOMBIA">BANCOLOMBIA</option>
+              </select>
+            ) : null
           }
           fechaPedido={
             detalles.fechaPedido

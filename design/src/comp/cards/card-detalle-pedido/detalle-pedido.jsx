@@ -15,6 +15,8 @@ export default function CardDetallePedido({
   estadoPedido,
   abono,
   totalPedido,
+  idTotal,
+  childrenSelect,
   fechaPedido,
   fechaEntrega,
   children,
@@ -68,7 +70,14 @@ export default function CardDetallePedido({
         </div>
         <section className="fila-detalles-ordenes">
           <ContDetalle titulo={"Abono:"} txt={abono} />
-          <ContDetalle titulo={"Total:"} txt={totalPedido} />
+          <ContDetalle
+            titulo={"Total:"}
+            txt={totalPedido}
+            id={idTotal}
+            clase={"detalles-txt-row"}
+          >
+            {childrenSelect}
+          </ContDetalle>
         </section>
         <section className="fila-detalles-ordenes">
           <ContDetalle titulo={"Fecha Pedido:"} txt={fechaPedido} />

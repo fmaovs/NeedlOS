@@ -1,11 +1,11 @@
 import "./filter-sec.css";
 
-const Filtro = '../../../../public/media/img/filtro.png'
+const Recargar = "../../../../public/media/img/recargar.png";
 
 export default function BotonFilter() {
   return (
     <button className="other-filters">
-      <img src={Filtro} className="img-others-filter" />
+      <img src={Recargar} className="img-others-filter" />
     </button>
   );
 }

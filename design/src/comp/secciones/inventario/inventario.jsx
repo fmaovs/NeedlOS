@@ -442,7 +442,7 @@ export default function Inventario() {
               className={`sumar-restar ${isResta ? "resta-presionada" : ""}`}
               onClick={() => asignarCalculo("-")}
             >
-              Retirar -
+              Descontar -
             </button>
             <button
               className={`sumar-restar ${isSuma ? "suma-presionada" : ""}`}
