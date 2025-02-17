@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -20,5 +21,9 @@ public class Ingreso {
     private Long id_ingreso;
 
     @Column(updatable = false, nullable = false)
+    @CreationTimestamp
     private Date fecha_ingreso;
+
+    @Column(updatable = false, nullable = false)
+    private String claseIngreso;
 }
