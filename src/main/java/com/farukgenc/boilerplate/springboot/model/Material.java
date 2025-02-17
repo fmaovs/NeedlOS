@@ -32,6 +32,7 @@ public class Material {
     private LocalDateTime fecha;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime fecha_actualizacion;
     @PreUpdate
     public void actualizacion() {
