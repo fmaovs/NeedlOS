@@ -37,7 +37,8 @@ export default function Inventario() {
       });
 
       const inventariosOrdenados = response.data.sort(
-        (a, b) => new Date(b.fecha) - new Date(a.fecha)
+        (a, b) =>
+          new Date(b.fecha_actualizacion) - new Date(a.fecha_actualizacion)
       );
 
       setInventarios(inventariosOrdenados);
@@ -79,7 +80,7 @@ export default function Inventario() {
       nombre: material.toLowerCase(),
       descripcion: descripcion.toLowerCase(),
       precio: precioUnit,
-      stock_actual: stock,
+      stockActual: stock,
     };
 
     console.log(nuevoMaterial);
@@ -161,7 +162,7 @@ export default function Inventario() {
         setTimeout(() => {
           setProducto(response.data.nombre);
           setDescripcion(response.data.descripcion);
-          setStockActual(response.data.stock_actual);
+          setStockActual(response.data.stockActual);
           setValorUnitario(response.data.precio);
 
           setEditarInvVisible(true);
@@ -198,7 +199,7 @@ export default function Inventario() {
         setTimeout(() => {
           setProducto(response.data.nombre);
           setDescripcion(response.data.descripcion);
-          setStockActual(response.data.stock_actual);
+          setStockActual(response.data.stockActual);
           setValorUnitario(response.data.precio);
 
           setEditarInvVisible(true);
@@ -477,9 +478,9 @@ export default function Inventario() {
                   <td className="td">{inventario.nombre}</td>
                   <td className="td">{inventario.descripcion}</td>
                   <td className="td">{inventario.precio}</td>
-                  <td className="td">{inventario.stock_actual}</td>
+                  <td className="td">{inventario.stockActual}</td>
                   <td className="td">
-                    {new Date(inventario.fecha)
+                    {new Date(inventario.fecha_actualizacion)
                       .toLocaleString("es-CO", {
                         year: "numeric",
                         month: "numeric",

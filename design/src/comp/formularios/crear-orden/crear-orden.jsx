@@ -19,7 +19,7 @@ const Aprobado = "../../../../public/media/img/aprobado.png";
 const ErrorMP3 = "../../../../public/media/sounds/error.mp3";
 const PedidoCreado = "../../../../public/media/sounds/pedidoCreado.mp3";
 
-export default function CrearOrden({ onClick }) {
+export default function CrearOrden({ onClick, ejecutarFuncion }) {
   const [isVisible, setIsVisible] = useState(true);
 
   /*ANIMACION MOSTRAR FORMULARIO*/
@@ -467,6 +467,16 @@ export default function CrearOrden({ onClick }) {
   /*MANDAR ORDEN*/
   let idOrden = null;
   async function enviarOrden() {
+    /*EVALUA QUE HAYAN PRENDAS INGRESADAS*/
+    if (dataPedido.detalles.length < 1) {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("Añada prendas a la lista");
+      }, 10);
+      return;
+    }
+
     /*ASIGNAR FECHA ENTREGA*/
     if (isDate(selectedDate)) {
       /*IF PARA ASEGURARNOS QUE NO ES UNA FECHA MENOR A LA ACTUAL*/
@@ -706,6 +716,7 @@ export default function CrearOrden({ onClick }) {
 
     /*EJECUTAR FUNCION DE LIIMPIAR DATOS*/
     limpiarPedido();
+    ejecutarFuncion();
   }
 
   return (

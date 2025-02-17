@@ -23,46 +23,62 @@ import TbAnulado from "./estados-ordenes/anulado.jsx";
 import TbTodo from "./estados-ordenes/todo.jsx";
 
 export default function Ordenes() {
+  // Estado para controlar qué filtro está seleccionado y qué componente renderizar
+  const [componenteSeleccionado, setComponenteSeleccionado] = useState(
+    <TbEnProceso />
+  );
   const [filtroSeleccionado, setFiltroSeleccionado] = useState("En Proceso");
-  const [key, setKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-  const obtenerComponente = (filtro) => {
+  const handleFilterClick = (filtro) => {
+    // Si es el mismo que ya esta no hace nada
+    if (filtro === filtroSeleccionado) return;
+
+    // Cambiar el componente según el filtro seleccionado
+    setFiltroSeleccionado(filtro);
     switch (filtro) {
       case "En Proceso":
-        return <TbEnProceso key={key} />;
+        setComponenteSeleccionado(<TbEnProceso />);
+        break;
       case "Finalizado":
-        return <TbFinalizado key={key} />;
+        setComponenteSeleccionado(<TbFinalizado />);
+        break;
       case "Entregado":
-        return <TbEntregado key={key} />;
+        setComponenteSeleccionado(<TbEntregado />);
+        break;
       case "Anulado":
-        return <TbAnulado key={key} />;
+        setComponenteSeleccionado(<TbAnulado />);
+        break;
       case "Todo":
-        return <TbTodo key={key} />;
-      default:
-        return <TbTodo key={key} />;
+        setComponenteSeleccionado(<TbTodo />);
+        break;
     }
   };
 
-  const [componenteSeleccionado, setComponenteSeleccionado] = useState(
-    obtenerComponente("En Proceso")
-  );
-
-  const handleFilterClick = (filtro) => {
-    if (filtro === filtroSeleccionado) return;
-    setFiltroSeleccionado(filtro);
-    setComponenteSeleccionado(obtenerComponente(filtro));
+  // Función modificada para refrescar solo TbEnProceso y TbTodo
+  const refreshCurrentComponent = () => {
+    // Solo refrescar si el filtro actual es "En Proceso" o "Todo"
+    if (filtroSeleccionado === "En Proceso" || filtroSeleccionado === "Todo") {
+      switch (filtroSeleccionado) {
+        case "En Proceso":
+          setComponenteSeleccionado(<TbEnProceso key={refreshKey} />);
+          break;
+        case "Todo":
+          setComponenteSeleccionado(<TbTodo key={refreshKey} />);
+          break;
+      }
+      setRefreshKey((prevKey) => prevKey + 1);
+    }
   };
 
-  const handleRefreshClick = () => {
-    setKey((prevKey) => prevKey + 1);
-    setComponenteSeleccionado(obtenerComponente(filtroSeleccionado));
-  };
-
+  // Mostrar formulario de crear orden y activar cámara
   const mostrarCrearOrden = async () => {
     setMostrarFormulario(true);
   };
 
+  //Ocultar Formulario de crear orden
   const ocultarCrearOrden = () => {
     setMostrarFormulario(false);
   };
@@ -78,7 +94,12 @@ export default function Ordenes() {
         opc4={"N°"}
         onClick={mostrarCrearOrden}
       />
-      {mostrarFormulario && <CrearOrden onClick={ocultarCrearOrden} />}
+      {mostrarFormulario && (
+        <CrearOrden
+          onClick={ocultarCrearOrden}
+          ejecutarFuncion={refreshCurrentComponent}
+        />
+      )}
       <SepXNegro />
       <div className="cont-filterAndBoton">
         <Filtrador>
@@ -113,7 +134,7 @@ export default function Ordenes() {
             onClick={() => handleFilterClick("Todo")}
           />
         </Filtrador>
-        <BotonFilter onClick={handleRefreshClick} />
+        <BotonFilter onClick={refreshCurrentComponent} />
       </div>
       <EspacioRender>{componenteSeleccionado}</EspacioRender>
     </>
