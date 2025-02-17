@@ -23,48 +23,46 @@ import TbAnulado from "./estados-ordenes/anulado.jsx";
 import TbTodo from "./estados-ordenes/todo.jsx";
 
 export default function Ordenes() {
-  // Estado para controlar qué filtro está seleccionado y qué componente renderizar
-  const [componenteSeleccionado, setComponenteSeleccionado] = useState(
-    <TbEnProceso />
-  );
   const [filtroSeleccionado, setFiltroSeleccionado] = useState("En Proceso");
-
+  const [key, setKey] = useState(0);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-  const handleFilterClick = (filtro) => {
-    // Si es el mismo que ya esta no hace nada
-    if (filtro === filtroSeleccionado) return;
-
-    // Cambiar el componente según el filtro seleccionado
-    setFiltroSeleccionado(filtro);
+  const obtenerComponente = (filtro) => {
     switch (filtro) {
       case "En Proceso":
-        setComponenteSeleccionado(<TbEnProceso />);
-        break;
+        return <TbEnProceso key={key} />;
       case "Finalizado":
-        setComponenteSeleccionado(<TbFinalizado />);
-        break;
+        return <TbFinalizado key={key} />;
       case "Entregado":
-        setComponenteSeleccionado(<TbEntregado />);
-        break;
+        return <TbEntregado key={key} />;
       case "Anulado":
-        setComponenteSeleccionado(<TbAnulado />);
-        break;
+        return <TbAnulado key={key} />;
       case "Todo":
-        setComponenteSeleccionado(<TbTodo />);
-        break;
+        return <TbTodo key={key} />;
       default:
-        setComponenteSeleccionado(<TbTodo />);
-        break;
+        return <TbTodo key={key} />;
     }
   };
 
-  // Mostrar formulario de crear orden y activar cámara
+  const [componenteSeleccionado, setComponenteSeleccionado] = useState(
+    obtenerComponente("En Proceso")
+  );
+
+  const handleFilterClick = (filtro) => {
+    if (filtro === filtroSeleccionado) return;
+    setFiltroSeleccionado(filtro);
+    setComponenteSeleccionado(obtenerComponente(filtro));
+  };
+
+  const handleRefreshClick = () => {
+    setKey((prevKey) => prevKey + 1);
+    setComponenteSeleccionado(obtenerComponente(filtroSeleccionado));
+  };
+
   const mostrarCrearOrden = async () => {
     setMostrarFormulario(true);
   };
 
-  //Ocultar Formulario de crear orden
   const ocultarCrearOrden = () => {
     setMostrarFormulario(false);
   };
@@ -115,7 +113,7 @@ export default function Ordenes() {
             onClick={() => handleFilterClick("Todo")}
           />
         </Filtrador>
-        <BotonFilter />
+        <BotonFilter onClick={handleRefreshClick} />
       </div>
       <EspacioRender>{componenteSeleccionado}</EspacioRender>
     </>
