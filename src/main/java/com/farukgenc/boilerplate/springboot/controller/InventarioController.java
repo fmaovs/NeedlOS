@@ -48,10 +48,11 @@ public class InventarioController {
         return ResponseEntity.ok("Stock actualizado correctamente");
     }
 
-    @GetMapping("/baja-cantidad")
+
+    @GetMapping("/stock-bajo")
     @Operation(tags = "inventario", description = "muestra los materiales que estan próximos a agotarse")
-    public ResponseEntity<List<Material>> listarMaterialesConBajaCantidad() {
-        List<Material> materiales = inventario.obtenerMaterialesBajaCantidad();
+    public ResponseEntity<List<Material>> obtenerMaterialesConStockBajo() {
+        List<Material> materiales = inventario.obtenerMaterialesConStockBajo();
         return ResponseEntity.ok(materiales);
     }
 

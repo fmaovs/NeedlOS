@@ -15,5 +15,4 @@ public class HelloController {
 
 		return ResponseEntity.ok("Hello Spring Boot Boilerplate");
 	}
-
 }

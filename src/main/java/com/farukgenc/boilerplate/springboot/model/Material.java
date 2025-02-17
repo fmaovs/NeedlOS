@@ -31,6 +31,13 @@ public class Material {
     @CreationTimestamp
     private LocalDateTime fecha;
 
+    @Column(nullable = false)
+    private LocalDateTime fecha_actualizacion;
+    @PreUpdate
+    public void actualizacion() {
+        this.fecha_actualizacion = LocalDateTime.now();
+    }
+
     @Column(updatable = false, nullable = false)
     @Positive(message = "El precio debe ser un número positivo")
     private Double precio;
@@ -38,5 +45,5 @@ public class Material {
     @Column(nullable = false)
     @Positive(message = "el stock_actual debe ser un número positivo")
     @Min(value = 1, message = "el stock_actual mínimo debe ser 1")
-    private Long stock_actual;
+    private Long stockActual;
 }

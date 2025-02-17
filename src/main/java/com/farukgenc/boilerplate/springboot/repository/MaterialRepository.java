@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface MaterialRepository extends JpaRepository<Material,  Long> {
 
-    @Query("SELECT m FROM Material m WHERE m.stock_actual <= :cantidad")
-    List<Material> findByCantidadBaja(int cantidad);
+    List<Material> findByStockActualLessThanEqual(int cantidad);
+
 }

@@ -44,7 +44,7 @@ public class MaterialInventarioService {
         Ingreso ingreso = ingresoRepository.findById(request.getId_ingreso())
                 .orElseThrow(()-> new RuntimeException("no hay ingreso de este material"));
 
-        material.setStock_actual(material.getStock_actual() + request.getCantidad_ingresada());
+        material.setStockActual(material.getStockActual() + request.getCantidad_ingresada());
         materialRepository.save(material);
 
         MaterialIngresadoId materialIngresadoId = new MaterialIngresadoId(request.getId_material(), request.getId_ingreso());
@@ -60,10 +60,10 @@ public class MaterialInventarioService {
                 .orElseThrow(() -> new RuntimeException("Material no encontrado"));
         Prenda prenda = prendaRepository.findById(request.getId_prenda())
                 .orElseThrow(() -> new RuntimeException("Prenda no encontrada"));
-        if (material.getStock_actual() < request.getCantidad_usada()) {
+        if (material.getStockActual() < request.getCantidad_usada()) {
             throw new RuntimeException("Stock insuficiente");
         }
-        material.setStock_actual(material.getStock_actual() - request.getCantidad_usada());
+        material.setStockActual(material.getStockActual() - request.getCantidad_usada());
         materialRepository.save(material);
 
         MaterialUsadoId materialUsadoId = new MaterialUsadoId(request.getId_prenda(), Long.valueOf(request.getId_material()));
@@ -81,7 +81,7 @@ public class MaterialInventarioService {
         return materialRepository.findById(id);
     }
 
-    public List<Material> obtenerMaterialesBajaCantidad() {
-        return materialRepository.findByCantidadBaja(5);
+    public List<Material> obtenerMaterialesConStockBajo() {
+        return materialRepository.findByStockActualLessThanEqual(5);
     }
 }

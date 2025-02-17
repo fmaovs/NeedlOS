@@ -45,9 +45,9 @@ public class SecurityConfiguration {
 																	      "/swagger-ui.html",
 																	      "/actuator/**")
 													   .permitAll()
-                        .requestMatchers("/arqueo/**").hasAuthority("ADMIN")
-													   .anyRequest()
-													   .authenticated())
+						.requestMatchers("/arqueo/**").hasAuthority("ADMIN")
+						.anyRequest()
+						.authenticated())
 				.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.exceptionHandling(handler -> handler.authenticationEntryPoint(unauthorizedHandler))
 				.build();
