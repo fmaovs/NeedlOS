@@ -216,6 +216,7 @@ export default function Inventario() {
   function hidenEditarInventario() {
     setEditarInvVisible(false);
     setIdMaterial(undefined);
+    setDescripcion(undefined);
     setCalculoPresionado("");
     setStockActual("");
     setTimeout(() => {
@@ -304,6 +305,7 @@ export default function Inventario() {
         id_material: idMaterial,
         cantidad_usada: stock,
       };
+
       console.log(retiroMaterial);
       try {
         const response = await axios.put(
@@ -323,14 +325,31 @@ export default function Inventario() {
       }
     }
 
-    const ingresoMaterial = {
-      id_material: idMaterial,
-      id_ingreso: 1,
-      precio: valorUnitario,
-      cantidad_ingresada: stock,
-    };
-
     if (calculoPresionado === "+") {
+      let idIngreso;
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/ingresos/nuevo",
+          { claseIngreso: descripcion },
+          {
+            headers: {
+              Authorization: `Bearer ${tokenPass}`,
+            },
+          }
+        );
+        console.log("Ingreso creado: ", response.data);
+        idIngreso = response.data.id_ingreso;
+      } catch (error) {
+        console.error(error);
+      }
+
+      const ingresoMaterial = {
+        id_material: idMaterial,
+        id_ingreso: idIngreso,
+        precio: valorUnitario,
+        cantidad_ingresada: stock,
+      };
+
       try {
         const response = await axios.put(
           "http://localhost:8080/inventario/ingresando",
