@@ -1,7 +1,9 @@
 package com.farukgenc.boilerplate.springboot.service;
 
 import com.farukgenc.boilerplate.springboot.model.Pedido;
+import com.farukgenc.boilerplate.springboot.model.User;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
+import com.farukgenc.boilerplate.springboot.security.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +23,22 @@ public class NominaService {
     @Autowired
     private GastoService gastoService;
 
-    public List<PedidoResponse> obtenerPedidosByUserAndDateBetween(String username) {
+    @Autowired
+    private UserServiceImpl userService;
+
+    public List<PedidoResponse> obtenerPedidosByUserAndDateBetween(Long userId, Date fechaInicio, Date fechaFin) {
         LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY);
         LocalDate saturday = LocalDate.now().with(DayOfWeek.SATURDAY);
 
-        List<PedidoResponse> pedidos = pedidoService.findPedidosByFechaBetween(Date.from(monday.atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(saturday.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        User user = userService.findById(userId);
+        String userName = user.getName() + " " + user.getLastname();
+        System.out.println(userName);
+
+        List<PedidoResponse> pedidos = pedidoService.findPedidosByFechaBetween(fechaInicio, fechaFin);
         List<PedidoResponse> pedidosByUser = new ArrayList<>();
         for (PedidoResponse pedido : pedidos) {
             System.out.println(pedido.getSastre());
-            if (pedido.getSastre().equals(username)) {
+            if (pedido.getSastre().equals(userName) && pedido.getFechaPedido().after(Date.from(monday.atStartOfDay(ZoneId.systemDefault()).toInstant())) && pedido.getFechaPedido().before(Date.from(saturday.atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
                 pedidosByUser.add(pedido);
             }
         }
