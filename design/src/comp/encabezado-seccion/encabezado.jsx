@@ -5,6 +5,7 @@ import CrearNSec from "../botones/crearN-sec/crearN-sec";
 
 export default function Encabezado({
   titEncabezado,
+  claseCont,
   conBtCrear,
   opc1,
   opc2,
@@ -17,7 +18,7 @@ export default function Encabezado({
   return (
     <div className="cont-encabezado">
       <span className="tit-encabezado">{titEncabezado}</span>
-      <div className="cont-espacio">
+      <div className={`cont-espacio ${claseCont}`}>
         <Buscador
           opc1={opc1}
           opc2={opc2}

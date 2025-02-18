@@ -9,7 +9,7 @@ import SepYNegro from "../../separadores/sep-y-negro/sep-y-negro";
 import ContTxtForm from "../../section/cont-txt-form/cont-txt-form";
 import TxtForm from "../../input/txt-form/txt-form";
 import SpanForm from "../../parrafos/span-form/span-form";
-import CustomDateInput from "../../calendario/calendario";
+import CustomDateInput from "../../calendario/custom-calendar/calendario";
 import CardPrenda from "../../cards/card-prenda/card-prenda";
 import basura from "../../../../public/media/img/basura.png";
 

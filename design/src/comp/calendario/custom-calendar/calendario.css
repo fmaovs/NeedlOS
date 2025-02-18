@@ -12,7 +12,7 @@
   font-family: sans-serif;
   text-transform: capitalize;
   line-height: 5vh;
-  font-size: calc((0.2vw + 3.2vh) * 0.6);
+  font-size: 1.9vh;
   font-weight: lighter;
 }
 
@@ -30,7 +30,7 @@
 /*ENCABEZADO DIAS*/
 .react-datepicker__day-name {
   text-transform: capitalize;
-  font-size: calc((0.2vw + 3.2vh) * 0.4);
+  font-size: 1.5vh;
 }
 
 /*SABADOS Y DOMINGOS*/
@@ -47,7 +47,7 @@
 
 /*TODOS LOS DIAS*/
 .react-datepicker__day {
-  font-size: calc((0.2vw + 3.2vh) * 0.4);
+  font-size: 1.5vh;
 }
 
 /*DIA SELECCIONADO*/

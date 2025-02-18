@@ -3,6 +3,7 @@ import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
 import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
+import CalendarioNomina from "../../calendario/nomina-calendario/nomina-calendario.jsx";
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -16,10 +17,12 @@ export default function Nomina() {
   function resumenCuenta() {
     setEmpleadoPresionado(true);
   }
+  
   return (
     <>
       <Encabezado
         titEncabezado={"Nomina"}
+        claseCont={"cont-espacio-nomina"}
         conBtCrear={"none"}
         opc1={"Cliente"}
         opc2={"Prenda"}
@@ -27,7 +30,7 @@ export default function Nomina() {
         opc4={"N°"}
         withSearch={"cont-buscador-none"}
       >
-        <span>hola</span>
+        <CalendarioNomina />
       </Encabezado>
       <SepXNegro />
       <div className="cont-filterAndBoton">
@@ -64,7 +67,9 @@ export default function Nomina() {
                 onClick={resumenCuenta}
               >
                 <td className="td">Pablo Rivas</td>
-                <td className="td" id="sastre-td">Sastre</td>
+                <td className="td" id="sastre-td">
+                  Sastre
+                </td>
               </tr>
               <tr className="separacion-fila"></tr>
             </tbody>

@@ -1,0 +1,47 @@
+.cont-espacio-nomina {
+  padding: 1vh;
+}
+
+.cont-calendario-nomina {
+  height: 100%;
+  padding: 0 1vh;
+  gap: 1vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: 0.1s ease-in-out;
+  border-radius: 1.2vh;
+}
+
+.cont-calendario-nomina:hover {
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+
+/*Contenedor que engloba todo*/
+.cont-calendario-nomina .react-datepicker-wrapper {
+  height: 100%;
+}
+
+.cont-calendario-nomina:active img {
+  transform: scale(0.9);
+}
+
+/*Imagen*/
+.cont-calendario-nomina img {
+  height: 70%;
+  transition: 0.1s ease-in-out;
+}
+
+/*Contenedor que engloba el input*/
+.cont-calendario-nomina .react-datepicker__input-container input {
+  height: 100%;
+  padding: 1vh;
+  background-color: transparent;
+  font-size: calc((2.2vh - 0.4vw) * 2);
+  width: 23vh;
+  letter-spacing: 0.6vh;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+}
