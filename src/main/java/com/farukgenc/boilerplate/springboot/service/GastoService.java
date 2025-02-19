@@ -40,7 +40,6 @@ public class GastoService {
     public List<GastosRequest> obtenerGastos() {
         List<Gastos> gastos = gastoRepository.findAll();
 
-        // Convertimos la entidad a DTO antes de devolverla
         return gastos.stream()
                 .map(gasto -> new GastosRequest(
                         gasto.getDescripcion(),
@@ -69,6 +68,7 @@ public class GastoService {
                                 .sum();
     }
 
+    @Transactional
     public double obtenerValesByEmpleado(Long id, LocalDate fechaInicio, LocalDate fechaFin, CategoriaGasto categoria) {
         List<Gastos> gastos = gastoRepository.findByEmpleado_IdAndFechaBetweenAndCategoria(id, fechaInicio, fechaFin, categoria);
 
@@ -88,6 +88,29 @@ public class GastoService {
         }
         return total;
     }
+
+    @Transactional
+    public double obtenerTotalGastosPorCategoriaYRango(CategoriaGasto categoria, LocalDate fechaInicio, LocalDate FechaFin){
+        List<Gastos> gastos = gastoRepository.findByCategoriaAndFechaBetween( categoria,  fechaInicio,  FechaFin);
+        return gastos.stream().mapToDouble(Gastos::getMonto).sum();
+    }
+
+
+    @Transactional
+    public List<GastosRequest> obtenerDetallesGastosorCategoriaYRango(CategoriaGasto categoria, LocalDate fechaInicio, LocalDate fechaFin){
+        List<Gastos> gastos = gastoRepository.findByCategoriaAndFechaBetween(categoria, fechaInicio, fechaFin);
+
+        return gastos.stream()
+                .map(gasto -> new GastosRequest(
+                        gasto.getDescripcion(),
+                        gasto.getMonto(),
+                        gasto.getFecha(),
+                        gasto.getCategoria(),
+                        gasto.getIdGasto()
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 
 }

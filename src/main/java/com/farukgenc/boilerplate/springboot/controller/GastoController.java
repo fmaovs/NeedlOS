@@ -54,4 +54,15 @@ public class GastoController {
     public double obtenerValesSemanalesPorEmpleado(@PathVariable Long id, @RequestParam("fechaInicio")LocalDate fechaInicio, @RequestParam("fechaFin")LocalDate fechaFin, @RequestParam("categoria") CategoriaGasto categoria) {
         return gastosService.obtenerValesByEmpleado(id, fechaInicio, fechaFin, categoria);
     }
+
+    @GetMapping("/valor/categoria/EntreFechas")
+    public double obtenerTotalGastosPorCategoriaYRango(@RequestParam("categoria") CategoriaGasto categoria, @RequestParam("fechaInicio")LocalDate fechaInicio, @RequestParam("fechaFin")LocalDate fechaFin){
+        return  gastosService.obtenerTotalGastosPorCategoriaYRango(categoria,fechaInicio, fechaFin);
+    }
+
+    @GetMapping("/detalles/categoria/EntreFechas")
+    public ResponseEntity<List<GastosRequest>> obtenerDetallesGastosPorCategoriaYRango(@RequestParam("categoria") CategoriaGasto categoria, @RequestParam("fechaInicio")LocalDate fechaInicio, @RequestParam("fechaFin") LocalDate fechaFin){
+        return ResponseEntity.ok(gastosService.obtenerDetallesGastosorCategoriaYRango(categoria, fechaInicio, fechaFin));
+    }
+
 }
