@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
+import com.farukgenc.boilerplate.springboot.model.CategoriaGasto;
 import com.farukgenc.boilerplate.springboot.model.Gastos;
 import com.farukgenc.boilerplate.springboot.security.dto.GastosRequest;
 import com.farukgenc.boilerplate.springboot.service.GastoService;
@@ -48,4 +49,8 @@ public class GastoController {
         return gastosService.obtenervalorTotalDia(Dia);
     }
 
+    @GetMapping("/categoria/vales/semanal/empleado/{id}")
+    public double obtenerValesSemanalesPorEmpleado(@PathVariable Long id, @RequestParam("fechaInicio")LocalDate fechaInicio, @RequestParam("fechaFin")LocalDate fechaFin, @RequestParam("categoria") CategoriaGasto categoria) {
+        return gastosService.obtenerValesByEmpleado(id, fechaInicio, fechaFin, categoria);
+    }
 }

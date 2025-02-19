@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.service;
 
+import com.farukgenc.boilerplate.springboot.model.CategoriaGasto;
 import com.farukgenc.boilerplate.springboot.model.Gastos;
 import com.farukgenc.boilerplate.springboot.model.User;
 import com.farukgenc.boilerplate.springboot.repository.GastoRepository;
@@ -67,4 +68,26 @@ public class GastoService {
                                 .mapToDouble(Gastos::getMonto)
                                 .sum();
     }
+
+    public double obtenerValesByEmpleado(Long id, LocalDate fechaInicio, LocalDate fechaFin, CategoriaGasto categoria) {
+        List<Gastos> gastos = gastoRepository.findByEmpleado_IdAndFechaBetweenAndCategoria(id, fechaInicio, fechaFin, categoria);
+
+        List<GastosRequest> vales = gastos.stream()
+                .map(gasto -> new GastosRequest(
+                        gasto.getDescripcion(),
+                        gasto.getMonto(),
+                        gasto.getFecha(),
+                        gasto.getCategoria(),
+                        gasto.getIdGasto()
+                ))
+                .collect(Collectors.toList());
+
+        double total = 0;
+        for (GastosRequest vale : vales) {
+            total += vale.getMonto();
+        }
+        return total;
+    }
+
+
 }
