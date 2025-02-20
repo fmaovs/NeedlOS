@@ -496,7 +496,13 @@ export default function Inventario() {
                   <td className="td">{inventario.id_material}</td>
                   <td className="td">{inventario.nombre}</td>
                   <td className="td">{inventario.descripcion}</td>
-                  <td className="td">{inventario.precio}</td>
+                  <td className="td">
+                    {`$ ${new Intl.NumberFormat("es-CO", {
+                      style: "decimal",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    }).format(inventario.precio)}`}
+                  </td>
                   <td className="td">{inventario.stockActual}</td>
                   <td className="td">
                     {new Date(inventario.fecha_actualizacion)

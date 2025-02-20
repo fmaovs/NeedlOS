@@ -296,11 +296,11 @@ export default function TbEnProceso() {
                           .replace("p. m.", "PM")}
                       </td>
                       <td className="td">
-                        {new Intl.NumberFormat("es-CO", {
+                        {`$ ${new Intl.NumberFormat("es-CO", {
                           style: "decimal",
                           minimumFractionDigits: 0,
                           maximumFractionDigits: 0,
-                        }).format(order.saldo)}
+                        }).format(order.saldo)}`}
                       </td>
                       <td className="td">
                         {order.prenda

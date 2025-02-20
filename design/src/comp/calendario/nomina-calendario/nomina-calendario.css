@@ -1,26 +1,30 @@
 .cont-espacio-nomina {
   padding: 1vh;
+  width: 80%;
 }
 
 .cont-calendario-nomina {
   height: 100%;
-  padding: 0 1vh;
+  flex: 1;
+  padding: 0 2vh;
   gap: 1vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   transition: 0.1s ease-in-out;
   border-radius: 1.2vh;
+  border: 0.1vh solid #f0f0f0;
 }
 
 .cont-calendario-nomina:hover {
   cursor: pointer;
-  background-color: #e6e6e6;
+  background-color: #f0f0f0;
 }
 
 /*Contenedor que engloba todo*/
 .cont-calendario-nomina .react-datepicker-wrapper {
   height: 100%;
+  width: calc(100% - 4vh);
 }
 
 .cont-calendario-nomina:active img {
@@ -29,19 +33,28 @@
 
 /*Imagen*/
 .cont-calendario-nomina img {
-  height: 70%;
+  height: 60%;
   transition: 0.1s ease-in-out;
+}
+
+.cont-calendario-nomina .react-datepicker__input-container {
+  width: 100%;
 }
 
 /*Contenedor que engloba el input*/
 .cont-calendario-nomina .react-datepicker__input-container input {
   height: 100%;
+  width: 100%;
   padding: 1vh;
   background-color: transparent;
-  font-size: calc((2.2vh - 0.4vw) * 2);
-  width: 23vh;
+  font-size: calc((2.2vh - 0.4vw) * 1.8);
   letter-spacing: 0.6vh;
   box-sizing: border-box;
   border: none;
   outline: none;
+}
+
+.span-desde-hasta {
+  margin: 0 2vh 0 0;
+  font-size: calc((0.2vw + 3.2vh) * 0.6);
 }

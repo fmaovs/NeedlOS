@@ -164,3 +164,11 @@
   color: white;
   letter-spacing: 0;
 }
+
+.th-tabla-nomina-colum1 {
+  width: 14vw;
+}
+
+.th-tabla-nomina-colum2 {
+  width: 25vw;
+}
