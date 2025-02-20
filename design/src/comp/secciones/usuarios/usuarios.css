@@ -49,7 +49,6 @@
     font-weight: 500;
     white-space: pre-wrap;
   }
-
   .th:first-child {
     border-right: 0.05vh solid #bababa;
   }
@@ -69,29 +68,51 @@
     height: 1.6vh;
   }
   
+  .td-user{
+    font-size: calc((0.2vw + 3.2vh) * 0.5);
+    text-align: center;
+    vertical-align: middle; 
+  }
   .acciones {
+    justify-content: center; 
+    align-items: center; 
     display: flex;
     gap: 0.8vw;
   }
+  .icono-editar {
+    height: 3.5vh; 
+  }
   
   .btn-editar {
+    height: 4.5vh; 
+    width: 4.5vw;  
     color: #0050b8;
     cursor: pointer;
     background: none;
     border: none;
-    padding: 0.4vh;
+    padding: 0.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .btn-editar:hover {
     color: #0050b8;
   }
-  
+  .icono-eliminar{
+    height: 4vh;  
+  }
   .btn-eliminar {
+    height: 4.5vh; 
+    width: 4.5vw; 
     color: #dc2626;
     cursor: pointer;
     background: none;
     border: none;
-    padding: 0.4vh;
+    padding: 0.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .btn-eliminar:hover {
