@@ -3,9 +3,12 @@ package com.farukgenc.boilerplate.springboot.service;
 import com.farukgenc.boilerplate.springboot.model.Abono;
 import com.farukgenc.boilerplate.springboot.model.MetodoPago;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -33,4 +36,5 @@ public class ArqueoService {
         List<Abono> abonos = abonoService.getAbonosByDate(date);
         return abonos.stream().mapToDouble(Abono::getMonto).sum();
     }
+
 }

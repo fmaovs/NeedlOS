@@ -2,12 +2,16 @@ package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.Abono;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import com.farukgenc.boilerplate.springboot.service.ArqueoService;
+import com.farukgenc.boilerplate.springboot.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,6 +21,9 @@ public class ArqueoController {
 
     @Autowired
     private ArqueoService arqueoService;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     @GetMapping("/abonos/{date}")
     public ResponseEntity<List<AbonoDTO>> obtenerAbonosDelDia(@PathVariable String date) {
@@ -29,4 +36,12 @@ public class ArqueoController {
         double total = arqueoService.obtenerTotalAbonosDelDia(date);
         return ResponseEntity.ok(total);
     }
+
+
+    @GetMapping("pedidos/{date}")
+    public ResponseEntity<List<PedidoResponse>> obtenerPedidosDelDia(@PathVariable String date) {
+        List<PedidoResponse> pedidos = pedidoService.getPedidosByDate(date);
+        return ResponseEntity.ok(pedidos);
+    }
+
 }
