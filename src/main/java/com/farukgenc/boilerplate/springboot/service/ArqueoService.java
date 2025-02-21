@@ -37,4 +37,9 @@ public class ArqueoService {
         return abonos.stream().mapToDouble(Abono::getMonto).sum();
     }
 
+    public List<PedidoResponse> obtenerPedidosDelDia(String date){
+        List<AbonoDTO> abonos = obtenerAbonosDelDia(date);
+        return abonos.stream().map(abono -> pedidoService.findById(abono.getIdPedido()).get()).toList();
+    }
+
 }

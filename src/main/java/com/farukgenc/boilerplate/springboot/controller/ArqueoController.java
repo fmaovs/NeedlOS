@@ -44,4 +44,10 @@ public class ArqueoController {
         return ResponseEntity.ok(pedidos);
     }
 
+    @GetMapping("pedidos/abonos/{date}")
+    public ResponseEntity<List<PedidoResponse>> obtenerPedidosConAbonosDelDia(@PathVariable String date) {
+        List<PedidoResponse> pedidos = arqueoService.obtenerPedidosDelDia(date);
+        return ResponseEntity.ok(pedidos);
+    }
+
 }
