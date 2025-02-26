@@ -78,4 +78,42 @@ public class AbonoService {
         return abonoRepository.findByFechaBetween(startOfDay, endOfDay);
     }
 
+    public List<AbonoDTO> getAbonosByDateAndMetodoPago_Efectivo(String dateString) {
+        LocalDate localDate = LocalDate.parse(dateString);
+        MetodoPago metodoPago = MetodoPago.EFECTIVO;
+        // Convertimos LocalDate a Date con 00:00:00 y 23:59:59
+        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endOfDay = Date.from(localDate.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
+        List<Abono> abonos = abonoRepository.findByFechaBetweenAndMetodoPago(startOfDay, endOfDay, metodoPago);
+        return abonos.stream().map(abono -> {
+            AbonoDTO abonoDTO = new AbonoDTO();
+            abonoDTO.setIdPedido(abono.getPedido().getId());
+            abonoDTO.setMonto(abono.getMonto());
+            abonoDTO.setMetodoPago(abono.getMetodoPago().name());
+            return abonoDTO;
+        }).toList();
+
+    }
+
+    public List<AbonoDTO> getAbonosByDateAndMetodoPago_Electronico(String dateString) {
+        LocalDate localDate = LocalDate.parse(dateString);
+        // Convertimos LocalDate a Date con 00:00:00 y 23:59:59
+        Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endOfDay = Date.from(localDate.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
+        List<Abono> abonos = abonoRepository.findByFechaBetween(startOfDay, endOfDay);
+        for (Abono abono : abonos) {
+            if (abono.getMetodoPago() == MetodoPago.EFECTIVO) {
+                abonos.remove(abono);
+            }
+        }
+        return abonos.stream().map(abono -> {
+            AbonoDTO abonoDTO = new AbonoDTO();
+            abonoDTO.setIdPedido(abono.getPedido().getId());
+            abonoDTO.setMonto(abono.getMonto());
+            abonoDTO.setMetodoPago(abono.getMetodoPago().name());
+            return abonoDTO;
+        }).toList();
+
+    }
+
 }

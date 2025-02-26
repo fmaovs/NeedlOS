@@ -4,6 +4,7 @@ import com.farukgenc.boilerplate.springboot.model.Abono;
 import com.farukgenc.boilerplate.springboot.model.Estado;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
+import com.farukgenc.boilerplate.springboot.service.AbonoService;
 import com.farukgenc.boilerplate.springboot.service.ArqueoService;
 import com.farukgenc.boilerplate.springboot.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class ArqueoController {
 
     @Autowired
     private PedidoService pedidoService;
+
+    @Autowired
+    private AbonoService abonoService;
 
     @GetMapping("/abonos/{date}")
     public ResponseEntity<List<AbonoDTO>> obtenerAbonosDelDia(@PathVariable String date) {
@@ -61,6 +65,18 @@ public class ArqueoController {
     public ResponseEntity<Integer> obtenerPedidosConPrendasDelDia(@PathVariable String date) {
         Integer cantidad = pedidoService.getCantidadPrendasByEstadoAndDate(date);
         return ResponseEntity.ok(cantidad);
+    }
+
+    @GetMapping("abonos/efectivo/{date}")
+    public ResponseEntity<List<AbonoDTO>> obtenerAbonosPorMetodoPagoEnEfectivoYFecha(@PathVariable String date) {
+        List<AbonoDTO> abonos = abonoService.getAbonosByDateAndMetodoPago_Efectivo(date);
+        return ResponseEntity.ok(abonos);
+    }
+
+    @GetMapping("abonos/electronico/{date}")
+    public ResponseEntity<List<AbonoDTO>> obtenerAbonosPorMetodoPagoElectronicoYFecha(@PathVariable String date) {
+        List<AbonoDTO> abonos = abonoService.getAbonosByDateAndMetodoPago_Electronico(date);
+        return ResponseEntity.ok(abonos);
     }
 
 }
