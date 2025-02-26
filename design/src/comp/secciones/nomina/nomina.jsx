@@ -148,7 +148,7 @@ export default function Nomina() {
       <div className="cont-filterAndBoton">
         <Filtrador>
           <OpcionesFilter
-            txtFilter={"Entrada Prendas"}
+            txtFilter={"Sastres"}
             imgFilter={camisa}
             clase={"dos-diez"}
           />

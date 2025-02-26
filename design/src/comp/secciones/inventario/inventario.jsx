@@ -11,8 +11,6 @@ import ContSelect from "../../cards/card-detalle-pedido/cont-select.jsx";
 
 const cerrarInventario = "../../../../public/media/img/cerrar.png";
 const ErrorMP3 = "../../../../public/media/sounds/error.mp3";
-const InventarioActualizado =
-  "../../../../public/media/sounds/pedidoCreado.mp3";
 
 export default function Inventario() {
   useEffect(() => {
