@@ -1,6 +1,7 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.Abono;
+import com.farukgenc.boilerplate.springboot.model.Estado;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import com.farukgenc.boilerplate.springboot.service.ArqueoService;
@@ -48,6 +49,18 @@ public class ArqueoController {
     public ResponseEntity<List<PedidoResponse>> obtenerPedidosConAbonosDelDia(@PathVariable String date) {
         List<PedidoResponse> pedidos = arqueoService.obtenerPedidosDelDia(date);
         return ResponseEntity.ok(pedidos);
+    }
+
+    @GetMapping("pedidos/{date}/{estado}")
+    public ResponseEntity<List<PedidoResponse>> obtenerPedidosPorEstadoYFecha(@PathVariable String date, @PathVariable String estado) {
+        List<PedidoResponse> pedidos = pedidoService.getPedidosByDateAndEstado(date, estado);
+        return ResponseEntity.ok(pedidos);
+    }
+
+    @GetMapping("prendas/{date}")
+    public ResponseEntity<Integer> obtenerPedidosConPrendasDelDia(@PathVariable String date) {
+        Integer cantidad = pedidoService.getCantidadPrendasByEstadoAndDate(date);
+        return ResponseEntity.ok(cantidad);
     }
 
 }
