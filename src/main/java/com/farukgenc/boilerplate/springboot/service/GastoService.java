@@ -59,6 +59,20 @@ public class GastoService {
                 .sum();
     }
 
+    @Transactional
+    public List<GastosRequest> obtenerDetallesGastosDia(LocalDate fecha){
+        List<Gastos> gastos = gastoRepository.findByfecha(fecha);
+
+        return gastos.stream()
+                .map(gasto -> new GastosRequest(
+                        gasto.getDescripcion(),
+                        gasto.getMonto(),
+                        gasto.getFecha(),
+                        gasto.getCategoria(),
+                        gasto.getIdGasto()
+                ))
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public Double obtenervalorTotalEnRango(LocalDate fechaInicio, LocalDate fechaFin){
