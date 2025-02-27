@@ -32,8 +32,17 @@ public class AbonoService {
     @Autowired
     private PedidoService pedidoService;
 
-    public Optional<Abono> findById(Long id) {
-        return Optional.of(abonoRepository.findById(id).get());
+    public Optional<AbonoDTO> findById(Long id) {
+        Abono abono = abonoRepository.findById(id).orElse(null);
+        if (abono == null) {
+            return Optional.empty();
+        } else {
+            AbonoDTO abonoDTO = new AbonoDTO();
+            abonoDTO.setIdPedido(abono.getPedido().getId());
+            abonoDTO.setMonto(abono.getMonto());
+            abonoDTO.setMetodoPago(abono.getMetodoPago().name());
+            return Optional.of(abonoDTO);
+        }
     }
 
     public List<Abono> getAbonos() {

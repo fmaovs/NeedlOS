@@ -23,7 +23,7 @@ public class AbonoController {
     }
 
     @GetMapping("/{id}")
-    public Abono getAbono(@PathVariable Long id) {
+    public AbonoDTO getAbono(@PathVariable Long id) {
         return abonoService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Abono no encontrado"));
     }
