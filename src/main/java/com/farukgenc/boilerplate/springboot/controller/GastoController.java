@@ -5,6 +5,7 @@ import com.farukgenc.boilerplate.springboot.model.Gastos;
 import com.farukgenc.boilerplate.springboot.security.dto.GastosRequest;
 import com.farukgenc.boilerplate.springboot.service.GastoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,11 +44,17 @@ public class GastoController {
         return gastosService.obtenervalorTotalEnRango(inicio, fin);
     }
 
-    @GetMapping("/dias")
+    @GetMapping("valor-total/dias")
     public double obtenerValorToalDiario(@RequestParam("Día")String fecha){
 
         LocalDate Dia = LocalDate.parse(fecha);
         return gastosService.obtenervalorTotalDia(Dia);
+    }
+
+    @GetMapping("/detalles/dia")
+    public ResponseEntity<List<GastosRequest>> obtenerDetallesGastosDia(@RequestParam("Día") String fecha){
+        LocalDate Dia = LocalDate.parse(fecha);
+        return ResponseEntity.ok(gastosService.obtenerDetallesGastosDia(Dia));
     }
 
     @GetMapping("/categoria/vales/semanal/empleado/{id}")
