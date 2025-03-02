@@ -45,8 +45,15 @@ public class AbonoService {
         }
     }
 
-    public List<Abono> getAbonos() {
-        return abonoRepository.findAll();
+    public List<AbonoDTO> getAbonos() {
+        List<Abono> abonos = abonoRepository.findAll();
+        return abonos.stream().map(abono -> {
+            AbonoDTO abonoDTO = new AbonoDTO();
+            abonoDTO.setIdPedido(abono.getPedido().getId());
+            abonoDTO.setMonto(abono.getMonto());
+            abonoDTO.setMetodoPago(abono.getMetodoPago().name());
+            return abonoDTO;
+        }).toList();
     }
 
     @Transactional

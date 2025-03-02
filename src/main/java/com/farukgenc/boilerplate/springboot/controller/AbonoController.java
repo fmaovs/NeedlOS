@@ -29,7 +29,7 @@ public class AbonoController {
     }
 
     @GetMapping("/all")
-    public List<Abono> getAbonos() {
+    public List<AbonoDTO> getAbonos() {
         return abonoService.getAbonos();
     }
 }
