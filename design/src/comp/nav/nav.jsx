@@ -36,14 +36,6 @@ export default function Nav({ setComponenteSeleccionado }) {
         onClick={() => handleClick("Ordenes")}
       />
       <OpcionNav
-        img={Informes}
-        txt={"Informes"}
-        clase={`cont-seccion ${
-          opcionSeleccionada === "Informes" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Informes")}
-      />
-      <OpcionNav
         img={Inventario}
         txt={"Inventario"}
         clase={`cont-seccion ${
@@ -68,20 +60,28 @@ export default function Nav({ setComponenteSeleccionado }) {
         onClick={() => handleClick("Gastos")}
       />
       <OpcionNav
-        img={ArqueoCaja}
-        txt={"Arqueo Caja"}
-        clase={`cont-seccion ${
-          opcionSeleccionada === "ArqueoCaja" ? "active" : ""
-        }`}
-        onClick={() => handleClick("ArqueoCaja")}
-      />
-      <OpcionNav
         img={Nomina}
         txt={"Nomina"}
-        clase={`cont-seccion-last ${
+        clase={`cont-seccion ${
           opcionSeleccionada === "Nomina" ? "active" : ""
         }`}
         onClick={() => handleClick("Nomina")}
+      />
+      <OpcionNav
+        img={Informes}
+        txt={"Informes"}
+        clase={`cont-seccion ${
+          opcionSeleccionada === "Informes" ? "active" : ""
+        }`}
+        onClick={() => handleClick("Informes")}
+      />
+      <OpcionNav
+        img={ArqueoCaja}
+        txt={"Arqueo Caja"}
+        clase={`cont-seccion-last ${
+          opcionSeleccionada === "ArqueoCaja" ? "active" : ""
+        }`}
+        onClick={() => handleClick("ArqueoCaja")}
       />
       <SepXBlancoSmall />
       <OpcionNav

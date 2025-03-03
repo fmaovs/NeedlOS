@@ -147,6 +147,10 @@ export default function TbEnProceso() {
         ...prevDetalles,
         estado: "ANULADO",
       }));
+
+      setTimeout(() => {
+        ocultarDetalles();
+      }, 1000);
     } catch (error) {
       console.log(error);
     }

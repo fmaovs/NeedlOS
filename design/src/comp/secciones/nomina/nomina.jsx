@@ -73,6 +73,7 @@ export default function Nomina() {
         }
       );
 
+      console.log(response.data);
       const total = response.data.reduce(
         (acc, item) => acc + (item.totalAbonos || 0),
         0

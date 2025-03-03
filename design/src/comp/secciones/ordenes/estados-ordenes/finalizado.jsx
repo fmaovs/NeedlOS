@@ -253,6 +253,10 @@ export default function TbFinalizado() {
         ...prevDetalles,
         estado: "ANULADO",
       }));
+
+      setTimeout(() => {
+        ocultarDetalles();
+      }, 1000);
     } catch (error) {
       console.log(error);
     }

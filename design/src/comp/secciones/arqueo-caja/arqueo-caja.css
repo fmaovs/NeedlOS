@@ -53,7 +53,7 @@
 }
 
 .min-wi-tb1 {
-  min-width: 34rem;
+  min-width: 24rem;
 }
 
 .tb-arqueo2 {
@@ -94,8 +94,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 1vh;
   height: 15%;
 }
 
@@ -105,9 +103,20 @@
   font-size: calc((0.2vw + 3.2vh) * 0.5);
 }
 
+.head-resumen-arqueo span:first-of-type {
+  flex: none;
+  width: calc(16% + 2.1vh);
+}
+
+.head-resumen-arqueo span:not(:first-of-type):not(:last-of-type) {
+  flex: none;
+  width: calc(32% + 2.1vh);
+}
+
 .sep-y-small-arqueo {
   height: 60%;
   width: 0.1vh;
+  margin: 0 0.5vh;
   background-color: #bababa;
 }
 
@@ -136,22 +145,35 @@
   height: 1vh;
 }
 
+.section-resu-entradas th {
+  font-size: calc((0.2vw + 3.2vh)* 0.5);
+}
+
 .section-resu-entradas th:first-of-type {
-  border-right: 0.1vh solid #d2d2d2;
+  border-right: 0.05vh solid #d2d2d2;
 }
 
 .section-resu-entradas th:last-of-type {
-  border-left: 0.1vh solid #d2d2d2;
+  border-left: 0.05vh solid #d2d2d2;
+}
+
+.section-resu-entradas th:not(:first-of-type):not(:last-of-type) {
+  border-left: 0.05vh solid #d2d2d2;
+  border-right: 0.05vh solid #d2d2d2;
+}
+
+.section-resu-entradas td {
+  font-size: calc((0.2vw + 3.2vh)* 0.45);
 }
 
 .section-resu-entradas tr:not(:last-of-type):not(:first-of-type) {
-  height: 4.2vh;
+  height: 4.8vh;
   border-bottom: 0.1vh solid #d2d2d2;
   text-align: center;
 }
 
 .section-resu-entradas tbody tr:last-of-type {
-  height: 4.2vh;
+  height: 4.8vh;
   text-align: center;
 }
 
@@ -159,6 +181,22 @@
   height: 1.5vh;
 }
 
-.section-resu-entradas.resu-ingresos {
+/*Tamaños tablas*/
+.section-resu-entradas.resu-entradas {
+  flex: none;
+  width: 16%;
+}
 
+.section-resu-entradas.resu-gastos {
+  flex: none;
+  width: 32%;
+}
+
+.section-resu-entradas.resu-ingresos {
+  overflow: hidden;
+}
+
+.td.td-arqueo:hover {
+  background-color: #f8f8f8;
+  cursor: auto;
 }

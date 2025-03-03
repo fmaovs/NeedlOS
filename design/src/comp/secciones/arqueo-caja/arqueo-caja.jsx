@@ -1,29 +1,26 @@
 import "./arqueo-caja.css";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
-import SepYNegroSmall from "../../separadores/sep-y-negro-small/sep-y-negro-small.jsx";
-import CalendarioNomina from "../../calendario/nomina-calendario/nomina-calendario.jsx";
 import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
 import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
+import axios from "axios";
 
 const entradaPrendas = "../../../../public/media/img/ingresoPrendas.png";
 const retiroPrendas = "../../../../public/media/img/retiroPrendas.png";
 const maximizar = "../../../../public/media/img/maximizar.png";
 
 export default function AqrueoCaja() {
-  const [fecha1, setFecha1] = useState(null);
-  const [fecha2, setFecha2] = useState(null);
-
-  const [resumenIsVisible, setResumenIsVisible] = useState(false);
-  const [resumenMax, setResumenMax] = useState(false);
-  const [imageReverse, setImageReverse] = useState(false);
+  const [resumenIsVisible, setResumenIsVisible] = useState(true);
+  const [resumenMax, setResumenMax] = useState(true);
+  const [imageReverse, setImageReverse] = useState(true);
   const handleResumen = () => {
     if (resumenIsVisible) {
-      setResumenMax();
-      setImageReverse();
+      setResumenMax(false);
+      setImageReverse(false);
       setTimeout(() => {
-        setResumenIsVisible();
+        setResumenIsVisible(false);
       }, 300);
       return;
     }
@@ -34,10 +31,125 @@ export default function AqrueoCaja() {
       setResumenMax(true);
     }, 0);
   };
+
+  const [pedidosCreadosHoy, setPedidosCreadosHoy] = useState([]);
+  const [totalOrdenes, setTotalOrdenes] = useState(0);
+  const [totalPzs, setTotalPzs] = useState(0);
+  const [totalVlrPedido, setTotalVlrPedido] = useState(0);
+  /*Traer los pedidos creados de hoy*/
+  async function traerPedidosCreadosHoy() {
+    const fecha = new Date().toISOString().split("T")[0];
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/arqueo/pedidos/${fecha}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+
+      const pedidosOrdenados = response.data.sort(
+        (a, b) => new Date(b.fechaPedido) - new Date(a.fechaPedido)
+      );
+
+      setTotalOrdenes(response.data.length);
+      setTotalPzs(
+        response.data.reduce(
+          (acumulador, pedido) =>
+            acumulador +
+            pedido.prenda.reduce((sum, prenda) => sum + prenda.cantidad, 0),
+          0
+        )
+      );
+      setTotalVlrPedido(
+        response.data.reduce(
+          (acumulador, pedido) =>
+            acumulador + pedido.saldo + pedido.totalAbonos,
+          0
+        )
+      );
+
+      setPedidosCreadosHoy(pedidosOrdenados);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /*Traer los gastos de hoy*/
+  const [gastos, setGastos] = useState([]);
+  async function traerGastos() {
+    const fecha = new Date().toISOString().split("T")[0];
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/gastos/detalles/dia?D%C3%ADa=${fecha}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      setGastos(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /*Traer los abonos efectivo*/
+  const [abonosEfe, setAbonosEfe] = useState(0);
+  const [abonosElec, setAbonosElec] = useState(0);
+  async function traerAbonos() {
+    const fecha = new Date().toISOString().split("T")[0];
+    /*Traer abonos efectivo*/
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/arqueo/abonos/efectivo/${fecha}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      setAbonosEfe(
+        response.data.reduce(
+          (acumulador, pedido) => acumulador + pedido.monto,
+          0
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+
+    /*Traer abonos electronicos*/
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/arqueo/abonos/electronico/${fecha}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      setAbonosElec(
+        response.data.reduce(
+          (acumulador, pedido) => acumulador + pedido.monto,
+          0
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    traerPedidosCreadosHoy();
+    traerGastos();
+    traerAbonos();
+  }, []);
   return (
     <>
       <Encabezado
-        titEncabezado={"Nomina"}
+        titEncabezado={"Arqueo caja"}
         claseCont={"cont-espacio-nomina"}
         conBtCrear={"none"}
         opc1={"Cliente"}
@@ -45,19 +157,7 @@ export default function AqrueoCaja() {
         opc3={"Valor"}
         opc4={"N°"}
         withSearch={"cont-buscador-none"}
-      >
-        <CalendarioNomina
-          selected={fecha1}
-          onChange={setFecha1}
-          desdeHasta={"Desde:"}
-        />
-        <div className="span-separacion">/</div>
-        <CalendarioNomina
-          selected={fecha2}
-          onChange={setFecha2}
-          desdeHasta={"Hasta:"}
-        />
-      </Encabezado>
+      ></Encabezado>
       <SepXNegro />
       <div className="cont-filterAndBoton">
         <Filtrador>
@@ -67,7 +167,7 @@ export default function AqrueoCaja() {
             clase={"dos-diez"}
           />
           <OpcionesFilter
-            txtFilter={"Dinero recaudado"}
+            txtFilter={"Pedidos entregados"}
             imgFilter={retiroPrendas}
             clase={"ocho-diez"}
           />
@@ -88,11 +188,11 @@ export default function AqrueoCaja() {
           </div>
           <SepXNegro />
           <div className="cont-info-resumenes">
-            <section className="section-resu-entradas">
+            <section className="section-resu-entradas resu-entradas">
               <table>
                 <thead>
                   <tr>
-                    <th>Concepto</th>
+                    <th>Conpto</th>
                     <th>Total</th>
                   </tr>
                 </thead>
@@ -100,20 +200,26 @@ export default function AqrueoCaja() {
                   <tr></tr>
                   <tr>
                     <td>Ordenes</td>
-                    <td>8</td>
+                    <td>{totalOrdenes}</td>
                   </tr>
                   <tr>
                     <td>Piezas</td>
-                    <td>12</td>
+                    <td>{totalPzs}</td>
                   </tr>
                   <tr>
-                    <td>Valor Ord.</td>
-                    <td>$78.000</td>
+                    <td>Vlr. Ord</td>
+                    <td>
+                      {`$ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(totalVlrPedido)}`}
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </section>
-            <section className="section-resu-entradas">
+            <section className="section-resu-entradas resu-gastos">
               <table>
                 <thead>
                   <tr>
@@ -124,21 +230,25 @@ export default function AqrueoCaja() {
                 </thead>
                 <tbody>
                   <tr></tr>
-                  <tr>
-                    <td>Vl. Eduardo Rodriguez</td>
-                    <td>$697.000</td>
-                    <td>13/09/2023</td>
-                  </tr>
-                  <tr>
-                    <td>Vl. Camila Ramirez</td>
-                    <td>$697.000</td>
-                    <td>13/09/2023</td>
-                  </tr>
-                  <tr>
-                    <td>Vl. Carlos Gaitan</td>
-                    <td>$697.000</td>
-                    <td>13/09/2023</td>
-                  </tr>
+                  {gastos.map((gasto, index) => (
+                    <React.Fragment key={index}>
+                      <tr>
+                        <td>Vl. Eduardo Rodrigu</td>
+                        <td>{`$ ${new Intl.NumberFormat("es-CO", {
+                          style: "decimal",
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }).format(gasto.monto)}`}</td>
+                        <td>
+                          {new Date(gasto.fecha).toLocaleDateString("es-CO", {
+                            year: "numeric",
+                            month: "numeric",
+                            day: "numeric",
+                          })}
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
                 </tbody>
               </table>
             </section>
@@ -146,73 +256,59 @@ export default function AqrueoCaja() {
               <table>
                 <thead>
                   <tr>
-                    <th>Categoría</th>
                     <th>Concepto</th>
-                    <th>Valor</th>
+                    <th>Abonos</th>
+                    <th>Pagos</th>
+                    <th>Ingreso Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr></tr>
                   <tr>
-                    <td rowspan="2">
-                      <b>Órdenes</b>
-                    </td>
-                    <td>Órdenes entregadas</td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td>Piezas entregadas</td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
+                    <td>Ord. Entg: 12</td>
                     <td>
-                      <b>Gastos</b>
-                    </td>
-                    <td>Gastos</td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td rowspan="3">
-                      <b>Abonos</b>
-                    </td>
-                    <td>Abonos efectivo</td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td>Abonos electrónicos</td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Total abonos</b>
-                    </td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td rowspan="3">
-                      <b>Pagos</b>
-                    </td>
-                    <td>Pagos efectivo</td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td>Pagos electrónicos</td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Total pagos</b>
-                    </td>
-                    <td>$78.000</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Ingresos</b>
+                      <b>EFV</b>
+                      {` $ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(abonosEfe)}`}
                     </td>
                     <td>
-                      <b>Total ingresos</b>
+                      <b>EFV</b>
+                      $78.000
                     </td>
-                    <td>$78.000</td>
+                    <td rowSpan="3">$236.000</td>
+                  </tr>
+                  <tr>
+                    <td>Pzs. Entg: 14</td>
+                    <td>
+                      <b>ELC</b>
+                      {` $ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(abonosElec)}`}
+                    </td>
+                    <td>
+                      <b>ELC</b>
+                      $78.000
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Gts: -$78.000</td>
+                    <td>
+                      <b>TA</b>
+                      {` $ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(abonosEfe + abonosElec)}`}
+                    </td>
+                    <td>
+                      <b>TA</b>
+                      $178.000
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -238,7 +334,7 @@ export default function AqrueoCaja() {
             <thead className="th-tabla">
               <tr className="separacion-fila-head"></tr>
               <tr className="tr-encabezado">
-                <th className="th">N° Ord</th>
+                <th className="th">N°</th>
                 <th className="th">Sastre Asig.</th>
                 <th className="th">Pzs</th>
                 <th className="th">Vlr. Ord</th>
@@ -246,7 +342,33 @@ export default function AqrueoCaja() {
               </tr>
               <tr className="separacion-fila-head"></tr>
             </thead>
-            <tbody className="body-tabla"></tbody>
+            <tbody className="body-tabla">
+              {pedidosCreadosHoy.map((pedidoCreado) => (
+                <React.Fragment key={pedidoCreado.id}>
+                  <tr className="tr-body">
+                    <td className="td">{pedidoCreado.id}</td>
+                    <td className="td">{pedidoCreado.sastre}</td>
+                    <td className="td">
+                      {pedidoCreado.prenda.reduce(
+                        (sum, prenda) => sum + prenda.cantidad,
+                        0
+                      )}
+                    </td>
+                    <td className="td">
+                      {`$ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(
+                        pedidoCreado.saldo + pedidoCreado.totalAbonos
+                      )}`}
+                    </td>
+                    <td className="td td-arqueo">{`${pedidoCreado.customerName} ${pedidoCreado.customerLastName}`}</td>
+                  </tr>
+                  <tr className="separacion-fila"></tr>
+                </React.Fragment>
+              ))}
+            </tbody>
           </table>
         </div>
 
