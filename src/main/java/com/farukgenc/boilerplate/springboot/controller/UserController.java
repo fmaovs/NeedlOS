@@ -46,4 +46,9 @@ public class UserController {
         userServiceImpl.updatePassword(id, password);
         return ResponseEntity.ok("Password updated successfully");
     }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userServiceImpl.findById(id);
+    }
 }

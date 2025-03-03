@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	User findByCargo(Cargo cargo);
 
+	User findById(long id);
+
 
 	List<User> findAllByCargo(Cargo cargo);
 
