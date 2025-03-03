@@ -39,8 +39,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findById(Long id) {
-		return userRepository.findById(id).orElse(null);
+	public UserResponse findById(Long id) {
+		User user = userRepository.findById(id).orElse(null);
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUsername(user.getUsername());
+		userResponse.setEmail(user.getEmail());
+		userResponse.setCargo(user.getCargo().getCargoName());
+		userResponse.setPhone(user.getPhone());
+		userResponse.setName(user.getName());
+		userResponse.setLastname(user.getLastname());
+		return userResponse;
+
 	}
 
 	@Override

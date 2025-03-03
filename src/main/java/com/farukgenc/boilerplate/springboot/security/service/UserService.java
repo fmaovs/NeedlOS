@@ -4,13 +4,14 @@ import com.farukgenc.boilerplate.springboot.model.User;
 import com.farukgenc.boilerplate.springboot.security.dto.AuthenticatedUserDto;
 import com.farukgenc.boilerplate.springboot.security.dto.RegistrationRequest;
 import com.farukgenc.boilerplate.springboot.security.dto.RegistrationResponse;
+import com.farukgenc.boilerplate.springboot.security.dto.UserResponse;
 
 
 public interface UserService {
 
 	User findByUsername(String username);
 
-	User findById(Long id);
+	UserResponse findById(Long id);
 
 	RegistrationResponse registration(RegistrationRequest registrationRequest);
 
