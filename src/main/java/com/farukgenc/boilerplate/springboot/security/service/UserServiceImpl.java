@@ -39,17 +39,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserResponse findById(Long id) {
-		User user = userRepository.findById(id).orElse(null);
-		UserResponse userResponse = new UserResponse();
-		userResponse.setUsername(user.getUsername());
-		userResponse.setEmail(user.getEmail());
-		userResponse.setCargo(user.getCargo().getCargoName());
-		userResponse.setPhone(user.getPhone());
-		userResponse.setName(user.getName());
-		userResponse.setLastname(user.getLastname());
-		return userResponse;
-
+	public User findById(Long id) {
+		return userRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -191,6 +182,21 @@ public class UserServiceImpl implements UserService {
 		System.out.println(user.getPassword());
 	}
 
+
+	public UserResponse convertUsertoUserResponse(Long id) {
+		User user = userRepository.findById(id).orElse(null);
+		if (user == null) {
+			return null;
+		}
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUsername(user.getUsername());
+		userResponse.setEmail(user.getEmail());
+		userResponse.setCargo(user.getCargo().getCargoName());
+		userResponse.setPhone(user.getPhone());
+		userResponse.setName(user.getName());
+		userResponse.setLastname(user.getLastname());
+		return userResponse;
+	}
 
 
 }

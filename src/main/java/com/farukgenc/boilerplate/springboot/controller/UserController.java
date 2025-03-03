@@ -49,6 +49,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserResponse getUser(@PathVariable Long id) {
-        return userServiceImpl.findById(id);
+        return userServiceImpl.convertUsertoUserResponse(id);
     }
 }
