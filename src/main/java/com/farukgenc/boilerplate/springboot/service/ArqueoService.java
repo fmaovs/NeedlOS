@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ArqueoService {
@@ -43,22 +40,27 @@ public class ArqueoService {
 
     public List<PedidoResponse> obtenerPedidosDelDia(String date) {
         List<AbonoDTO> abonos = obtenerAbonosDelDia(date);
+        Set<Long> pedidosProcesados = new HashSet<>(); // Para evitar duplicados
         List<PedidoResponse> pedidos = new ArrayList<>();
 
         for (AbonoDTO abono : abonos) {
-            Optional<PedidoResponse> pedido = pedidoService.findById(abono.getIdPedido());
+            if (!pedidosProcesados.contains(abono.getIdPedido())) { // Verifica si ya fue agregado
+                Optional<PedidoResponse> pedido = pedidoService.findById(abono.getIdPedido());
 
-            if (pedido.isPresent()) {
-                PedidoResponse p = pedido.get();
-                System.out.println("Pedido ID: " + p.getId() + ", Estado: " + p.getEstado());
+                if (pedido.isPresent()) {
+                    PedidoResponse p = pedido.get();
+                    System.out.println("Pedido ID: " + p.getId() + ", Estado: " + p.getEstado());
 
-                if (p.getEstado() == Estado.ENTREGADO && p.getSaldo() == 0) {
-                    pedidos.add(p);
+                    if (p.getEstado() == Estado.ENTREGADO && p.getSaldo() == 0) {
+                        pedidos.add(p);
+                        pedidosProcesados.add(p.getId()); // Marcar como agregado
+                    }
                 }
             }
         }
         return pedidos;
     }
+
 
 
 
