@@ -15,6 +15,7 @@ public class AgregarDatosPrendas implements CommandLineRunner {
 
     @Autowired
     private PrendaRepository prendaRepository;
+
     public void run(String... args) {
         if (prendaRepository.count() == 0) {
             List<Prenda> prendas = List.of(
@@ -97,4 +98,5 @@ public class AgregarDatosPrendas implements CommandLineRunner {
             System.out.println("prendas ya existentes");
         }
     }
+
 }
