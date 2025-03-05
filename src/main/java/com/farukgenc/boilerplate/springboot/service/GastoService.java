@@ -46,7 +46,7 @@ public class GastoService {
                         gasto.getMonto(),
                         gasto.getFecha(),
                         gasto.getCategoria(),
-                        gasto.getIdGasto()
+                        gasto.getEmpleado().getId()
                 ))
                 .collect(Collectors.toList());
     }
@@ -69,7 +69,7 @@ public class GastoService {
                         gasto.getMonto(),
                         gasto.getFecha(),
                         gasto.getCategoria(),
-                        gasto.getIdGasto()
+                        gasto.getEmpleado().getId()
                 ))
                 .collect(Collectors.toList());
     }
