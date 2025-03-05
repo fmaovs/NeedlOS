@@ -45,7 +45,31 @@ public class SecurityConfiguration {
 																	      "/swagger-ui.html",
 																	      "/actuator/**")
 													   .permitAll()
+						//SASTRE
+						.requestMatchers("/ingresos/nuevo").hasAuthority("USER")
+						.requestMatchers("/inventario/all", "/inventario/Usando", "/inventario/stock-bajo").hasAuthority("USER")
+						.requestMatchers("/orders/all").hasAuthority("USER")
+						.requestMatchers("/orders/{id}/**").hasAuthority("USER")
+						.requestMatchers("/orders/estado/**").hasAuthority("USER")
+						.requestMatchers("/orders/concepto").hasAuthority("USER")
+						.requestMatchers("/orders/customer").hasAuthority("USER")
+						.requestMatchers("/orders/sastre").hasAuthority("USER")
+
+						//ADMIN Y SASTRE
+						.requestMatchers("/abonos/**").hasAnyAuthority("ADMIN", "USER")
+						.requestMatchers("/customers/**").hasAnyAuthority("ADMIN", "USER")
+						.requestMatchers("/prendas/**").hasAnyAuthority("ADMIN", "USER")
+
+						//ADMIN
+						.requestMatchers("/orders/**").hasAuthority("ADMIN")
 						.requestMatchers("/arqueo/**").hasAuthority("ADMIN")
+						.requestMatchers("/gastos/**").hasAuthority("ADMIN")
+						.requestMatchers("/nomina/**").hasAuthority("ADMIN")
+						.requestMatchers("/users/**").hasAuthority("ADMIN")
+						.requestMatchers("/ingresos/**").hasAuthority("ADMIN")
+						.requestMatchers("/inventario/**").hasAuthority("ADMIN")
+						.requestMatchers("/register/**").hasAuthority("ADMIN")
+						.requestMatchers("/users/**").hasAuthority("ADMIN")
 						.anyRequest()
 						.authenticated())
 				.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
