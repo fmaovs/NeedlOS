@@ -6,12 +6,13 @@ import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
 import React, { useEffect, useState } from "react";
 import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
+import { id } from "date-fns/locale";
 
 const entradaPrendas = "../../../../public/media/img/ingresoPrendas.png";
 const retiroPrendas = "../../../../public/media/img/retiroPrendas.png";
 const maximizar = "../../../../public/media/img/maximizar.png";
 
-export default function AqrueoCaja() {
+export default function ArqueoCaja() {
   const [resumenIsVisible, setResumenIsVisible] = useState(true);
   const [resumenMax, setResumenMax] = useState(true);
   const [imageReverse, setImageReverse] = useState(true);
@@ -38,10 +39,15 @@ export default function AqrueoCaja() {
   const [totalVlrPedido, setTotalVlrPedido] = useState(0);
   /*Traer los pedidos creados de hoy*/
   async function traerPedidosCreadosHoy() {
-    const fecha = new Date().toISOString().split("T")[0];
+    const fecha = new Date();
+    const fechaLocal = new Date(
+      fecha.getTime() - fecha.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
     try {
       const response = await axios.get(
-        `http://localhost:8080/arqueo/pedidos/${fecha}`,
+        `http://localhost:8080/arqueo/pedidos/${fechaLocal}`,
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
@@ -79,19 +85,47 @@ export default function AqrueoCaja() {
   /*Traer los gastos de hoy*/
   const [gastos, setGastos] = useState([]);
   async function traerGastos() {
-    const fecha = new Date().toISOString().split("T")[0];
+    const fecha = new Date();
+    const fechaLocal = new Date(
+      fecha.getTime() - fecha.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+
     try {
       const response = await axios.get(
-        `http://localhost:8080/gastos/detalles/dia?D%C3%ADa=${fecha}`,
+        `http://localhost:8080/gastos/detalles/dia?D%C3%ADa=${fechaLocal}`,
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
           },
         }
       );
-      setGastos(response.data);
+      asignarNameEmpleado(response.data);
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  /*Asignar nombre empleado segun id*/
+  const [empleados, setEmpleados] = useState([]);
+  async function asignarNameEmpleado(gastos) {
+    for (let gasto of gastos) {
+      let id = gasto.empleadoId;
+      try {
+        const response = await axios.get(`http://localhost:8080/users/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        });
+        gasto.empleadoId = `${response.data.name} ${response.data.lastname}`;
+        setTimeout(() => {
+          setGastos(gastos);
+        }, 10);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -99,17 +133,25 @@ export default function AqrueoCaja() {
   const [abonosEfe, setAbonosEfe] = useState(0);
   const [abonosElec, setAbonosElec] = useState(0);
   async function traerAbonos() {
-    const fecha = new Date().toISOString().split("T")[0];
+    const fecha = new Date();
+    const fechaLocal = new Date(
+      fecha.getTime() - fecha.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+
     /*Traer abonos efectivo*/
     try {
+      console.log("Fecha EFEEEEE", fechaLocal);
       const response = await axios.get(
-        `http://localhost:8080/arqueo/abonos/efectivo/${fecha}`,
+        `http://localhost:8080/arqueo/abonos/efectivo/${fechaLocal}`,
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
           },
         }
       );
+      console.log("Abono EFE:", response.data);
       setAbonosEfe(
         response.data.reduce(
           (acumulador, pedido) => acumulador + pedido.monto,
@@ -122,14 +164,16 @@ export default function AqrueoCaja() {
 
     /*Traer abonos electronicos*/
     try {
+      console.log("Fecha ELEEEE", fechaLocal);
       const response = await axios.get(
-        `http://localhost:8080/arqueo/abonos/electronico/${fecha}`,
+        `http://localhost:8080/arqueo/abonos/electronico/${fechaLocal}`,
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
           },
         }
       );
+      console.log("Abono ELE:", response.data);
       setAbonosElec(
         response.data.reduce(
           (acumulador, pedido) => acumulador + pedido.monto,
@@ -233,7 +277,7 @@ export default function AqrueoCaja() {
                   {gastos.map((gasto, index) => (
                     <React.Fragment key={index}>
                       <tr>
-                        <td>Vl. Eduardo Rodrigu</td>
+                        <td>{`Vl. ${gasto.empleadoId}`}</td>
                         <td>{`$ ${new Intl.NumberFormat("es-CO", {
                           style: "decimal",
                           minimumFractionDigits: 0,
@@ -265,7 +309,7 @@ export default function AqrueoCaja() {
                 <tbody>
                   <tr></tr>
                   <tr>
-                    <td>Ord. Entg: 12</td>
+                    <td>Ord. Entg:</td>
                     <td>
                       <b>EFV</b>
                       {` $ ${new Intl.NumberFormat("es-CO", {
@@ -276,12 +320,11 @@ export default function AqrueoCaja() {
                     </td>
                     <td>
                       <b>EFV</b>
-                      $78.000
                     </td>
                     <td rowSpan="3">$236.000</td>
                   </tr>
                   <tr>
-                    <td>Pzs. Entg: 14</td>
+                    <td>Pzs. Entg:</td>
                     <td>
                       <b>ELC</b>
                       {` $ ${new Intl.NumberFormat("es-CO", {
@@ -292,11 +335,10 @@ export default function AqrueoCaja() {
                     </td>
                     <td>
                       <b>ELC</b>
-                      $78.000
                     </td>
                   </tr>
                   <tr>
-                    <td>Gts: -$78.000</td>
+                    <td>Gts:</td>
                     <td>
                       <b>TA</b>
                       {` $ ${new Intl.NumberFormat("es-CO", {
@@ -307,7 +349,6 @@ export default function AqrueoCaja() {
                     </td>
                     <td>
                       <b>TA</b>
-                      $178.000
                     </td>
                   </tr>
                 </tbody>

@@ -164,6 +164,7 @@
 
 .section-resu-entradas td {
   font-size: calc((0.2vw + 3.2vh)* 0.45);
+  text-transform: capitalize;
 }
 
 .section-resu-entradas tr:not(:last-of-type):not(:first-of-type) {
