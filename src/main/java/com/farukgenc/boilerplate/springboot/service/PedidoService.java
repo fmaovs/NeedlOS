@@ -551,30 +551,30 @@ public class PedidoService {
         List<Pedido> pedidos = pedidoRepository.findPedidosByDateBetween(fechaInicio, fechaFin);
         List<PedidoResponse> pedidosResponse = new ArrayList<>();
         for (Pedido pedido : pedidos) {
-            PedidoResponse pedidoResponse = new PedidoResponse();
-            List<DetallePedido> detallePedidoList = detallePedidoRepository.findByPedido_Id(pedido.getId());
-            List<PrendaDTO> prendasPedido = new ArrayList<>();
-            for (DetallePedido detallePedido: detallePedidoList) {
-                PrendaDTO prendaDTO = new PrendaDTO();
-                prendaDTO.setDescripcion(detallePedido.getPrenda().getDescripcion());
-                prendaDTO.setValor(detallePedido.getValorTotal());
-                prendaDTO.setCantidad(detallePedido.getCantidad());
-                prendasPedido.add(prendaDTO);
-            }
+            if (pedido.getDetalles().get(0).getEstadoActual().getEstado()==Estado.EN_PROCESO || pedido.getDetalles().get(0).getEstadoActual().getEstado()==Estado.FINALIZADO){PedidoResponse pedidoResponse = new PedidoResponse();
+                List<DetallePedido> detallePedidoList = detallePedidoRepository.findByPedido_Id(pedido.getId());
+                List<PrendaDTO> prendasPedido = new ArrayList<>();
+                for (DetallePedido detallePedido: detallePedidoList) {
+                    PrendaDTO prendaDTO = new PrendaDTO();
+                    prendaDTO.setDescripcion(detallePedido.getPrenda().getDescripcion());
+                    prendaDTO.setValor(detallePedido.getValorTotal());
+                    prendaDTO.setCantidad(detallePedido.getCantidad());
+                    prendasPedido.add(prendaDTO);
+                }
 
-            pedidoResponse.setId(pedido.getId());
-            pedidoResponse.setCustomerName(pedido.getCustomer().getName());
-            pedidoResponse.setCustomerLastName(pedido.getCustomer().getLastname());
-            pedidoResponse.setTelefono(pedido.getCustomer().getPhone());
-            pedidoResponse.setFechaPedido(pedido.getDate());
-            pedidoResponse.setFechaEntrega(detallePedidoList.get(0).getFechaEntrega());
-            pedidoResponse.setSaldo(pedido.getSaldo());
-            pedidoResponse.setTotalAbonos(pedido.getTotalAbonos());
-            pedidoResponse.setPrenda(prendasPedido);
-            pedidoResponse.setSastre(detallePedidoList.get(0).getUser().getName() + " " + detallePedidoList.get(0).getUser().getLastname());
-            pedidoResponse.setEstado(detallePedidoList.get(0).getEstadoActual().getEstado());
-            pedidoResponse.setConcepto(detallePedidoList.get(0).getConcepto().toString());
-            pedidosResponse.add(pedidoResponse);
+                pedidoResponse.setId(pedido.getId());
+                pedidoResponse.setCustomerName(pedido.getCustomer().getName());
+                pedidoResponse.setCustomerLastName(pedido.getCustomer().getLastname());
+                pedidoResponse.setTelefono(pedido.getCustomer().getPhone());
+                pedidoResponse.setFechaPedido(pedido.getDate());
+                pedidoResponse.setFechaEntrega(detallePedidoList.get(0).getFechaEntrega());
+                pedidoResponse.setSaldo(pedido.getSaldo());
+                pedidoResponse.setTotalAbonos(pedido.getTotalAbonos());
+                pedidoResponse.setPrenda(prendasPedido);
+                pedidoResponse.setSastre(detallePedidoList.get(0).getUser().getName() + " " + detallePedidoList.get(0).getUser().getLastname());
+                pedidoResponse.setEstado(detallePedidoList.get(0).getEstadoActual().getEstado());
+                pedidoResponse.setConcepto(detallePedidoList.get(0).getConcepto().toString());
+                pedidosResponse.add(pedidoResponse);}
         }
         System.out.println(pedidosResponse);
         return pedidosResponse;
