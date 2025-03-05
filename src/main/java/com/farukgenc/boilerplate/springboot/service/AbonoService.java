@@ -113,23 +113,32 @@ public class AbonoService {
 
     public List<AbonoDTO> getAbonosByDateAndMetodoPago_Electronico(String dateString) {
         LocalDate localDate = LocalDate.parse(dateString);
+
         // Convertimos LocalDate a Date con 00:00:00 y 23:59:59
         Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date endOfDay = Date.from(localDate.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
+
+        // Obtener abonos en el rango de fecha
         List<Abono> abonos = abonoRepository.findByFechaBetween(startOfDay, endOfDay);
-        for (Abono abono : abonos) {
-            if (abono.getMetodoPago() == MetodoPago.EFECTIVO) {
-                abonos.remove(abono);
-            }
-        }
-        return abonos.stream().map(abono -> {
+
+        System.out.println("Total de abonos encontrados: " + abonos.size());
+
+        // Filtrar los que NO sean en EFECTIVO (Métodos electrónicos)
+        List<Abono> abonosElectronicos = abonos.stream()
+                .filter(abono -> abono.getMetodoPago() != MetodoPago.EFECTIVO) // Filtrar correctamente
+                .toList();
+
+        System.out.println("Abonos electrónicos encontrados: " + abonosElectronicos.size());
+
+        // Convertir a DTO
+        return abonosElectronicos.stream().map(abono -> {
             AbonoDTO abonoDTO = new AbonoDTO();
             abonoDTO.setIdPedido(abono.getPedido().getId());
             abonoDTO.setMonto(abono.getMonto());
             abonoDTO.setMetodoPago(abono.getMetodoPago().name());
             return abonoDTO;
         }).toList();
-
     }
+
 
 }
