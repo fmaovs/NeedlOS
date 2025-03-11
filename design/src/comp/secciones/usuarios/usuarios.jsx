@@ -62,7 +62,7 @@ export default function Usuarios() {
         "http://localhost:8080/register",
         {
           ...formData,
-          user_role: formData.user_role.toUpperCase(),
+          user_role: formData.user_role.toUpperCase() ,
           cargo: formData.cargo.toUpperCase(),
         },
         {
