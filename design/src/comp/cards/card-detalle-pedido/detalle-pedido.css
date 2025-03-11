@@ -1,5 +1,5 @@
 .cont-tarjeta-detalles {
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   left: 44%;

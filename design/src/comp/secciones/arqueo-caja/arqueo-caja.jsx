@@ -82,8 +82,44 @@ export default function ArqueoCaja() {
     }
   }
 
+  /*Traer los pedidos entregados de hoy*/
+  const [ordEntregadas, setOrdenesEntregadas] = useState(0);
+  const [pzsEntregadas, setPzsEntregadas] = useState(0);
+  const [pedidosEntregados, setPedidosEntregados] = useState([]);
+  async function traerPedidosEntregado() {
+    const fecha = new Date();
+    const fechaLocal = new Date(
+      fecha.getTime() - fecha.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/arqueo/pedidos/abonos/${fechaLocal}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+      setPedidosEntregados(response.data);
+      setOrdenesEntregadas(response.data.length);
+      setPzsEntregadas(
+        response.data.reduce(
+          (total, pedido) =>
+            total +
+            pedido.prenda.reduce((sum, prenda) => sum + prenda.cantidad, 0),
+          0
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   /*Traer los gastos de hoy*/
   const [gastos, setGastos] = useState([]);
+  const [totGastos, setTotGastos] = useState(null);
   async function traerGastos() {
     const fecha = new Date();
     const fechaLocal = new Date(
@@ -100,6 +136,9 @@ export default function ArqueoCaja() {
             Authorization: `Bearer ${tokenPass}`,
           },
         }
+      );
+      setTotGastos(
+        response.data.reduce((acumulador, gasto) => acumulador + gasto.monto, 0)
       );
       asignarNameEmpleado(response.data);
     } catch (error) {
@@ -122,17 +161,18 @@ export default function ArqueoCaja() {
         gasto.empleadoId = `${response.data.name} ${response.data.lastname}`;
         setTimeout(() => {
           setGastos(gastos);
-        }, 10);
+        }, 20);
       } catch (error) {
         console.error(error);
       }
     }
   }
 
-  /*Traer los abonos efectivo*/
-  const [abonosEfe, setAbonosEfe] = useState(0);
-  const [abonosElec, setAbonosElec] = useState(0);
-  async function traerAbonos() {
+  /*Traer los abonos y pago efectivo*/
+  const [ingresosEfetivo, setIngresosEfectivo] = useState(0);
+  const [ingresosElectronico, setIngresosElectronico] = useState(0);
+  /*Traer pago/abono efectivo*/
+  async function traerEfectivo() {
     const fecha = new Date();
     const fechaLocal = new Date(
       fecha.getTime() - fecha.getTimezoneOffset() * 60000
@@ -140,9 +180,11 @@ export default function ArqueoCaja() {
       .toISOString()
       .split("T")[0];
 
+    let abonoEfectivo;
+    let pagoEfectivo;
+
     /*Traer abonos efectivo*/
     try {
-      console.log("Fecha EFEEEEE", fechaLocal);
       const response = await axios.get(
         `http://localhost:8080/arqueo/abonos/efectivo/${fechaLocal}`,
         {
@@ -151,20 +193,46 @@ export default function ArqueoCaja() {
           },
         }
       );
-      console.log("Abono EFE:", response.data);
-      setAbonosEfe(
-        response.data.reduce(
-          (acumulador, pedido) => acumulador + pedido.monto,
-          0
-        )
+      setIngresosEfectivo(
+        ingresosEfetivo +
+          response.data.reduce(
+            (acumulador, pedido) => acumulador + pedido.monto,
+            0
+          )
       );
     } catch (error) {
       console.error(error);
     }
 
+    /*Traer pagos efectivo*/
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/arqueo/abonos/entregados/efectivo/${fechaLocal}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /*Traer abono/pago electronico*/
+  async function traerEletronico() {
+    const fecha = new Date();
+    const fechaLocal = new Date(
+      fecha.getTime() - fecha.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split("T")[0];
+
+    let abonoElectronico;
+    let pagoElectronico;
+
     /*Traer abonos electronicos*/
     try {
-      console.log("Fecha ELEEEE", fechaLocal);
       const response = await axios.get(
         `http://localhost:8080/arqueo/abonos/electronico/${fechaLocal}`,
         {
@@ -173,12 +241,23 @@ export default function ArqueoCaja() {
           },
         }
       );
-      console.log("Abono ELE:", response.data);
-      setAbonosElec(
-        response.data.reduce(
-          (acumulador, pedido) => acumulador + pedido.monto,
-          0
-        )
+      abonoElectronico = response.data.reduce(
+        (acumulador, pedido) => acumulador + pedido.monto,
+        0
+      );
+    } catch (error) {
+      console.error(error);
+    }
+
+    /*Traer pagos electronicos*/
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/arqueo/abonos/electronico/${fechaLocal}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+          },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -187,9 +266,12 @@ export default function ArqueoCaja() {
 
   useEffect(() => {
     traerPedidosCreadosHoy();
+    traerPedidosEntregado();
     traerGastos();
-    traerAbonos();
+    traerEfectivo();
+    traerEletronico();
   }, []);
+
   return (
     <>
       <Encabezado
@@ -296,59 +378,52 @@ export default function ArqueoCaja() {
                 </tbody>
               </table>
             </section>
+
+            {/*Tabla resumen ingresos*/}
             <section className="section-resu-entradas resu-ingresos">
               <table>
                 <thead>
                   <tr>
                     <th>Concepto</th>
-                    <th>Abonos</th>
-                    <th>Pagos</th>
+                    <th>Ingreso Neto</th>
                     <th>Ingreso Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr></tr>
                   <tr>
-                    <td>Ord. Entg:</td>
                     <td>
-                      <b>EFV</b>
-                      {` $ ${new Intl.NumberFormat("es-CO", {
-                        style: "decimal",
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      }).format(abonosEfe)}`}
+                      <b>ORD. ENTG</b>
+                      {` ${ordEntregadas}`}
                     </td>
                     <td>
                       <b>EFV</b>
+                      {/*Ingresos efectivo*/}
                     </td>
-                    <td rowSpan="3">$236.000</td>
+                    <td rowSpan="3">$ 236.000</td>
                   </tr>
                   <tr>
-                    <td>Pzs. Entg:</td>
+                    <td>
+                      <b>PZS. ENTG</b>
+                      {` ${pzsEntregadas}`}
+                    </td>
                     <td>
                       <b>ELC</b>
+                      {/*Ingresos electronico*/}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>GTS</b>
                       {` $ ${new Intl.NumberFormat("es-CO", {
                         style: "decimal",
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 0,
-                      }).format(abonosElec)}`}
-                    </td>
-                    <td>
-                      <b>ELC</b>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Gts:</td>
-                    <td>
-                      <b>TA</b>
-                      {` $ ${new Intl.NumberFormat("es-CO", {
-                        style: "decimal",
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      }).format(abonosEfe + abonosElec)}`}
+                      }).format(totGastos)}`}
                     </td>
                     <td>
                       <b>TA</b>
+                      {/*Total*/}
                     </td>
                   </tr>
                 </tbody>
@@ -422,14 +497,45 @@ export default function ArqueoCaja() {
                 <th className="th">N° Ord</th>
                 <th className="th">Sastre Asig.</th>
                 <th className="th">Pzs</th>
-                <th className="th">Mvto</th>
                 <th className="th">Vlr. Ord</th>
                 <th className="th">Cliente</th>
                 <th className="th">Fecha</th>
               </tr>
               <tr className="separacion-fila-head"></tr>
             </thead>
-            <tbody className="body-tabla"></tbody>
+            <tbody className="body-tabla">
+              {pedidosEntregados.map((pedidoEntregado) => (
+                <React.Fragment key={pedidoEntregado.id}>
+                  <tr className="tr-body">
+                    <td className="td">{pedidoEntregado.id}</td>
+                    <td className="td">{pedidoEntregado.sastre}</td>
+                    <td className="td">
+                      {pedidoEntregado.prenda.reduce(
+                        (acc, item) => acc + item.cantidad,
+                        0
+                      )}
+                    </td>
+                    <td className="td">{`$ ${new Intl.NumberFormat("es-CO", {
+                      style: "decimal",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    }).format(pedidoEntregado.totalAbonos)}`}</td>
+                    <td className="td">{`${pedidoEntregado.customerName} ${pedidoEntregado.customerLastName}`}</td>
+                    <td className="td">
+                      {new Date(pedidoEntregado.fechaPedido).toLocaleDateString(
+                        "es-CO",
+                        {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                        }
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="separacion-fila"></tr>
+                </React.Fragment>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
