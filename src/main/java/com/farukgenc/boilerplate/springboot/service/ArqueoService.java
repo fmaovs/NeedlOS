@@ -61,28 +61,9 @@ public class ArqueoService {
         return pedidos;
     }
 
-    public List<PedidoResponse> obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(String date) {
+    public List<AbonoDTO> obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(String date) {
         List<AbonoDTO> abonos = abonoService.getAbonosByDateAndMetodoPago_Efectivo(date);
-        Set<Long> pedidosProcesados = new HashSet<>(); // Para evitar duplicados
-        List<PedidoResponse> pedidos = new ArrayList<>();
-
-        for (AbonoDTO abono : abonos) {
-            if (!pedidosProcesados.contains(abono.getIdPedido())) { // Verifica si ya fue agregado
-                System.out.println("Abono ID: " + abono.getIdPedido() + ", Metodo de Pago: " + abono.getMetodoPago());
-                if (abono.getMetodoPago().equals(MetodoPago.EFECTIVO.name())) {
-                    Optional<PedidoResponse> pedido = pedidoService.findById(abono.getIdPedido());
-                    if (pedido.isPresent()) {
-                        PedidoResponse p = pedido.get();
-                        if (p.getEstado() == Estado.ENTREGADO && p.getSaldo() == 0) {
-                            System.out.println("Pedido ID: " + p.getId() + ", Estado: " + p.getEstado());
-                            pedidos.add(p);
-                            pedidosProcesados.add(p.getId()); // Marcar como agregado
-                        }
-                    }
-                }
-            }
-        }
-        return pedidos;
+        return abonos;
     }
 
     public List<PedidoResponse> obtenerPedidosEntregadosConAbonosDelDiaEnElectronicos(String date) {
