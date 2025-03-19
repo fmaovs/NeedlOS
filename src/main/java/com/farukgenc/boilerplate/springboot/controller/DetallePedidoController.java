@@ -17,8 +17,4 @@ public class DetallePedidoController {
     @Autowired
     private DetallePedidoService detallePedidoService;
 
-
-
-
-
 }

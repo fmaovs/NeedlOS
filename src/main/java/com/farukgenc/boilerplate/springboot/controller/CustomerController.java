@@ -42,7 +42,7 @@ public class CustomerController {
         return ResponseEntity.ok().body(newCustomer);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<String> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO updatedCustomer){
         try{
             Customer updated = customerService.update(id, updatedCustomer );
@@ -52,7 +52,7 @@ public class CustomerController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
         Optional<Customer> customer = customerService.findById(id);
         if (customer.isPresent()) {
