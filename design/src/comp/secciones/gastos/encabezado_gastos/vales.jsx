@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './vales.css';
+import excel from '../../../../../public/media/img/excel.png'
+import lupa from '../../../../../public/media/img/buscar.png'
 
 export const Vales = () => {
   const [formData, setFormData] = useState({
