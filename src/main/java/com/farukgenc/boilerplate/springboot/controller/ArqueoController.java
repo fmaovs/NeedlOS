@@ -70,6 +70,7 @@ public class ArqueoController {
     @GetMapping("abonos/efectivo/{date}")
     public ResponseEntity<List<AbonoDTO>> obtenerAbonosPorMetodoPagoEnEfectivoYFecha(@PathVariable String date) {
         List<AbonoDTO> abonos = abonoService.getAbonosByDateAndMetodoPago_Efectivo(date);
+        System.out.println(abonos);
         return ResponseEntity.ok(abonos);
     }
 

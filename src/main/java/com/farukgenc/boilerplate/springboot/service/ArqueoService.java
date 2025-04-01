@@ -67,6 +67,7 @@ public class ArqueoService {
         for (AbonoDTO abonito: abonosDia){
             Optional<PedidoResponse> pedidoResponse = pedidoService.findById(abonito.getIdPedido());
             if (pedidoResponse.isPresent() && pedidoResponse.get().getEstado().toString().equals("ENTREGADO")){
+                System.out.println(abonito);
                 abonos.add(abonito);
             }
         }
@@ -74,11 +75,14 @@ public class ArqueoService {
     }
 
     public List<AbonoDTO> obtenerAbonosPedidosEntregadosConAbonosDelDiaEnElectronicos(String date) {
+        System.out.println(date);
         List<AbonoDTO> abonosDia = abonoService.getAbonosByDateAndMetodoPago_Electronico(date);
         List<AbonoDTO> abonos = new ArrayList<>();
         for (AbonoDTO abonito: abonosDia){
-            Optional<PedidoResponse> pedidoResponse = pedidoService.findById(abonito.getIdPedido());
-            if (pedidoResponse.isPresent() && pedidoResponse.get().getEstado().toString().equals("ENTREGADO")){
+            PedidoResponse pedidoResponse = pedidoService.findById(abonito.getIdPedido()).orElseThrow();
+            System.out.println("pedido del abono"+ pedidoResponse);
+            if (pedidoResponse.getEstado().toString().equals("ENTREGADO")){
+                System.out.println(abonito);
                 abonos.add(abonito);
             }
         }

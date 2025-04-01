@@ -1,9 +1,6 @@
 package com.farukgenc.boilerplate.springboot.service;
 
-import com.farukgenc.boilerplate.springboot.model.Abono;
-import com.farukgenc.boilerplate.springboot.model.DetallePedido;
-import com.farukgenc.boilerplate.springboot.model.MetodoPago;
-import com.farukgenc.boilerplate.springboot.model.Pedido;
+import com.farukgenc.boilerplate.springboot.model.*;
 import com.farukgenc.boilerplate.springboot.repository.AbonoRepository;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
@@ -17,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -101,7 +99,14 @@ public class AbonoService {
         Date startOfDay = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date endOfDay = Date.from(localDate.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
         List<Abono> abonos = abonoRepository.findByFechaBetweenAndMetodoPago(startOfDay, endOfDay, metodoPago);
-        return abonos.stream().map(abono -> {
+        List<Abono> abonosPendientes = new ArrayList<>();
+        for (Abono abonoFiltrado : abonos){
+            if (abonoFiltrado.getPedido().getDetalles().get(0).getEstadoActual().getEstado().toString().equals("EN_PROCESO")
+                    || abonoFiltrado.getPedido().getDetalles().get(0).getEstadoActual().getEstado().toString().equals("FINALIZADO")) {
+                abonosPendientes.add(abonoFiltrado);
+            }
+        }
+        return abonosPendientes.stream().map(abono -> {
             AbonoDTO abonoDTO = new AbonoDTO();
             abonoDTO.setIdPedido(abono.getPedido().getId());
             abonoDTO.setMonto(abono.getMonto());
@@ -136,6 +141,7 @@ public class AbonoService {
             abonoDTO.setIdPedido(abono.getPedido().getId());
             abonoDTO.setMonto(abono.getMonto());
             abonoDTO.setMetodoPago(abono.getMetodoPago().name());
+            System.out.println(abonoDTO);
             return abonoDTO;
         }).toList();
     }
