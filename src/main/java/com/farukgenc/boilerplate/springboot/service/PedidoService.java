@@ -81,6 +81,7 @@ public class PedidoService {
             detalle.setCantidad(detalleDTO.getCantidad());
             detalle.setFechaEntrega(pedidoDTO.getFechaEntrega());
             detalle.calcularValorTotal(); // Calcula el valor total
+            detalle.setDetallePedido(detalleDTO.getDetallePedido());
             String concepto = detalleDTO.getConcepto();
             detalle.setConcepto(Concepto.valueOf(concepto.toUpperCase()));
             detallePedidoRepository.save(detalle); // Persistir el detalle primero
@@ -172,8 +173,6 @@ public class PedidoService {
         // Convertir el mapa a una lista de resultados
         return new ArrayList<>(pedidosMap.values());
     }
-
-
 
 
     public List<PedidoResponse> findAllByEstado(String estado) {

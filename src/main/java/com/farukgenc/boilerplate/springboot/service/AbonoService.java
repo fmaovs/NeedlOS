@@ -42,7 +42,6 @@ public class AbonoService {
             return Optional.of(abonoDTO);
         }
     }
-
     public List<AbonoDTO> getAbonos() {
         List<Abono> abonos = abonoRepository.findAll();
         return abonos.stream().map(abono -> {
