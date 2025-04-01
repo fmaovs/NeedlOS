@@ -140,5 +140,14 @@ public class AbonoService {
         }).toList();
     }
 
+    public AbonoDTO getAbonoByIdPedido(Long idPedido){
+        Abono abono = abonoRepository.findByPedido_Id(idPedido);
+        AbonoDTO abonoDTO = new AbonoDTO();
+        abonoDTO.setIdPedido(abono.getPedido().getId());
+        abonoDTO.setMonto(abono.getMonto());
+        abonoDTO.setMetodoPago(abono.getMetodoPago().toString());
+        return abonoDTO;
+    }
+
 
 }

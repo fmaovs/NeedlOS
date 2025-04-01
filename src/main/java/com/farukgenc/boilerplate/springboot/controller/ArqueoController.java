@@ -80,15 +80,15 @@ public class ArqueoController {
     }
 
     @GetMapping("abonos/entregados/efectivo/{date}")
-    public ResponseEntity<List<PedidoResponse>> obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(@PathVariable String date) {
-        List<PedidoResponse> pedidos = arqueoService.obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(date);
-        return ResponseEntity.ok(pedidos);
+    public ResponseEntity<List<AbonoDTO>> obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(@PathVariable String date) {
+        List<AbonoDTO> abonos = arqueoService.obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(date);
+        return ResponseEntity.ok(abonos);
     }
 
     @GetMapping("abonos/entregados/electronico/{date}")
-    public ResponseEntity<List<PedidoResponse>> obtenerPedidosEntregadosConAbonosDelDiaEnElectronico(@PathVariable String date) {
-        List<PedidoResponse> pedidos = arqueoService.obtenerPedidosEntregadosConAbonosDelDiaEnElectronicos(date);
-        return ResponseEntity.ok(pedidos);
+    public ResponseEntity<List<AbonoDTO>> obtenerPedidosEntregadosConAbonosDelDiaEnElectronico(@PathVariable String date) {
+        List<AbonoDTO> abonos = arqueoService.obtenerAbonosPedidosEntregadosConAbonosDelDiaEnElectronicos(date);
+        return ResponseEntity.ok(abonos);
     }
 
 }

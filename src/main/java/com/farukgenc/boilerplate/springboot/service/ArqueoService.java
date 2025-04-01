@@ -61,51 +61,27 @@ public class ArqueoService {
         return pedidos;
     }
 
-    public List<PedidoResponse> obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(String date) {
-        List<AbonoDTO> abonos = abonoService.getAbonosByDateAndMetodoPago_Efectivo(date);
-        Set<Long> pedidosProcesados = new HashSet<>(); // Para evitar duplicados
-        List<PedidoResponse> pedidos = new ArrayList<>();
-
-        for (AbonoDTO abono : abonos) {
-            if (!pedidosProcesados.contains(abono.getIdPedido())) { // Verifica si ya fue agregado
-                System.out.println("Abono ID: " + abono.getIdPedido() + ", Metodo de Pago: " + abono.getMetodoPago());
-                if (abono.getMetodoPago().equals(MetodoPago.EFECTIVO.name())) {
-                    Optional<PedidoResponse> pedido = pedidoService.findById(abono.getIdPedido());
-                    if (pedido.isPresent()) {
-                        PedidoResponse p = pedido.get();
-                        if (p.getEstado() == Estado.ENTREGADO && p.getSaldo() == 0) {
-                            System.out.println("Pedido ID: " + p.getId() + ", Estado: " + p.getEstado());
-                            pedidos.add(p);
-                            pedidosProcesados.add(p.getId()); // Marcar como agregado
-                        }
-                    }
-                }
+    public List<AbonoDTO> obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(String date) {
+        List<AbonoDTO> abonosDia = abonoService.getAbonosByDateAndMetodoPago_Efectivo(date);
+        List<AbonoDTO> abonos = new ArrayList<>();
+        for (AbonoDTO abonito: abonosDia){
+            Optional<PedidoResponse> pedidoResponse = pedidoService.findById(abonito.getIdPedido());
+            if (pedidoResponse.isPresent() && pedidoResponse.get().getEstado().toString().equals("ENTREGADO")){
+                abonos.add(abonito);
             }
         }
-        return pedidos;
+        return abonos;
     }
 
-    public List<PedidoResponse> obtenerPedidosEntregadosConAbonosDelDiaEnElectronicos(String date) {
-        List<AbonoDTO> abonos = abonoService.getAbonosByDateAndMetodoPago_Electronico(date);
-        Set<Long> pedidosProcesados = new HashSet<>(); // Para evitar duplicados
-        List<PedidoResponse> pedidos = new ArrayList<>();
-
-        for (AbonoDTO abono : abonos) {
-            if (!pedidosProcesados.contains(abono.getIdPedido())) { // Verifica si ya fue agregado
-                if (abono.getMetodoPago().equals(MetodoPago.BANCOLOMBIA.name()) || abono.getMetodoPago().equals(MetodoPago.NEQUI.name()) || abono.getMetodoPago().equals(MetodoPago.DAVIPLATA.name())) {
-                    System.out.println("Abono ID: " + abono.getIdPedido() + ", Metodo de Pago: " + abono.getMetodoPago());
-                    Optional<PedidoResponse> pedido = pedidoService.findById(abono.getIdPedido());
-                    if (pedido.isPresent()) {
-                        PedidoResponse p = pedido.get();
-                        if (p.getEstado() == Estado.ENTREGADO && p.getSaldo() == 0) {
-                            System.out.println("Pedido ID: " + p.getId() + ", Estado: " + p.getEstado());
-                            pedidos.add(p);
-                            pedidosProcesados.add(p.getId()); // Marcar como agregado
-                        }
-                    }
-                }
+    public List<AbonoDTO> obtenerAbonosPedidosEntregadosConAbonosDelDiaEnElectronicos(String date) {
+        List<AbonoDTO> abonosDia = abonoService.getAbonosByDateAndMetodoPago_Electronico(date);
+        List<AbonoDTO> abonos = new ArrayList<>();
+        for (AbonoDTO abonito: abonosDia){
+            Optional<PedidoResponse> pedidoResponse = pedidoService.findById(abonito.getIdPedido());
+            if (pedidoResponse.isPresent() && pedidoResponse.get().getEstado().toString().equals("ENTREGADO")){
+                abonos.add(abonito);
             }
         }
-    return pedidos;
+        return abonos;
     }
 }
