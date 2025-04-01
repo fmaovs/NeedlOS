@@ -40,6 +40,9 @@ public class DetallePedido {
     @Column(nullable = false)
     private double valorTotal;
 
+    @Column(nullable = false)
+    private String detallePedido;
+
     @Enumerated(EnumType.STRING)
     private Concepto concepto;
 
