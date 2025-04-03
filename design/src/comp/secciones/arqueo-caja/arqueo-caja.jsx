@@ -193,12 +193,18 @@ export default function ArqueoCaja() {
           },
         }
       );
-      setIngresosEfectivo(
-        ingresosEfetivo +
-          response.data.reduce(
-            (acumulador, pedido) => acumulador + pedido.monto,
-            0
-          )
+
+      console.log(
+        "Abono Efectivo: ",
+        response.data.reduce(
+          (acumulador, pedido) => acumulador + pedido.monto,
+          0
+        )
+      );
+
+      abonoEfectivo = response.data.reduce(
+        (acumulador, pedido) => acumulador + pedido.monto,
+        0
       );
     } catch (error) {
       console.error(error);
@@ -214,9 +220,24 @@ export default function ArqueoCaja() {
           },
         }
       );
+
+      console.log(
+        "Pago Electronico: ",
+        response.data.reduce(
+          (acumulador, pedido) => acumulador + pedido.monto,
+          0
+        )
+      );
+
+      pagoEfectivo = response.data.reduce(
+        (acumulador, pedido) => acumulador + pedido.monto,
+        0
+      );
     } catch (error) {
       console.error(error);
     }
+
+    setIngresosEfectivo(abonoEfectivo + pagoEfectivo);
   }
 
   /*Traer abono/pago electronico*/
@@ -241,6 +262,15 @@ export default function ArqueoCaja() {
           },
         }
       );
+
+      console.log(
+        "Abono Electronico: ",
+        response.data.reduce(
+          (acumulador, pedido) => acumulador + pedido.monto,
+          0
+        )
+      );
+
       abonoElectronico = response.data.reduce(
         (acumulador, pedido) => acumulador + pedido.monto,
         0
@@ -259,9 +289,24 @@ export default function ArqueoCaja() {
           },
         }
       );
+
+      console.log(
+        "Pago Electronico: ",
+        response.data.reduce(
+          (acumulador, pedido) => acumulador + pedido.monto,
+          0
+        )
+      );
+
+      pagoElectronico = response.data.reduce(
+        (acumulador, pedido) => acumulador + pedido.monto,
+        0
+      );
     } catch (error) {
       console.error(error);
     }
+
+    setIngresosElectronico(abonoElectronico + pagoElectronico);
   }
 
   useEffect(() => {
@@ -398,9 +443,13 @@ export default function ArqueoCaja() {
                     </td>
                     <td>
                       <b>EFV</b>
-                      {/*Ingresos efectivo*/}
+                      {` $ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(ingresosEfetivo)}`}
                     </td>
-                    <td rowSpan="3">$ 236.000</td>
+                    <td rowSpan="3"></td>
                   </tr>
                   <tr>
                     <td>
@@ -409,7 +458,11 @@ export default function ArqueoCaja() {
                     </td>
                     <td>
                       <b>ELC</b>
-                      {/*Ingresos electronico*/}
+                      {` $ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(ingresosElectronico)}`}
                     </td>
                   </tr>
                   <tr>
@@ -423,7 +476,11 @@ export default function ArqueoCaja() {
                     </td>
                     <td>
                       <b>TA</b>
-                      {/*Total*/}
+                      {` $ ${new Intl.NumberFormat("es-CO", {
+                        style: "decimal",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(ingresosEfetivo + ingresosElectronico)}`}
                     </td>
                   </tr>
                 </tbody>
