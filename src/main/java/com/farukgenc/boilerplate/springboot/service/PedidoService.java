@@ -8,6 +8,21 @@ import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import com.farukgenc.boilerplate.springboot.security.dto.PrendaDTO;
 import com.farukgenc.boilerplate.springboot.security.service.UserService;
 import com.farukgenc.boilerplate.springboot.security.service.UserServiceImpl;
+import com.itextpdf.barcodes.Barcode128;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.transaction.Transactional;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +31,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.RowSet;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -124,6 +141,7 @@ public class PedidoService {
             PrendaDTO prendaDTO = new PrendaDTO();
             prendaDTO.setDescripcion(detallePedido.getPrenda().getDescripcion());
             prendaDTO.setValor(detallePedido.getValorTotal());
+            prendaDTO.setDetalle_pedido(detallePedido.getDetallePedido());
             prendaDTO.setCantidad(detallePedido.getCantidad());
             prendasPedido.add(prendaDTO);
         }
@@ -229,6 +247,7 @@ public class PedidoService {
             prendaDTO.setDescripcion(detallePedido.getPrenda().getDescripcion());
             prendaDTO.setValor(detallePedido.getValorTotal());
             prendaDTO.setCantidad(detallePedido.getCantidad());
+            prendaDTO.setDetalle_pedido(detallePedido.getDetallePedido());
             prendasPedido.add(prendaDTO);
         }
         pedidoResponse.setPrenda(prendasPedido);
@@ -629,6 +648,99 @@ public class PedidoService {
             }
         }
         return cantidadPrendas;
+    }
+
+
+
+
+    /*____________________intento para crear PDF de orden_____________________ */
+
+    public byte[] pdfOrden(PedidoResponse pedidoResponse) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            PdfWriter writer = new PdfWriter(outputStream);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+
+            /*tamaño y margenes*/
+            PageSize pdfSize = new PageSize(200, 400);
+            Document document = new Document(pdfDocument, pdfSize);
+            document.setMargins(10,10,10,10);
+
+            /*estilos para las fuentes */
+            PdfFont boldFont = PdfFontFactory.createFont("Helvetica-Bold");
+            document.setFont(boldFont);
+
+            //fromato de las fechas
+            DateTimeFormatter formartof = DateTimeFormatter.ofPattern("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
+
+            /*------------------------posicion para logo {CAMBIARLO A IMAGEN}-------------------*/
+            document.add(new Paragraph("LOGO-EMPRESA-CAMI")
+                    .setFontSize(20).
+                    setFont(boldFont).
+                    setHorizontalAlignment(HorizontalAlignment.CENTER));
+
+
+            document.add(new Paragraph(String.valueOf(pedidoResponse.getId()))
+                    .setFont(boldFont)
+                    .setFontSize(50)
+                    .setPadding(0)
+                    .setMargin(1)
+                    .setTextAlignment(TextAlignment.CENTER).setBorder(new SolidBorder(1)));
+
+            /*codigo de barras*/
+            Barcode128 barcode128 = new Barcode128(pdfDocument);
+            barcode128.setCode(String.valueOf(pedidoResponse.getId()));
+            barcode128.setFont(null);
+            document.add(new Image(barcode128.createFormXObject(pdfDocument))
+                    .setWidth(90).
+                    setHorizontalAlignment(HorizontalAlignment.CENTER));
+
+            document.add(new Paragraph("Cliente\n" + pedidoResponse.getCustomerName() + " " + pedidoResponse.getCustomerLastName())
+                    .setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Telefono: " + pedidoResponse.getTelefono()));
+            document.add(new Paragraph("Fecha: " + pedidoResponse.getFechaPedido()));
+            document.add(new LineSeparator(new SolidLine(1)));
+
+            /*----prendas  del pedido -------------*/
+
+            float[] tamañosColumnas ={5, 135, 40};
+            Table table = new Table(tamañosColumnas);
+            table.addCell("Cant.");
+            table.addCell("Detalles.");
+            table.addCell("Valor $");
+
+
+            for (PrendaDTO prenda : pedidoResponse.getPrenda()) {
+                table.addCell(String.valueOf(prenda.getCantidad()));
+                table.addCell(prenda.getDescripcion()+" " + prenda.getDetalle_pedido() );
+                table.addCell("" + prenda.getValor() / prenda.getCantidad());
+            }
+
+            table.addCell("");
+            table.addCell("Total");
+            table.addCell("" + pedidoResponse.getPrenda().stream()
+                    .mapToDouble(prenda -> prenda.getValor())
+                    .sum());
+            document.add(table);
+            document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()));
+            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()));
+            document.add(new LineSeparator(new SolidLine(1)));
+            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Para Entregar: " + pedidoResponse.getFechaEntrega()).setTextAlignment(TextAlignment.CENTER));
+            barcode128.setCode(String.valueOf(pedidoResponse.getFechaEntrega()));
+            document.add(new Image(barcode128.createFormXObject(pdfDocument))
+                    .setWidth(120).
+                    setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine(1)));
+
+            document.add(new Paragraph("fecha 2" + LocalDateTime.now(ZoneId.systemDefault()).format(formartof)));
+            document.add(new Paragraph("Desarrollado por grupo NeedlOS"));
+
+            document.close();
+            return outputStream.toByteArray();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generando el PDF", e);
+        }
     }
 
 

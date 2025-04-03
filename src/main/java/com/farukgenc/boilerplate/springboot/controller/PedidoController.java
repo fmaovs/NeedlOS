@@ -178,4 +178,22 @@ public class PedidoController {
         pedidoService.cambiarSastre(id, sastre);
         return ResponseEntity.ok("Sastre reasignado correctamente");
     }
+
+
+
+    /*____________________intento para crear PDF de orden_____________________ */
+
+    @GetMapping("/{Id}/pdf")
+    public ResponseEntity<byte[]> generatePdfOrden(@RequestParam Long id) {
+        PedidoResponse pedidoResponse = pedidoService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+
+        byte[] pdfContent = pedidoService.pdfOrden(pedidoResponse);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-" + id + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfContent);
+    }
+
 }
