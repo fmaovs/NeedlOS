@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./registroUsuario.css";
+import "./registroUsuario.css"
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
@@ -179,13 +179,13 @@ export function RegistroUsuario({ onClose, onSubmit }) {
            {errors.phone && <p className="from-error">{errors.phone}</p>}
          </div>
 
-         <div className="from-group">
+         <div className="from-group ">
           <label className="from-label">Rol</label>
           <select 
           name="user_role"
           value={formData.user_role}
           onChange={handleChange}
-          className={`form-input ${errors.user_role? 'form-input-error' : ''}`}
+          className={`form-input-rol ${errors.user_role? 'form-input-error' : ''}`}
           >
             <option value="">Seleccione un rol</option>
             <option value="ADMIN">Administrador</option>
@@ -200,7 +200,7 @@ export function RegistroUsuario({ onClose, onSubmit }) {
               name="cargo"
               value={formData.cargo}
               onChange={handleChange}
-              className={`form-input ${errors.cargo ? 'form-input-error' : ''}`}
+              className={`form-cargo ${errors.cargo ? 'form-input-error' : ''}`}
             >
               <option value="">Seleccione un cargo</option>
               <option value="ADMIN">ADMIN</option>

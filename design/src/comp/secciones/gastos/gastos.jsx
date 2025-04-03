@@ -6,9 +6,9 @@ import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
 import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
 
-// Importación corregida
+// Importación de las pestañas 
 import { GastosDiarios as TbGastosDiarios } from "./encabezado_gastos/gastosDiarios.jsx";
-import { Vales as TbVales } from "./encabezado_gastos/vales.jsx";
+import  TbVales from "./encabezado_gastos/vales.jsx"
 
 // Rutas de imágenes corregidas
 const img = {

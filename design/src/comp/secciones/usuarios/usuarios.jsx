@@ -3,6 +3,7 @@ import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import ConUsuari from "./con-usuario.jsx";
 import "./usuarios.css";
+import {EditarUsuario} from "./editar-usuario.jsx";
 import { RegistroUsuario } from "./registro-usuario.jsx";
 import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
@@ -11,13 +12,14 @@ const ima = {
   admi: "../../../../public/media/img/administrador.png",
   metro: "../../../../public/media/img/metro.png",
   editar: "../../../../public/media/img/editar.png",
-  basura: "../../../../public/media/img/basura.png",
-};
+};  
 
 export default function Usuarios() {
   const [admins, setAdmins] = useState([]);
   const [sastres, setSastres] = useState([]);
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
+  const [mostrarEditar, setMostrarEditar] = useState(false);
+  const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
@@ -83,24 +85,37 @@ export default function Usuarios() {
     }
   };
 
-  // Eliminar usuario
-  const eliminarUsuario = async (userId) => {
-    if (!window.confirm("¿Estás seguro que deseas eliminar este usuario?")) {
-      return;
-    }
+  //Editar usuario
+  const actualizarUsuario = async () => {
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+
     try {
-      await axios.delete(`http://localhost:8080/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${tokenPass}`,
+      const response = await axios.put(
+        `http://localhost:8080/users/update/${userData.id}`,
+        {
+          ...formData,
+          user_role: formData.user_role.toUpperCase(),
+          cargo: formData.cargo.toUpperCase(),
         },
-      });
-      await cargarUsuarios();
-    } catch (error) {
-      console.error("Error al eliminar el usuario", error);
-      alert(
-        "Error al eliminar usuario: " +
-          (error.response?.data?.message || error.message)
+        {
+          headers: {
+            Authorization: `Bearer ${tokenPass}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
+
+      if (response.status === 200) {
+        await cargarUsuarios(); // Recargar la lista de usuarios
+        onClose(); // Cerrar modal
+      }
+    } catch (error) {
+      console.error("Error al actualizar usuario:", error);
+      alert("Error al actualizar usuario: " + (error.response?.data?.message || error.message));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -123,13 +138,11 @@ export default function Usuarios() {
             <td className="td-user">{usuario.phone}</td>
             <td>
               <div className="acciones">
-                <button className="btn-editar">
-                <img src={ima.editar} alt="Editar" className="icono-editar" />
-                </button>
-                <button className="btn-eliminar"
-                  onClick={() => eliminarUsuario(usuario.id)}
+                <button 
+                className="btn-editar"
+                onClick={() => handleEditarClick(usuario)}
                 >
-                <img src={ima.basura} alt="Eliminar" className="icono-eliminar" />
+                <img src={ima.editar} alt="Editar" className="icono-editar" />
                 </button>
               </div>
             </td>
@@ -171,6 +184,16 @@ export default function Usuarios() {
         <RegistroUsuario
           onClose={() => setMostrarRegistro(false)}
           onSubmit={registrarUsuarios}
+        />
+      )}
+      {mostrarEditar && actualizarUsuario && (
+        <EditarUsuario
+          usuario={actualizarUsuario}
+          onClose={() => {
+            setMostrarEditar(false);
+            setUsuarioEditando(null);
+          }}
+          onSubmit={handleEditarSubmit} 
         />
       )}
     </>
