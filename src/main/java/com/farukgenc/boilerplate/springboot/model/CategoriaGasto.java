@@ -15,6 +15,7 @@ public enum CategoriaGasto {
     PLASTICOS,
     GANCHOS,
     PAPELERIA,
+    BOLSAS,
 
     //SE AGREGAN A LOS QUE YA TENIAN PREDETERMINADOS
     MATERIAL,
