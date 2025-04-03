@@ -3,7 +3,7 @@ import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import ConUsuari from "./con-usuario.jsx";
 import "./usuarios.css";
-import { EditarUsuario } from "./editar-usuario.jsx";
+import {EditarUsuario} from "./editar-usuario.jsx";
 import { RegistroUsuario } from "./registro-usuario.jsx";
 import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
@@ -12,7 +12,7 @@ const ima = {
   admi: "../../../../public/media/img/administrador.png",
   metro: "../../../../public/media/img/metro.png",
   editar: "../../../../public/media/img/editar.png",
-};
+};  
 
 export default function Usuarios() {
   const [admins, setAdmins] = useState([]);
@@ -22,12 +22,12 @@ export default function Usuarios() {
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     cargarUsuarios();
   }, []);
 
+  // Obtener lista de usuarios
   const cargarUsuarios = async () => {
     try {
       setCargando(true);
@@ -57,13 +57,14 @@ export default function Usuarios() {
     }
   };
 
+  // Registrar usuarios
   const registrarUsuarios = async (formData) => {
     try {
       const response = await axios.post(
         "http://localhost:8080/register",
         {
           ...formData,
-          user_role: formData.user_role.toUpperCase(),
+          user_role: formData.user_role.toUpperCase() ,
           cargo: formData.cargo.toUpperCase(),
         },
         {
@@ -80,18 +81,19 @@ export default function Usuarios() {
       }
     } catch (error) {
       console.error("Error al registrar usuario", error);
-      setError("Error al registrar usuario");
+      throw error;
     }
   };
 
-  const actualizarUsuario = async (formData) => {
+  //Editar usuario
+  const actualizarUsuario = async () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/users/update/${usuarioEditando.id}`,
+        `http://localhost:8080/users/update/${userData.id}`,
         {
           ...formData,
           user_role: formData.user_role.toUpperCase(),
@@ -106,9 +108,8 @@ export default function Usuarios() {
       );
 
       if (response.status === 200) {
-        await cargarUsuarios();
-        setMostrarEditar(false);
-        setUsuarioEditando(null);
+        await cargarUsuarios(); // Recargar la lista de usuarios
+        onClose(); // Cerrar modal
       }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
@@ -116,11 +117,6 @@ export default function Usuarios() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleEditarClick = (usuario) => {
-    setUsuarioEditando(usuario);
-    setMostrarEditar(true);
   };
 
   const renderTablaUsuarios = (usuarios) => (
@@ -143,10 +139,10 @@ export default function Usuarios() {
             <td>
               <div className="acciones">
                 <button 
-                  className="btn-editar"
-                  onClick={() => handleEditarClick(usuario)}
+                className="btn-editar"
+                onClick={() => handleEditarClick(usuario)}
                 >
-                  <img src={ima.editar} alt="Editar" className="icono-editar" />
+                <img src={ima.editar} alt="Editar" className="icono-editar" />
                 </button>
               </div>
             </td>
@@ -184,22 +180,20 @@ export default function Usuarios() {
         </div>
       </div>
 
-      {error && <div className="error">{error}</div>}
-
       {mostrarRegistro && (
         <RegistroUsuario
           onClose={() => setMostrarRegistro(false)}
           onSubmit={registrarUsuarios}
         />
       )}
-      {mostrarEditar && usuarioEditando && (
+      {mostrarEditar && actualizarUsuario && (
         <EditarUsuario
-          usuario={usuarioEditando}
+          usuario={actualizarUsuario}
           onClose={() => {
             setMostrarEditar(false);
             setUsuarioEditando(null);
           }}
-          onSubmit={actualizarUsuario} 
+          onSubmit={handleEditarSubmit} 
         />
       )}
     </>

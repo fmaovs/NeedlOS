@@ -14,7 +14,7 @@ const CODIGOS_GASTOS = {
 export const GastosDiarios = () => {
   const [formData, setFormData] = useState({
     concepto: '',
-    valor: ''
+    monto: ''
   });
   const [gastos, setGastos] = useState([]);
   const [loading, setLoading] = useState(false);
