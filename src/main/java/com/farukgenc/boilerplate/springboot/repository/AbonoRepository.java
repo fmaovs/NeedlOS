@@ -21,4 +21,5 @@ public interface AbonoRepository extends JpaRepository<Abono, Long> {
     List<Abono> findByFechaBetweenAndMetodoPago(Date start, Date end, MetodoPago metodoPago);
 
     Abono findByPedido_Id(Long idPedido);
+
 }

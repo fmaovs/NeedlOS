@@ -3,6 +3,7 @@ package com.farukgenc.boilerplate.springboot.service;
 import com.farukgenc.boilerplate.springboot.model.*;
 import com.farukgenc.boilerplate.springboot.repository.AbonoRepository;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
+import com.farukgenc.boilerplate.springboot.security.dto.AbonoResponse;
 import com.farukgenc.boilerplate.springboot.security.dto.PedidoResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -154,5 +156,28 @@ public class AbonoService {
         return abonoDTO;
     }
 
+    public List<AbonoResponse> getFechaBetween(String fechaI, String fechaF){
+        // Convertir las cadenas de fecha en LocalDate
+        LocalDate fechaInicioLD = LocalDate.parse(fechaI);
+        LocalDate fechaFinLD = LocalDate.parse(fechaF);
+
+        // Convertir LocalDate a Date con 00:00:00 y 23:59:59
+        Date fechaInicio = Date.from(fechaInicioLD.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaFin = Date.from(fechaFinLD.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
+
+        List<Abono> abonos = abonoRepository.findByFechaBetween(fechaInicio,fechaFin);
+        List<AbonoResponse> abonoResponses = new ArrayList<>();
+        for (Abono abono: abonos){
+            AbonoResponse abonoResponse = new AbonoResponse();
+            abonoResponse.setId(abono.getId());
+            abonoResponse.setMonto(abono.getMonto());
+            abonoResponse.setFecha(abono.getFecha());
+            System.out.println(abono.getFecha());
+            abonoResponse.setPedidoId(abono.getPedido().getId());
+            abonoResponse.setMetodoPago(abono.getMetodoPago().toString());
+            abonoResponses.add(abonoResponse);
+        }
+        return abonoResponses;
+    }
 
 }
