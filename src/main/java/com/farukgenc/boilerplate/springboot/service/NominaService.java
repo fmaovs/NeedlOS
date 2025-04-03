@@ -38,8 +38,10 @@ public class NominaService {
         List<PedidoResponse> pedidosByUser = new ArrayList<>();
         for (PedidoResponse pedido : pedidos) {
             System.out.println(pedido.getSastre());
-            if (pedido.getSastre().equals(userName) && pedido.getFechaPedido().after(Date.from(monday.atStartOfDay(ZoneId.systemDefault()).toInstant())) && pedido.getFechaPedido().before(Date.from(saturday.atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
-                pedidosByUser.add(pedido);
+            if (pedido.getSastre().equals(userName) && pedido.getFechaPedido().after(Date.from(monday.atStartOfDay(ZoneId.systemDefault()).toInstant())) && pedido.getFechaPedido().before(Date.from(saturday.atStartOfDay(ZoneId.systemDefault()).toInstant())) ) {
+                if (pedido.getEstado().toString().equals("FINALIZADO") || pedido.getEstado().toString().equals("ENTREGADO")){
+                    pedidosByUser.add(pedido);
+                }
             }
         }
         return pedidosByUser;
