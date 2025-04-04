@@ -14,5 +14,4 @@ public class AbonoDTO {
     private double monto;
     private String metodoPago;
 
-
 }

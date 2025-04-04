@@ -16,6 +16,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.RoundDotsBorder;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.LineSeparator;
@@ -34,6 +35,7 @@ import javax.sql.RowSet;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -661,79 +663,88 @@ public class PedidoService {
             PdfDocument pdfDocument = new PdfDocument(writer);
 
             /*tamaño y margenes*/
-            PageSize pdfSize = new PageSize(200, 400);
+            PageSize pdfSize = new PageSize(200f, 400f);
             Document document = new Document(pdfDocument, pdfSize);
-            document.setMargins(10,10,10,10);
+            document.setMargins(10f,10f,10f,10f);
 
             /*estilos para las fuentes */
             PdfFont boldFont = PdfFontFactory.createFont("Helvetica-Bold");
             document.setFont(boldFont);
 
             //fromato de las fechas
-            DateTimeFormatter formartof = DateTimeFormatter.ofPattern("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
+            DateTimeFormatter formartofg = DateTimeFormatter.ofPattern("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
+            SimpleDateFormat formato = new SimpleDateFormat("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
+
 
             /*------------------------posicion para logo {CAMBIARLO A IMAGEN}-------------------*/
             document.add(new Paragraph("LOGO-EMPRESA-CAMI")
-                    .setFontSize(20).
+                    .setFontSize(20f).
                     setFont(boldFont).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
 
 
             document.add(new Paragraph(String.valueOf(pedidoResponse.getId()))
                     .setFont(boldFont)
-                    .setFontSize(50)
-                    .setPadding(0)
-                    .setMargin(1)
-                    .setTextAlignment(TextAlignment.CENTER).setBorder(new SolidBorder(1)));
+                    .setFontSize(40f)
+                    .setPadding(0f)
+                    .setMargin(0f)
+                    .setTextAlignment(TextAlignment.CENTER).setBorder(new SolidBorder(1f)));
 
             /*codigo de barras*/
             Barcode128 barcode128 = new Barcode128(pdfDocument);
             barcode128.setCode(String.valueOf(pedidoResponse.getId()));
             barcode128.setFont(null);
             document.add(new Image(barcode128.createFormXObject(pdfDocument))
-                    .setWidth(90).
+                    .setWidth(90f).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
 
             document.add(new Paragraph("Cliente\n" + pedidoResponse.getCustomerName() + " " + pedidoResponse.getCustomerLastName())
-                    .setTextAlignment(TextAlignment.CENTER));
-            document.add(new Paragraph("Telefono: " + pedidoResponse.getTelefono()));
-            document.add(new Paragraph("Fecha: " + pedidoResponse.getFechaPedido()));
-            document.add(new LineSeparator(new SolidLine(1)));
+                    .setTextAlignment(TextAlignment.CENTER).setFontSize(10f).setMarginBottom(2f));
+            document.add(new Paragraph("Telefono: " + pedidoResponse.getTelefono()).setFontSize(10f).setMarginBottom(1f));
+            Date fecha = pedidoResponse.getFechaPedido();
+            String fechaFormateada = formato.format(fecha);
+            document.add(new Paragraph("Fecha: " + fechaFormateada).setFontSize(10f).setMarginBottom(1f));
+            document.add(new LineSeparator(new SolidLine(1f)));
 
             /*----prendas  del pedido -------------*/
 
-            float[] tamañosColumnas ={5, 135, 40};
+            float[] tamañosColumnas ={5f, 135f, 40f};
             Table table = new Table(tamañosColumnas);
-            table.addCell("Cant.");
-            table.addCell("Detalles.");
-            table.addCell("Valor $");
+            table.addCell("Cant.").setFontSize(10f).setMarginBottom(1f);
+            table.addCell("Detalles.").setFontSize(10f).setMarginBottom(1f);
+            table.addCell("Valor $").setFontSize(10f).setMarginBottom(1f);
 
 
             for (PrendaDTO prenda : pedidoResponse.getPrenda()) {
-                table.addCell(String.valueOf(prenda.getCantidad()));
-                table.addCell(prenda.getDescripcion()+" " + prenda.getDetalle_pedido() );
-                table.addCell("" + prenda.getValor() / prenda.getCantidad());
+                table.addCell(String.valueOf(prenda.getCantidad())).setFontSize(10f).setMarginBottom(1f);
+                table.addCell(prenda.getDescripcion()+" " + prenda.getDetalle_pedido()).setFontSize(10f).setMarginBottom(1f);
+                table.addCell(String.valueOf(+ prenda.getValor() / prenda.getCantidad())).setFontSize(10f).setMarginBottom(1f);
             }
 
             table.addCell("");
-            table.addCell("Total");
+            table.addCell("Total").setFontSize(10f).setMarginBottom(1f);
             table.addCell("" + pedidoResponse.getPrenda().stream()
                     .mapToDouble(prenda -> prenda.getValor())
-                    .sum());
+                    .sum()).setFontSize(10f).setMarginBottom(1f);
             document.add(table);
-            document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()));
-            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()));
-            document.add(new LineSeparator(new SolidLine(1)));
-            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setTextAlignment(TextAlignment.CENTER));
-            document.add(new Paragraph("Para Entregar: " + pedidoResponse.getFechaEntrega()).setTextAlignment(TextAlignment.CENTER));
+
+            document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()).setFontSize(10f).setMarginBottom(1f));
+            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()).setFontSize(10f).setMarginBottom(1f));
+            document.add(new LineSeparator(new SolidLine(1f)));
+            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(10f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            Date fechaEntrega = pedidoResponse.getFechaEntrega();
+            String fechaEntregaFormateada = formato.format(fecha);
+            document.add(new Paragraph("Fecha: " + fechaEntregaFormateada).setFontSize(10f).setMarginBottom(1f));
+
+
+            document.add(new Paragraph("Para Entregar: " + pedidoResponse.getFechaEntrega()).setFontSize(10f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             barcode128.setCode(String.valueOf(pedidoResponse.getFechaEntrega()));
             document.add(new Image(barcode128.createFormXObject(pdfDocument))
                     .setWidth(120).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
-            document.add(new LineSeparator(new SolidLine(1)));
-
-            document.add(new Paragraph("fecha 2" + LocalDateTime.now(ZoneId.systemDefault()).format(formartof)));
-            document.add(new Paragraph("Desarrollado por grupo NeedlOS"));
+            document.add(new LineSeparator(new SolidLine(1f)));
+            document.add(new Paragraph("Fecha de impresión" + LocalDateTime.now(ZoneId.systemDefault()).format(formartofg)).setFontSize(10f).setMarginBottom(1f));
+            document.add(new Paragraph("Desarrollado por grupo NeedlOS").setFontSize(10f).setMarginBottom(1f));
 
             document.close();
             return outputStream.toByteArray();

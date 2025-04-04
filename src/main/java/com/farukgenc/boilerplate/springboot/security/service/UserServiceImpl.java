@@ -40,7 +40,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findById(Long id) {
-		return userRepository.findById(id).orElse(null);
+        User user = userRepository.findUserById(id);
+        System.out.println("el id es ="+user.getId());
+        return user;
 	}
 
 	@Override
@@ -190,6 +192,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 		UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
 		userResponse.setUsername(user.getUsername());
 		userResponse.setEmail(user.getEmail());
 		userResponse.setCargo(user.getCargo().getCargoName());

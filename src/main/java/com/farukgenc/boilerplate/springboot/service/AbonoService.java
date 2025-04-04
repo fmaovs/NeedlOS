@@ -16,10 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AbonoService {
@@ -129,15 +127,19 @@ public class AbonoService {
 
         System.out.println("Total de abonos encontrados: " + abonos.size());
 
-        // Filtrar los que NO sean en EFECTIVO (Métodos electrónicos)
-        List<Abono> abonosElectronicos = abonos.stream()
-                .filter(abono -> abono.getMetodoPago() != MetodoPago.EFECTIVO) // Filtrar correctamente
-                .toList();
+        // Filtrar los que NO sean en EFECTIVO (Métodos electrónicos) y conservar el último abono por pedido
+        Map<Long, Abono> ultimoAbonoPorPedido = abonos.stream()
+                .filter(abono -> abono.getMetodoPago() != MetodoPago.EFECTIVO)
+                .collect(Collectors.toMap(
+                        abono -> abono.getPedido().getId(),
+                        abono -> abono,
+                        (abono1, abono2) -> abono1.getFecha().after(abono2.getFecha()) ? abono1 : abono2
+                ));
 
-        System.out.println("Abonos electrónicos encontrados: " + abonosElectronicos.size());
+        System.out.println("Abonos electrónicos encontrados (últimos por pedido): " + ultimoAbonoPorPedido.size());
 
         // Convertir a DTO
-        return abonosElectronicos.stream().map(abono -> {
+        return ultimoAbonoPorPedido.values().stream().map(abono -> {
             AbonoDTO abonoDTO = new AbonoDTO();
             abonoDTO.setIdPedido(abono.getPedido().getId());
             abonoDTO.setMonto(abono.getMonto());
@@ -146,6 +148,7 @@ public class AbonoService {
             return abonoDTO;
         }).toList();
     }
+
 
     public AbonoDTO getAbonoByIdPedido(Long idPedido){
         Abono abono = abonoRepository.findByPedido_Id(idPedido);
