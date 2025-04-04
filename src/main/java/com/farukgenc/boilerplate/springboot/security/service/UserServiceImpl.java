@@ -91,6 +91,7 @@ public class UserServiceImpl implements UserService {
 		List<UserResponse> users = new ArrayList<>();
 		for(User user : userRepository.findAllByCargo(cargo)){
 			UserResponse userTemporal = new UserResponse();
+			userTemporal.setId(user.getId());
 			userTemporal.setUsername(user.getUsername());
 			userTemporal.setEmail(user.getEmail());
 			userTemporal.setCargo(user.getCargo().getCargoName());
