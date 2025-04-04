@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
 	};
 
 	public User updateUser(Long id, UserDTO user) {
-		User userToUpdate = userRepository.findById(id).orElse(null);
+		User userToUpdate = userRepository.findUserById(id);
 		if (userToUpdate != null) {
 			// Actualizar solo los campos no nulos
 			if (user.getName() != null && !user.getName().isEmpty()) {
