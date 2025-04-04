@@ -12,6 +12,7 @@ public class UserResponse {
     private String username;
     private String email;
     private String cargo;
+    private String rol;
     private Long phone;
     private String name;
     private String lastname;
