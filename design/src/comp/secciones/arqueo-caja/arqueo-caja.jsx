@@ -194,14 +194,6 @@ export default function ArqueoCaja() {
         }
       );
 
-      console.log(
-        "Abono Efectivo: ",
-        response.data.reduce(
-          (acumulador, pedido) => acumulador + pedido.monto,
-          0
-        )
-      );
-
       abonoEfectivo = response.data.reduce(
         (acumulador, pedido) => acumulador + pedido.monto,
         0
@@ -219,14 +211,6 @@ export default function ArqueoCaja() {
             Authorization: `Bearer ${tokenPass}`,
           },
         }
-      );
-
-      console.log(
-        "Pago Electronico: ",
-        response.data.reduce(
-          (acumulador, pedido) => acumulador + pedido.monto,
-          0
-        )
       );
 
       pagoEfectivo = response.data.reduce(
@@ -263,14 +247,6 @@ export default function ArqueoCaja() {
         }
       );
 
-      console.log(
-        "Abono Electronico: ",
-        response.data.reduce(
-          (acumulador, pedido) => acumulador + pedido.monto,
-          0
-        )
-      );
-
       abonoElectronico = response.data.reduce(
         (acumulador, pedido) => acumulador + pedido.monto,
         0
@@ -288,14 +264,6 @@ export default function ArqueoCaja() {
             Authorization: `Bearer ${tokenPass}`,
           },
         }
-      );
-
-      console.log(
-        "Pago Electronico: ",
-        response.data.reduce(
-          (acumulador, pedido) => acumulador + pedido.monto,
-          0
-        )
       );
 
       pagoElectronico = response.data.reduce(

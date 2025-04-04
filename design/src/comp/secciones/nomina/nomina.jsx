@@ -23,7 +23,6 @@ export default function Nomina() {
           Authorization: `Bearer ${tokenPass}`,
         },
       });
-      console.log(response.data);
       setEmpleados(response.data);
     } catch (error) {
       console.error(error);

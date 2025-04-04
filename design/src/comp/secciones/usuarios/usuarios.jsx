@@ -3,7 +3,7 @@ import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import ConUsuari from "./con-usuario.jsx";
 import "./usuarios.css";
-import {EditarUsuario} from "./editar-usuario.jsx";
+import { EditarUsuario } from "./editar-usuario.jsx";
 import { RegistroUsuario } from "./registro-usuario.jsx";
 import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
@@ -12,7 +12,7 @@ const ima = {
   admi: "../../../../public/media/img/administrador.png",
   metro: "../../../../public/media/img/metro.png",
   editar: "../../../../public/media/img/editar.png",
-};  
+};
 
 export default function Usuarios() {
   const [admins, setAdmins] = useState([]);
@@ -64,7 +64,7 @@ export default function Usuarios() {
         "http://localhost:8080/register",
         {
           ...formData,
-          user_role: formData.user_role.toUpperCase() ,
+          user_role: formData.user_role.toUpperCase(),
           cargo: formData.cargo.toUpperCase(),
         },
         {
@@ -113,11 +113,20 @@ export default function Usuarios() {
       }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
-      alert("Error al actualizar usuario: " + (error.response?.data?.message || error.message));
+      alert(
+        "Error al actualizar usuario: " +
+          (error.response?.data?.message || error.message)
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const [idUser, setIdUser] = useState(null);
+  function openEditarUsuario(id) {
+    setMostrarEditar(!mostrarEditar);
+    setIdUser(id);
+  }
 
   const renderTablaUsuarios = (usuarios) => (
     <table className="tabla">
@@ -138,11 +147,11 @@ export default function Usuarios() {
             <td className="td-user">{usuario.phone}</td>
             <td>
               <div className="acciones">
-                <button 
-                className="btn-editar"
-                onClick={() => handleEditarClick(usuario)}
+                <button
+                  className="btn-editar"
+                  onClick={() => openEditarUsuario(usuario.id)}
                 >
-                <img src={ima.editar} alt="Editar" className="icono-editar" />
+                  <img src={ima.editar} alt="Editar" className="icono-editar" />
                 </button>
               </div>
             </td>
@@ -171,13 +180,9 @@ export default function Usuarios() {
       </div>
 
       <div className="tablas">
-        <div className="tabla-container">
-          {renderTablaUsuarios(admins)}
-        </div>
+        <div className="tabla-container">{renderTablaUsuarios(admins)}</div>
 
-        <div className="tabla-container">
-          {renderTablaUsuarios(sastres)}
-        </div>
+        <div className="tabla-container">{renderTablaUsuarios(sastres)}</div>
       </div>
 
       {mostrarRegistro && (
@@ -186,14 +191,14 @@ export default function Usuarios() {
           onSubmit={registrarUsuarios}
         />
       )}
-      {mostrarEditar && actualizarUsuario && (
+      {mostrarEditar && (
         <EditarUsuario
           usuario={actualizarUsuario}
           onClose={() => {
             setMostrarEditar(false);
             setUsuarioEditando(null);
           }}
-          onSubmit={handleEditarSubmit} 
+          idUser={idUser}
         />
       )}
     </>
