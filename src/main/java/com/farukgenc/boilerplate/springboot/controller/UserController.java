@@ -37,7 +37,7 @@ public class UserController {
 
     }
     @PutMapping("/update/{id}")
-    public User updateUser(Long id, UserDTO user) {
+    public User updateUser(Long id, @RequestBody UserDTO user) {
         return userServiceImpl.updateUser(id, user);
     }
 
