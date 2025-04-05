@@ -75,8 +75,8 @@ public class ArqueoController {
     }
 
     @GetMapping("abonos/electronico/{date}")
-    public ResponseEntity<List<AbonoDTO>> obtenerAbonosPorMetodoPagoElectronicoYFecha(@PathVariable String date, String date2) {
-        List<AbonoDTO> abonos = arqueoService.obtenerAbonosByDateAndMetodoPago_ElectronicoPendientes(date, date2);
+    public ResponseEntity<List<AbonoDTO>> obtenerAbonosPorMetodoPagoElectronicoYFecha(@PathVariable String date) {
+        List<AbonoDTO> abonos = arqueoService.obtenerAbonosByDateAndMetodoPago_ElectronicoPendientes(date);
         return ResponseEntity.ok(abonos);
     }
 

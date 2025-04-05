@@ -23,7 +23,7 @@ public interface AbonoRepository extends JpaRepository<Abono, Long> {
 
     List<Abono> findByFechaBetweenAndMetodoPagoNot(
         Date startDate,
-        Date endDate,
+        Date startDate2,
         MetodoPago metodoPago
     );
 
