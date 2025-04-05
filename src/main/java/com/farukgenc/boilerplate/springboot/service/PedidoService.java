@@ -129,7 +129,7 @@ public class PedidoService {
         // 6. Guardar el pedido
         pedidoRepository.save(pedido);
 
-        // 7. Crear el PedidoResponse
+        // 8f. Crear el PedidoResponse
         PedidoResponse pedidoResponse = new PedidoResponse();
         pedidoResponse.setId(pedido.getId());
         pedidoResponse.setCustomerName(customer.getName() + " " + customer.getLastname());
@@ -654,9 +654,10 @@ public class PedidoService {
 
 
 
-    /*____________________intento para crear los PDFs de orden_____________________ */
+    /**____________________ CREACIÓN DE TICKETS EN FORMATO PDF_____________________ */
 
-    public byte[] pdfOrden(PedidoResponse pedidoResponse) {
+    /*-----TICKET PARA LA SASTRERIA------*/
+    public byte[] pdfOrdenSastreria(PedidoResponse pedidoResponse) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             PdfWriter writer = new PdfWriter(outputStream);
             PdfDocument pdfDocument = new PdfDocument(writer);
@@ -664,7 +665,7 @@ public class PedidoService {
             /*tamaño y margenes*/
             PageSize pdfSize = new PageSize(200f, 400f);
             Document document = new Document(pdfDocument, pdfSize);
-            document.setMargins(10f,10f,10f,10f);
+            document.setMargins(8f,8f,8f,8f);
 
             /*estilos para las fuentes */
             PdfFont boldFont = PdfFontFactory.createFont("Helvetica-Bold");
@@ -680,8 +681,7 @@ public class PedidoService {
                     setFont(boldFont).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
             document.add(new Paragraph(String.valueOf(pedidoResponse.getId()))
-                    .setFont(boldFont)
-                    .setFontSize(40f)
+                    .setFontSize(30f)
                     .setPadding(0f)
                     .setMargin(0f)
                     .setTextAlignment(TextAlignment.CENTER).setBorder(new SolidBorder(1f)));
@@ -691,50 +691,49 @@ public class PedidoService {
             barcode128.setCode(String.valueOf(pedidoResponse.getId()));
             barcode128.setFont(null);
             document.add(new Image(barcode128.createFormXObject(pdfDocument))
-                    .setWidth(90f).
+                    .setWidth(60f).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
             document.add(new Paragraph("Cliente\n" + pedidoResponse.getCustomerName() + " " + pedidoResponse.getCustomerLastName())
-                    .setTextAlignment(TextAlignment.CENTER).setFontSize(10f).setMarginBottom(2f));
-            document.add(new Paragraph("Telefono: " + pedidoResponse.getTelefono()).setFontSize(10f).setMarginBottom(1f));
+                    .setTextAlignment(TextAlignment.CENTER).setFontSize(8f).setMarginBottom(2f));
+            document.add(new Paragraph("Telefono: " + pedidoResponse.getTelefono()).setFontSize(8f).setMarginBottom(1f));
             Date fecha = pedidoResponse.getFechaPedido();
             String fechaFormateada = formato.format(fecha);
-            document.add(new Paragraph("Fecha: " + fechaFormateada).setFontSize(10f).setMarginBottom(1f));
+            document.add(new Paragraph("Fecha: " + fechaFormateada).setFontSize(8f).setMarginBottom(1f));
             document.add(new LineSeparator(new SolidLine(1f)));
 
             /*----prendas  del pedido -------------*/
             float[] tamañosColumnas ={5f, 135f, 40f};
             Table table = new Table(tamañosColumnas);
-            table.addCell("Cant.").setFontSize(10f).setMarginBottom(1f);
-            table.addCell("Detalles.").setFontSize(10f).setMarginBottom(1f);
-            table.addCell("Valor $").setFontSize(10f).setMarginBottom(1f);
+            table.addCell("Cant.").setFontSize(8f).setMarginBottom(1f);
+            table.addCell("Detalles.").setFontSize(8f).setMarginBottom(1f);
+            table.addCell("Valor $").setFontSize(8f).setMarginBottom(1f);
 
             for (PrendaDTO prenda : pedidoResponse.getPrenda()) {
-                table.addCell(String.valueOf(prenda.getCantidad())).setFontSize(10f).setMarginBottom(1f);
-                table.addCell(prenda.getDescripcion()+" " + prenda.getDetalle_pedido()).setFontSize(10f).setMarginBottom(1f);
-                table.addCell(String.valueOf(+ prenda.getValor() / prenda.getCantidad())).setFontSize(10f).setMarginBottom(1f);
+                table.addCell(String.valueOf(prenda.getCantidad())).setFontSize(8f).setMarginBottom(1f);
+                table.addCell(prenda.getDescripcion()+" " + prenda.getDetalle_pedido()).setFontSize(8f).setMarginBottom(1f);
+                table.addCell(String.valueOf(+ prenda.getValor() / prenda.getCantidad())).setFontSize(8f).setMarginBottom(1f);
             }
 
             table.addCell("");
-            table.addCell("Total").setFontSize(10f).setMarginBottom(1f);
+            table.addCell("Total").setFontSize(8f).setMarginBottom(1f);
             table.addCell("" + pedidoResponse.getPrenda().stream()
                     .mapToDouble(prenda -> prenda.getValor())
-                    .sum()).setFontSize(10f).setMarginBottom(1f);
+                    .sum()).setFontSize(8f).setMarginBottom(1f);
             document.add(table);
 
-            document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()).setFontSize(10f).setMarginBottom(1f));
-            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()).setFontSize(10f).setMarginBottom(1f));
+            document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()).setFontSize(8f).setMarginBottom(1f));
+            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()).setFontSize(8f).setMarginBottom(1f));
             document.add(new LineSeparator(new SolidLine(1f)));
-            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(8.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
-            Date fechaEntrega = pedidoResponse.getFechaEntrega();
+            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             String fechaEntregaFormateada = formato.format(fecha);
-            document.add(new Paragraph("Para Entregar: " + fechaEntregaFormateada).setFontSize(8f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Para Entregar: " + fechaEntregaFormateada).setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             barcode128.setCode(String.valueOf(pedidoResponse.getFechaEntrega()));
             document.add(new Image(barcode128.createFormXObject(pdfDocument))
                     .setWidth(180f).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
             document.add(new LineSeparator(new SolidLine(1f)));
-            document.add(new Paragraph("Fecha de impresión: " + LocalDateTime.now(ZoneId.systemDefault()).format(formartofg)).setFontSize(7.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
-            document.add(new Paragraph("Desarrollado por grupo NeedlOS®").setFontSize(8.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Fecha de impresión: " + LocalDateTime.now(ZoneId.systemDefault()).format(formartofg)).setFontSize(5.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Desarrollado por grupo NeedlOS®").setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
 
             document.close();
             return outputStream.toByteArray();
@@ -744,6 +743,150 @@ public class PedidoService {
         }
     }
 
+    /*-----TICKET PARA EL CLIENTE--------*/
+    public byte[] pdfOrdenCliente(PedidoResponse pedidoResponse){
+        try(ByteArrayOutputStream outputStream= new ByteArrayOutputStream()){
+            PdfWriter writer = new PdfWriter(outputStream);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+
+            /*tamaño y margenes*/
+            PageSize pdfSize = new PageSize(200f, 400f);
+            Document document = new Document(pdfDocument, pdfSize);
+            document.setMargins(8f,8f,8f,8f);
+
+            /*estilos para las fuentes */
+            PdfFont boldFont = PdfFontFactory.createFont("Helvetica-Bold");
+            document.setFont(boldFont);
+
+            //fromato de las fechas
+            DateTimeFormatter formartofg = DateTimeFormatter.ofPattern("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
+            SimpleDateFormat formato = new SimpleDateFormat("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
+
+
+            document.add(new Paragraph("LOGO-EMPRESA-CAMI")
+                    .setFontSize(20f).
+                    setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine(2f)));
+            document.add(new Paragraph("Pasados 30 dias no se respondes por las prendas").setFontSize(8f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine(1f)));
+            document.add(new Paragraph("CALLE 156 # 8B - 63").setTextAlignment(TextAlignment.CENTER).setFontSize(8f).setMarginBottom(1f));
+            document.add(new Paragraph("TELEFONOS\n" + "3126509352")
+                    .setFontSize(13f)
+                    .setPadding(0f)
+                    .setMargin(0f)
+                    .setHeight(45f)
+                    .setTextAlignment(TextAlignment.CENTER).setBorder(new SolidBorder(1f)));
+            document.add(new Paragraph("ORDEN DE SERVICO").setFontSize(8f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+
+            document.add(new Paragraph(String.valueOf(pedidoResponse.getId()))
+                    .setFontSize(30f)
+                    .setPadding(0f)
+                    .setMargin(0f)
+                    .setWidth(100f)
+                    .setBorder(new SolidBorder(1f))
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                    .setTextAlignment(TextAlignment.CENTER));
+            /*codigo de barras*/
+            Barcode128 barcode128 = new Barcode128(pdfDocument);
+            barcode128.setCode(String.valueOf(pedidoResponse.getId()));
+            barcode128.setFont(null);
+            document.add(new Image(barcode128.createFormXObject(pdfDocument))
+                    .setWidth(60f).
+                    setHorizontalAlignment(HorizontalAlignment.CENTER));
+            document.add(new Paragraph("Cliente\n" + pedidoResponse.getCustomerName() + " " + pedidoResponse.getCustomerLastName())
+                    .setTextAlignment(TextAlignment.CENTER).setFontSize(8f).setMarginBottom(2f));
+            document.add(new Paragraph("Telefono: " + pedidoResponse.getTelefono()).setFontSize(8f).setMarginBottom(1f));
+            Date fecha = pedidoResponse.getFechaPedido();
+            String fechaFormateada = formato.format(fecha);
+            document.add(new Paragraph("Fecha: " + fechaFormateada).setFontSize(8f).setMarginBottom(1f));
+
+            /*validacion par el texto segun el mes*/
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fecha);
+            int mes = calendar.get(Calendar.MONTH);
+            Paragraph parrafoFecha = null;
+
+            switch (mes) {
+                case Calendar.JANUARY:
+                    parrafoFecha = new Paragraph("feliz nuevo año");
+                    break;
+                case Calendar.FEBRUARY:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.MARCH:
+                    parrafoFecha = new Paragraph("feliz mes de marzo");
+                    break;
+                case Calendar.APRIL:
+                    parrafoFecha = new Paragraph("feliz mes de abril");
+                    break;
+                case Calendar.MAY:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.JUNE:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.JULY:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.AUGUST:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.SEPTEMBER:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.OCTOBER:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.NOVEMBER:
+                    parrafoFecha = new Paragraph("");
+                    break;
+                case Calendar.DECEMBER:
+                    parrafoFecha = new Paragraph("");
+                    break;
+            }
+            document.add(parrafoFecha.setFontSize(15f)
+                    .setMargin(0f)
+                    .setTextAlignment(TextAlignment.CENTER).setBorder(new SolidBorder(1f)).setPadding(5f));
+
+            float[] tamañosColumnas ={5f, 135f, 40f};
+            Table table = new Table(tamañosColumnas);
+            table.addCell("Cant.").setFontSize(8f).setMarginBottom(1f);
+            table.addCell("Detalles.").setFontSize(8f).setMarginBottom(1f);
+            table.addCell("Valor $").setFontSize(8f).setMarginBottom(1f);
+
+            for (PrendaDTO prenda : pedidoResponse.getPrenda()) {
+                table.addCell(String.valueOf(prenda.getCantidad())).setFontSize(8f).setMarginBottom(1f);
+                table.addCell(prenda.getDescripcion()+" " + prenda.getDetalle_pedido()).setFontSize(8f).setMarginBottom(1f);
+                table.addCell(String.valueOf(+ prenda.getValor() / prenda.getCantidad())).setFontSize(8f).setMarginBottom(1f);
+            }
+            table.addCell("");
+            table.addCell("Total").setFontSize(8f).setMarginBottom(1f);
+            table.addCell("" + pedidoResponse.getPrenda().stream()
+                    .mapToDouble(prenda -> prenda.getValor())
+                    .sum()).setFontSize(8f).setMarginBottom(1f);
+            document.add(table);
+
+            document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()).setFontSize(8f).setMarginBottom(1f));
+            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()).setFontSize(8f).setMarginBottom(1f));
+            document.add(new LineSeparator(new SolidLine(1f)));
+            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            String fechaEntregaFormateada = formato.format(fecha);
+            document.add(new Paragraph("Para Entregar: " + fechaEntregaFormateada).setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine(1f)));
+            document.add(new Paragraph("LAS ANOTACIONES MANUALES NO TENDRAN VALIDEZ").setFontSize(10f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new LineSeparator(new SolidLine(1f)));
+            document.add(new Paragraph("Fecha de impresión: " + LocalDateTime.now(ZoneId.systemDefault()).format(formartofg)).setFontSize(5.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Desarrollado por grupo NeedlOS®").setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+
+            document.close();
+
+
+            return outputStream.toByteArray();
+
+        }catch (Exception e){
+            throw new RuntimeException("Error generando el PDF", e);
+        }
+    }
 
 }
 

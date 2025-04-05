@@ -181,19 +181,32 @@ public class PedidoController {
 
 
 
-    /*____________________intento para crear PDF de orden_____________________ */
+    /**____________________ CREACIÓN DE TICKETS EN FORMATO PDF_____________________ */
 
-    @GetMapping("/{Id}/pdf")
-    public ResponseEntity<byte[]> generatePdfOrden(@RequestParam Long id) {
+    /*-----TICKET PARA LA SASTRERIA------*/
+    @GetMapping("/pdf/sastreria/{Id}")
+    public ResponseEntity<byte[]> generarPdfOrdenSastreria(@RequestParam Long id) {
         PedidoResponse pedidoResponse = pedidoService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
 
-        byte[] pdfContent = pedidoService.pdfOrden(pedidoResponse);
+        byte[] pdfListo = pedidoService.pdfOrdenSastreria(pedidoResponse);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-" + id + ".pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-empresa" + id + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
-                .body(pdfContent);
+                .body(pdfListo);
     }
 
+    /*-----TICKET PARA EL CLIENTE--------*/
+    @GetMapping("/pdf/cliente/{Id}")
+    public ResponseEntity<byte[]> generarPdfOrdenCliente(@RequestParam Long id){
+        PedidoResponse pedidoResponse = pedidoService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+         byte[] pdfListo = pedidoService.pdfOrdenCliente(pedidoResponse);
+
+         return ResponseEntity.ok()
+                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-cliente" + id + ".pdf")
+                 .contentType(MediaType.APPLICATION_PDF)
+                 .body(pdfListo);
+    }
 }

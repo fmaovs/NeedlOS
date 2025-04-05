@@ -84,7 +84,7 @@ public class GastoController {
         byte[] pdfContent = gastosService.pdfVale(gasto);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-" + id + ".pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=VAle-" + id + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfContent);
 
