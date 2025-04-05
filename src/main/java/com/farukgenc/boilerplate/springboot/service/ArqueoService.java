@@ -68,15 +68,25 @@ public class ArqueoService {
         return pedidos;
     }
 
-    public List<Abono> obtenerAbonosByDateAndMetodoPago_ElectronicoPendientes(String fechaIni, String fechaFinal){
+    public List<AbonoDTO> obtenerAbonosByDateAndMetodoPago_ElectronicoPendientes(String fechaIni, String fechaFinal){
         LocalDate fechaI = LocalDate.parse(fechaIni);
         LocalDate fecha2 = LocalDate.parse(fechaFinal);
         Date fechaInicio = Date.from(fechaI.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date fechaFin = Date.from(fecha2.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant());
         // List<Estado> estados = Arrays.asList(Estado.EN_PROCESO, Estado.FINALIZADO);
         List<Abono> abonos = abonoRepository.findByFechaBetweenAndMetodoPagoNot(fechaInicio,fechaFin,MetodoPago.EFECTIVO);
+        List<AbonoDTO> abonitos= new ArrayList<>();
+        for (Abono abono : abonos ){
+            if (!abono.getPedido().getDetalles().get(0).getEstadoActual().getEstado().toString().equals("ENTREGADO")){
+                AbonoDTO abonoDTO = new AbonoDTO();
+                abonoDTO.setIdPedido(abono.getPedido().getId());
+                abonoDTO.setMonto(abono.getMonto());
+                abonoDTO.setMetodoPago(abono.getMetodoPago().toString());
+                abonitos.add(abonoDTO);
+            }
+        }
         System.out.println(abonos);
-        return abonos;
+        return abonitos;
     }
 
     public List<AbonoDTO> obtenerPedidosEntregadosConAbonosDelDiaEnEfectivo(String date) {

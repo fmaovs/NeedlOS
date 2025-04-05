@@ -654,8 +654,7 @@ public class PedidoService {
 
 
 
-
-    /*____________________intento para crear PDF de orden_____________________ */
+    /*____________________intento para crear los PDFs de orden_____________________ */
 
     public byte[] pdfOrden(PedidoResponse pedidoResponse) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -675,14 +674,11 @@ public class PedidoService {
             DateTimeFormatter formartofg = DateTimeFormatter.ofPattern("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
             SimpleDateFormat formato = new SimpleDateFormat("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
 
-
             /*------------------------posicion para logo {CAMBIARLO A IMAGEN}-------------------*/
             document.add(new Paragraph("LOGO-EMPRESA-CAMI")
                     .setFontSize(20f).
                     setFont(boldFont).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
-
-
             document.add(new Paragraph(String.valueOf(pedidoResponse.getId()))
                     .setFont(boldFont)
                     .setFontSize(40f)
@@ -697,7 +693,6 @@ public class PedidoService {
             document.add(new Image(barcode128.createFormXObject(pdfDocument))
                     .setWidth(90f).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
-
             document.add(new Paragraph("Cliente\n" + pedidoResponse.getCustomerName() + " " + pedidoResponse.getCustomerLastName())
                     .setTextAlignment(TextAlignment.CENTER).setFontSize(10f).setMarginBottom(2f));
             document.add(new Paragraph("Telefono: " + pedidoResponse.getTelefono()).setFontSize(10f).setMarginBottom(1f));
@@ -712,7 +707,6 @@ public class PedidoService {
             table.addCell("Cant.").setFontSize(10f).setMarginBottom(1f);
             table.addCell("Detalles.").setFontSize(10f).setMarginBottom(1f);
             table.addCell("Valor $").setFontSize(10f).setMarginBottom(1f);
-
 
             for (PrendaDTO prenda : pedidoResponse.getPrenda()) {
                 table.addCell(String.valueOf(prenda.getCantidad())).setFontSize(10f).setMarginBottom(1f);
