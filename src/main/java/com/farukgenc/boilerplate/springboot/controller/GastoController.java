@@ -6,12 +6,15 @@ import com.farukgenc.boilerplate.springboot.security.dto.GastosRequest;
 import com.farukgenc.boilerplate.springboot.service.GastoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("gastos")
@@ -70,6 +73,21 @@ public class GastoController {
     @GetMapping("/detalles/categoria/EntreFechas")
     public ResponseEntity<List<GastosRequest>> obtenerDetallesGastosPorCategoriaYRango(@RequestParam("categoria") CategoriaGasto categoria, @RequestParam("fechaInicio")LocalDate fechaInicio, @RequestParam("fechaFin") LocalDate fechaFin){
         return ResponseEntity.ok(gastosService.obtenerDetallesGastosorCategoriaYRango(categoria, fechaInicio, fechaFin));
+    }
+
+    /*----------controller para pdf de vale----------*/
+
+    @GetMapping("/PDF/vale")
+    public ResponseEntity<byte[]> generarPdfVale(@RequestParam Long id){
+        GastosRequest gasto = gastosService.obtenerGastoId(id);
+
+        byte[] pdfContent = gastosService.pdfVale(gasto);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-" + id + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfContent);
+
     }
 
 }

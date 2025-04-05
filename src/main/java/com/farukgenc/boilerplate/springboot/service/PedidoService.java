@@ -707,7 +707,6 @@ public class PedidoService {
             document.add(new LineSeparator(new SolidLine(1f)));
 
             /*----prendas  del pedido -------------*/
-
             float[] tamañosColumnas ={5f, 135f, 40f};
             Table table = new Table(tamañosColumnas);
             table.addCell("Cant.").setFontSize(10f).setMarginBottom(1f);
@@ -731,20 +730,17 @@ public class PedidoService {
             document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()).setFontSize(10f).setMarginBottom(1f));
             document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()).setFontSize(10f).setMarginBottom(1f));
             document.add(new LineSeparator(new SolidLine(1f)));
-            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(10f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(8.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             Date fechaEntrega = pedidoResponse.getFechaEntrega();
             String fechaEntregaFormateada = formato.format(fecha);
-            document.add(new Paragraph("Fecha: " + fechaEntregaFormateada).setFontSize(10f).setMarginBottom(1f));
-
-
-            document.add(new Paragraph("Para Entregar: " + pedidoResponse.getFechaEntrega()).setFontSize(10f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Para Entregar: " + fechaEntregaFormateada).setFontSize(8f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             barcode128.setCode(String.valueOf(pedidoResponse.getFechaEntrega()));
             document.add(new Image(barcode128.createFormXObject(pdfDocument))
-                    .setWidth(120).
+                    .setWidth(180f).
                     setHorizontalAlignment(HorizontalAlignment.CENTER));
             document.add(new LineSeparator(new SolidLine(1f)));
-            document.add(new Paragraph("Fecha de impresión" + LocalDateTime.now(ZoneId.systemDefault()).format(formartofg)).setFontSize(10f).setMarginBottom(1f));
-            document.add(new Paragraph("Desarrollado por grupo NeedlOS").setFontSize(10f).setMarginBottom(1f));
+            document.add(new Paragraph("Fecha de impresión: " + LocalDateTime.now(ZoneId.systemDefault()).format(formartofg)).setFontSize(7.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Desarrollado por grupo NeedlOS®").setFontSize(8.5f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
 
             document.close();
             return outputStream.toByteArray();
