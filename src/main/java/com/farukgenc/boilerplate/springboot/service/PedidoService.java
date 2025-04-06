@@ -80,6 +80,8 @@ public class PedidoService {
         pedido.setSaldo(0);
         pedido.setCustomer(customer);
 
+        pedidoRepository.save(pedido);
+
         // 3. Crear los detalles del pedido
         List<DetallePedido> detalles = new ArrayList<>();
         for (DetallePedidoDTO detalleDTO : pedidoDTO.getDetalles()) {
@@ -109,7 +111,7 @@ public class PedidoService {
             EstadoPedido estadoInicial = new EstadoPedido();
             estadoInicial.setEstado(Estado.EN_PROCESO);
             estadoInicial.setFechaCambio(LocalDateTime.now());
-            estadoInicial.setDetallePedido(detalle); // Ahora el 'detalle' ya está en la base de datos
+            estadoInicial.setDetallePedido(detalle);
             estadoPedidoRepository.save(estadoInicial);
 
             // Asociar el estado inicial al detalle
