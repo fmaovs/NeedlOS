@@ -352,6 +352,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
     const nuevosDetalles = {
       prendaId: idPrenda,
       cantidad: cantidad,
+      detallePedido: concepto,
       user: idSastre,
       concepto: tipoTrabajo,
     };
@@ -415,7 +416,6 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
 
   /*VARIBLES PARA LAS ORDENES*/
   let fechaPedido = new Date(dataPedido.date);
-  let idCliente;
 
   /*REINICIAR DATAPEDIDO*/
   function limpiarPedido() {

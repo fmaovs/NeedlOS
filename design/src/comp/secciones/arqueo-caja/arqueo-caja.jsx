@@ -258,7 +258,7 @@ export default function ArqueoCaja() {
     /*Traer pagos electronicos*/
     try {
       const response = await axios.get(
-        `http://localhost:8080/arqueo/abonos/electronico/${fechaLocal}`,
+        `http://localhost:8080/arqueo/abonos/entregados/electronico/${fechaLocal}`,
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
@@ -399,7 +399,6 @@ export default function ArqueoCaja() {
                   <tr>
                     <th>Concepto</th>
                     <th>Ingreso Neto</th>
-                    <th>Ingreso Total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -417,7 +416,6 @@ export default function ArqueoCaja() {
                         maximumFractionDigits: 0,
                       }).format(ingresosEfetivo)}`}
                     </td>
-                    <td rowSpan="3"></td>
                   </tr>
                   <tr>
                     <td>

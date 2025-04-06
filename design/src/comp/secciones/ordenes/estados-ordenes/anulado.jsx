@@ -227,7 +227,7 @@ export default function TbAnulado() {
             <React.Fragment key={prenda.id || index}>
               <tr>
                 <td>{prenda.cantidad}</td>
-                <td>detalles</td>
+                <td>{prenda.detalle_pedido}</td>
                 <td>{prenda.descripcion}</td>
                 <td>
                   {"$ " +
