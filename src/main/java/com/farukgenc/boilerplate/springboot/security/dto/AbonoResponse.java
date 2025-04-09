@@ -1,12 +1,11 @@
 package com.farukgenc.boilerplate.springboot.security.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 public class AbonoResponse {
@@ -15,4 +14,5 @@ public class AbonoResponse {
     private Date fecha;
     private Long pedidoId;
     private String metodoPago;
+
 }

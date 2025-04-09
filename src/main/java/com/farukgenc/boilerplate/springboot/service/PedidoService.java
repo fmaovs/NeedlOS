@@ -9,6 +9,8 @@ import com.farukgenc.boilerplate.springboot.security.dto.PrendaDTO;
 import com.farukgenc.boilerplate.springboot.security.service.UserService;
 import com.farukgenc.boilerplate.springboot.security.service.UserServiceImpl;
 import com.itextpdf.barcodes.Barcode128;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
@@ -678,10 +680,14 @@ public class PedidoService {
             SimpleDateFormat formato = new SimpleDateFormat("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
 
             /*------------------------posicion para logo {CAMBIARLO A IMAGEN}-------------------*/
-            document.add(new Paragraph("LOGO-EMPRESA-CAMI")
-                    .setFontSize(20f).
-                    setFont(boldFont).
-                    setHorizontalAlignment(HorizontalAlignment.CENTER));
+            String rutaImagen = "src/main/java/com/farukgenc/boilerplate/springboot/utils/img/logo-vestiestilo.png";
+            ImageData data = ImageDataFactory.create(rutaImagen);
+            Image img = new Image(data);
+            img.setWidth(120);
+            img.setHeight(80);
+            img.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            document.add(img);
+
             document.add(new Paragraph(String.valueOf(pedidoResponse.getId()))
                     .setFontSize(30f)
                     .setPadding(0f)
@@ -765,9 +771,14 @@ public class PedidoService {
             SimpleDateFormat formato = new SimpleDateFormat("E dd MMM yyyy hh:mm a", new Locale("ES", "ES"));
 
 
-            document.add(new Paragraph("LOGO-EMPRESA-CAMI")
-                    .setFontSize(20f).
-                    setHorizontalAlignment(HorizontalAlignment.CENTER));
+            String rutaImagen = "src/main/java/com/farukgenc/boilerplate/springboot/utils/img/logo-vestiestilo.png";
+            ImageData data = ImageDataFactory.create(rutaImagen);
+            Image img = new Image(data);
+            img.setWidth(120);
+            img.setHeight(80);
+            img.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            document.add(img);
+
             document.add(new LineSeparator(new SolidLine(2f)));
             document.add(new Paragraph("Pasados 30 dias no se respondes por las prendas").setFontSize(8f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             document.add(new LineSeparator(new SolidLine(1f)));

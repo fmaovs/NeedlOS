@@ -1,8 +1,6 @@
 package com.farukgenc.boilerplate.springboot.security.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
