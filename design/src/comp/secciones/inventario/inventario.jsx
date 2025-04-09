@@ -379,6 +379,7 @@ export default function Inventario() {
         opc3={"Valor"}
         opc4={"N°"}
         onClick={mostrarCrearInventario}
+        imgBoton={"../../../../public/media/img/crear.png"}
       />
       <SepXNegro />
       {formularioInventario && (

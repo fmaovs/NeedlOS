@@ -289,7 +289,7 @@ export default function ArqueoCaja() {
     <>
       <Encabezado
         titEncabezado={"Arqueo caja"}
-        claseCont={"cont-espacio-nomina"}
+        claseCont={"cont-espacio-arqueo"}
         conBtCrear={"none"}
         opc1={"Cliente"}
         opc2={"Prenda"}

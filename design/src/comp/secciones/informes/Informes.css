@@ -1,26 +1,99 @@
-.cont-informes{
-    display: flex;
-    flex-direction: column;
-    margin: 1vh 1vh 1vh 1vh;
-    border-radius: 1.2vh;
-    border: 0.18rem solid #0050b8;
-    box-sizing: border-box;
-    padding: 4vh 6vh 6vh 6vh;
-    height: auto;
-    min-height: calc(100% - (12% + 0.1vh + 2vh));
+.cont-colores-grafico {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  justify-content: space-evenly;
+  gap: 1vh;
+  padding: 2vh 0;
+  height: 8vh;
+  width: 100%;
 }
 
-.tit-informes{
-  font-size: calc((0.2vw + 3.2vh)* 0.9);
-  font-weight: 300;
+.cont-buscador-informes {
+  padding: 1.4vh;
+  gap: 1.4vh;
+}
+
+.cont-buscador-informes span {
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+}
+
+.grafico-container {
+  margin: 0 1vh 1vh 1vh;
+  height: calc(99vh - (8vh + 0.1vh + 12%));
+}
+
+.opcione-informes {
+  margin-left: 1.2vh;
+}
+
+/*Total Grafico css*/
+.cont-total-grafico {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2vh;
+  height: 100%;
+  padding-right: 2vh;
+  border-radius: 1.2vh;
+}
+
+.cont-total-grafico.green {
+  background-color: rgb(46, 204, 113, 0.1);
+}
+
+.cont-total-grafico.red {
+  background-color: rgb(231, 76, 60, 0.1);
+}
+
+.cont-total-grafico.blue {
+  background-color: rgb(52, 152, 219, 0.1);
+}
+
+.cont-total-grafico div {
+  border-radius: 1.2vh;
+  height: 100%;
+  width: 8vw;
+}
+.cont-total-grafico span {
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+}
+
+.grafico-green {
+  background-color: rgb(46, 204, 113);
+}
+
+.grafico-red {
+  background-color: rgb(231, 76, 60);
+}
+
+.grafico-blue {
+  background-color: rgb(52, 152, 219);
+}
+
+.descargar-excell {
+  border: 0.3vh solid #00b840;
+  background-color: #edfff4;
+}
+
+.inp-year {
+  height: 100%;
+  flex: 1;
+  min-width: 8rem;
+  padding-right: 1vh;
   text-align: center;
-  margin: 0 0 4vh 0;
+  box-sizing: border-box;
+  border-radius: 1.2vh;
+  background-color: #f8f8f8;
+  border: none;
+  outline: none;
+  appearance: none;
+  letter-spacing: 0.2vh;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+  transition: 0.1s ease-in-out;
 }
 
-.informes{
-  margin-top: 4vh;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30vh, 1fr));
-  grid-auto-rows: min-content;
-  gap: 3vh;
+.inp-year:hover {
+  background-color: #ededed;
 }

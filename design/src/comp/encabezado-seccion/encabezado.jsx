@@ -14,6 +14,8 @@ export default function Encabezado({
   onClick,
   withSearch,
   children,
+  claseBoton,
+  imgBoton,
 }) {
   return (
     <div className="cont-encabezado">
@@ -28,7 +30,12 @@ export default function Encabezado({
         />
         {children}
       </div>
-      <CrearNSec visible={conBtCrear} onClick={onClick} />
+      <CrearNSec
+        visible={conBtCrear}
+        onClick={onClick}
+        claseBoton={claseBoton}
+        imgBoton={imgBoton}
+      />
     </div>
   );
 }

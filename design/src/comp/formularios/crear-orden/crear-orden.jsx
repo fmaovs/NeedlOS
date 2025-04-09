@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { isDate } from "date-fns";
+import printJS from "print-js";
 import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import axios from "axios";
 import WebCam from "react-webcam";
@@ -12,6 +13,7 @@ import SpanForm from "../../parrafos/span-form/span-form";
 import CustomDateInput from "../../calendario/custom-calendar/calendario";
 import CardPrenda from "../../cards/card-prenda/card-prenda";
 import basura from "../../../../public/media/img/basura.png";
+import { ca } from "date-fns/locale";
 
 /*CARPETA PRENDAS*/
 const prendasUbi = "../../../../public/media/img/prendas/";
@@ -635,11 +637,6 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
 
       if (responsePedido.status >= 200 && responsePedido.status < 300) {
         idOrden = responsePedido.data.id;
-        console.log("------------------------------");
-        console.log(
-          "Pedido creado correctamente. ID =",
-          responsePedido.data.id
-        );
 
         /*Aparecer notificacion*/
         setNotificacion(true);
@@ -670,13 +667,12 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
               },
             }
           );
-          console.log("Foto asignada");
         } catch (error) {
-          console.error("Foto NO asignada");
-          console.log("------------------------------");
+          console.error(error);
           return;
         }
 
+        /*ASIGNAR ABONO*/
         if (Number.isInteger(abono) && abono != 0) {
           /*Variables Abono*/
           let DatosAbono = {
@@ -700,6 +696,62 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
             console.log("Error Asignando abono");
           }
         }
+
+        try {
+          // IMPRIMIR SASTRERIA
+          const responseSastreria = await axios.get(
+            `http://localhost:8080/orders/pdf/sastreria/{Id}?id=${idOrden}`,
+            {
+              headers: {
+                Authorization: `Bearer ${tokenPass}`,
+              },
+              responseType: "blob",
+            }
+          );
+
+          const fileSastreria = new Blob([responseSastreria.data], {
+            type: "application/pdf",
+          });
+          const fileURLSastreria = URL.createObjectURL(fileSastreria);
+
+          await new Promise((resolve) => {
+            printJS({
+              printable: fileURLSastreria,
+              type: "pdf",
+              onPrintDialogClose: () => {
+                resolve();
+              },
+            });
+          });
+
+          // IMPRIMIR CLIENTE
+          const responseCliente = await axios.get(
+            `http://localhost:8080/orders/pdf/cliente/{Id}?id=${idOrden}`,
+            {
+              headers: {
+                Authorization: `Bearer ${tokenPass}`,
+              },
+              responseType: "blob",
+            }
+          );
+
+          const fileCliente = new Blob([responseCliente.data], {
+            type: "application/pdf",
+          });
+          const fileURLCliente = URL.createObjectURL(fileCliente);
+
+          await new Promise((resolve) => {
+            printJS({
+              printable: fileURLCliente,
+              type: "pdf",
+              onPrintDialogClose: () => {
+                resolve();
+              },
+            });
+          });
+        } catch (error) {
+          console.error(error);
+        }
       }
     } catch (error) {
       console.error(
@@ -709,12 +761,10 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
       return;
     }
 
-    /*BORRAR DATOS RECOLECTADOS Y LIMPIAR FORMULARIO*/
-    console.log("Datos enviados");
+    /*MOSTRAR ORDEN CREADA*/
     console.log(dataPedido);
-    console.log("------------------------------");
 
-    /*EJECUTAR FUNCION DE LIIMPIAR DATOS*/
+    /*EJECUTAR FUNCION DE LIIMPIAR DATOS Y REFRESCAR*/
     limpiarPedido();
     ejecutarFuncion();
   }
