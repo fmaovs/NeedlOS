@@ -1,0 +1,19 @@
+.cont-render {
+  width: 87.32%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  opacity: 1;
+  transition: 0.3s ease-in-out;
+  overflow-x: hidden;
+}
+
+.cont-render.animating {
+  opacity: 0;
+  transform: translateX(1vh);
+}
+
+/* Estado cuando no está animando */
+.cont-render:not(.animating) {
+  opacity: 1;
+}

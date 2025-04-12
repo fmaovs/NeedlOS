@@ -1,0 +1,38 @@
+.cont-info {
+  flex: 1;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Animación para la entrada, solo se aplicará al componente visible */
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateX(1vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes salida {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.cont-info > .entrando {
+  opacity: 0;
+  animation: entrada 0.15s ease-out 0.15s forwards; 
+}
+
+.cont-info > .exiting {
+  animation: salida 0.15s ease-in forwards;
+  opacity: 1;
+}

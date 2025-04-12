@@ -1,0 +1,107 @@
+import "./detalle-pedido.css";
+import ContDetalle from "./cont-detalle";
+import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro";
+const cerrar = "../../../../media/img/cerrar.png";
+
+export default function CardDetallePedido({
+  nPedido,
+  estado,
+  onClick,
+  nombre,
+  apelliido,
+  telefono,
+  sastreAsignado,
+  tipoArreglo,
+  estadoPedido,
+  abono,
+  totalPedido,
+  idTotal,
+  childrenSelect,
+  fechaPedido,
+  fechaEntrega,
+  children,
+  mostrarAnulado,
+  colorAnulado,
+  onMouseDownAnulado,
+  onMouseUpAnulado,
+  onMouseLeaveAnulado,
+  estadoBoton,
+  color,
+  pedidoAnulado,
+  onMouseDown,
+  onMouseUp,
+  onMouseLeave,
+}) {
+  return (
+    <div
+      className={`cont-tarjeta-detalles ${
+        estado ? "cont-tarjeta-detalles-visible" : ""
+      }`}
+    >
+      <div className="tarjeta-detalles">
+        <span className="nPedido">Orden #{nPedido}</span>
+        <SepXNegro />
+        <button className="salir-tarjeta-detalles" onClick={onClick}>
+          <img src={cerrar} />
+        </button>
+        <section className="fila-detalles-ordenes">
+          <ContDetalle titulo={"Nombre:"} txt={nombre} />
+          <ContDetalle titulo={"Apellido:"} txt={apelliido} />
+          <ContDetalle titulo={"Telefono:"} txt={telefono} />
+        </section>
+        <section className="fila-detalles-ordenes">
+          <ContDetalle titulo={"Sastre Asignado:"} txt={sastreAsignado} />
+          <ContDetalle titulo={"Tipo:"} txt={tipoArreglo} />
+          <ContDetalle titulo={"Estado:"} txt={estadoPedido} />
+        </section>
+        <div className="cont-tb-card-detaPedido">
+          <table className="tabla-card-detalles-pedido">
+            <thead>
+              <tr>
+                <th>Cant.</th>
+                <th>Detalles</th>
+                <th>Producto</th>
+                <th>Vlr.Unit</th>
+                <th>Vlr.Total</th>
+              </tr>
+            </thead>
+            <tbody>{children}</tbody>
+          </table>
+        </div>
+        <section className="fila-detalles-ordenes">
+          <ContDetalle titulo={"Abono:"} txt={abono} />
+          <ContDetalle
+            titulo={"Total:"}
+            txt={totalPedido}
+            id={idTotal}
+            clase={"detalles-txt-row"}
+          >
+            {childrenSelect}
+          </ContDetalle>
+        </section>
+        <section className="fila-detalles-ordenes">
+          <ContDetalle titulo={"Fecha Pedido:"} txt={fechaPedido} />
+          <ContDetalle titulo={"Fecha Entrega:"} txt={fechaEntrega} />
+        </section>
+        <section className="fila-detalles-ordenes">
+          <button
+            className={`boton-finalizar-estado-anulado ${mostrarAnulado} ${colorAnulado}`}
+            onMouseDown={onMouseDownAnulado}
+            onMouseUp={onMouseUpAnulado}
+            onMouseLeave={onMouseLeaveAnulado}
+          >
+            Anular?
+          </button>
+          <button
+            className={`boton-finalizar-estado ${estadoBoton} ${color} ${pedidoAnulado}`}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseLeave}
+          >
+            Terminar?
+          </button>
+        </section>
+      </div>
+    </div>
+  );
+}

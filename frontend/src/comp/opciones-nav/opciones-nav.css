@@ -1,0 +1,105 @@
+.cont-seccion-first {
+  width: 93.5%;
+  height: 6%;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  background: linear-gradient(to right, #ffffff, #ffffff);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0.42vw auto 0.21vw auto;
+  border: 0.18rem solid #ffffff;
+  border-radius: 1.2vh;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cont-seccion {
+  width: 93.5%;
+  height: 6%;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  background: linear-gradient(to right, #ffffff, #ffffff);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0.21vw auto 0.21vw auto;
+  border: 0.18rem solid #ffffff;
+  border-radius: 1.2vh;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cont-seccion-last {
+  width: 93.5%;
+  height: 6%;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  background: linear-gradient(to right, #ffffff, #ffffff);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0.21vw auto auto auto;
+  border: 0.18rem solid #ffffff;
+  border-radius: 1.2vh;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cont-seccion-sett {
+  width: 93.5%;
+  height: 6%;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0.42vw auto 0.42vw auto;
+  border: 0.18rem solid #ffffff;
+  border-radius: 1.2vh;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+}
+
+.cont-seccion-first:hover {
+  border: 0.18rem solid #dfdfdf;
+  text-decoration: underline;
+  text-underline-offset: 0.2vh;
+}
+
+.cont-seccion:hover {
+  border: 0.18rem solid #dfdfdf;
+  text-decoration: underline;
+  text-underline-offset: 0.2vh;
+}
+
+.cont-seccion-last:hover {
+  border: 0.18rem solid #dfdfdf;
+  text-decoration: underline;
+  text-underline-offset: 0.2vh;
+}
+
+.cont-seccion-sett:hover {
+  border: 0.18rem solid #dfdfdf;
+  text-decoration: underline;
+  text-underline-offset: 0.2vh;
+}
+
+.img-seccion {
+  height: 60%;
+  margin-left: 1vh;
+  margin-right: 1vh;
+}
+
+.active {
+  border: 0.3vh solid #0050b8;
+  background: linear-gradient(to right, #eff6ff, #ffffff);
+}
+
+.active:hover {
+  border: 0.3vh solid #0050b8;
+  background: linear-gradient(to right, #eff6ff, #ffffff);
+}

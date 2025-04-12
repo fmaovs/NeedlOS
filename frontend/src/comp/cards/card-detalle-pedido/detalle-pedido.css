@@ -1,0 +1,330 @@
+.cont-tarjeta-detalles {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  left: 44%;
+  top: -10vh;
+  transform: translateX(-50%);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+
+.cont-tarjeta-detalles-visible {
+  opacity: 1;
+}
+
+.tarjeta-detalles {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 40vw;
+  padding: 1vh;
+  border-radius: 1.2vh;
+  border: 0.18rem solid #0050b8;
+  background-color: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 0 4vh rgba(101, 101, 101, 0.3);
+}
+
+.salir-tarjeta-detalles {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6vh;
+  margin: 0;
+  top: 1vh;
+  right: 1vh;
+  border-radius: 0.8vh;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+}
+
+.salir-tarjeta-detalles:hover {
+  background-color: #f3f3f3;
+}
+
+.tarjeta-detalles .nPedido {
+  text-align: center;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+  margin: 1vh 0 2vh 0;
+}
+
+.salir-tarjeta-detalles img {
+  height: 1.8vh;
+  opacity: 0.6;
+}
+
+.fila-detalles-ordenes {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  gap: 1vh;
+}
+
+.cont-detalle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.detalles-titulo {
+  height: 4.5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 1vh;
+  color: #d2d2d2;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+}
+
+.detalles-txt {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 1.4vh;
+  height: 4.5vh;
+  border: 0.1vh solid #d2d2d2;
+  border-radius: 1.2vh;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+}
+
+.detalles-txt-input {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 1.4vh;
+  height: 4.5vh;
+  border: 0.1vh solid #d2d2d2;
+  border-radius: 1.2vh;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  outline: none;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  transition: 0.1s ease-in-out;
+}
+
+.detalles-txt-input:focus {
+  border-color: rgb(118, 118, 118);
+}
+
+.cont-tb-card-detaPedido {
+  min-height: 25vh;
+  max-height: 25vh;
+  overflow: auto;
+}
+
+.tabla-card-detalles-pedido {
+  width: 100%;
+  margin: 1vh 0;
+  border-collapse: collapse;
+}
+
+.tabla-card-detalles-pedido thead {
+  height: 4.5vh;
+}
+
+.tabla-card-detalles-pedido th {
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  font-weight: 400;
+  color: #d2d2d2;
+}
+
+.tabla-card-detalles-pedido tbody tr:not(.last-row-tb-tarjeta-detalles) {
+  height: 4vh;
+}
+
+.tabla-card-detalles-pedido td {
+  text-align: center;
+  background-color: #f8f8f8;
+  font-size: calc((0.2vw + 3.2vh) * 0.48);
+}
+
+.tabla-card-detalles-pedido td:first-child {
+  border-radius: 1.2vh 0 0 1.2vh;
+}
+
+.tabla-card-detalles-pedido td:last-child {
+  border-radius: 0 1.2vh 1.2vh 0;
+}
+
+.last-row-tb-tarjeta-detalles {
+  height: 1.2vh;
+}
+
+.boton-finalizar-estado {
+  position: relative;
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  margin: 1vh 0 0 0;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  overflow: hidden;
+  background-color: transparent;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.boton-finalizar-estado.FINALIZADO.oprimido {
+  border: hidden;
+}
+
+.boton-finalizar-estado:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  text-underline-offset: 0.2vh;
+  letter-spacing: 0.02vw;
+}
+
+.boton-finalizar-estado:active {
+  border-color: transparent;
+  text-decoration: none;
+}
+
+.boton-finalizar-estado::before {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  transform: translateX(-101%);
+  transition: 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.boton-finalizar-estado:active::before {
+  transform: translateX(0);
+}
+
+/*Pedido finalizado*/
+.boton-finalizar-estado.EN_PROCESO.EN_PROCESO::before {
+  content: "Finalizado";
+  background-color: #48ea60;
+  border: 0.1vh solid #48ea60;
+}
+
+.boton-finalizar-estado.EN_PROCESO.oprimido.FINALIZADO::before {
+  content: "Finalizado";
+  background-color: #48ea60;
+  border: 0.1vh solid #48ea60;
+  transform: translateX(0);
+}
+
+/*Pedido entregado*/
+.boton-finalizar-estado.FINALIZADO.FINALIZADO::before {
+  content: "Entregado";
+  background-color: #fdbc40;
+  border: 0.1vh solid #fdbc40;
+}
+
+.boton-finalizar-estado.FINALIZADO.oprimido.ENTREGADO::before {
+  transform: translateX(0);
+}
+
+.boton-finalizar-estado.ENTREGADO {
+  display: none;
+}
+
+.boton-finalizar-estado.ANULADO {
+  display: none;
+}
+
+.boton-finalizar-estado-anulado {
+  position: relative;
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  margin: 1vh 0 0 0;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  overflow: hidden;
+  background-color: transparent;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.boton-finalizar-estado-anulado.ANULADO.oprimido {
+  border: hidden;
+}
+
+.boton-finalizar-estado-anulado:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  text-underline-offset: 0.2vh;
+  letter-spacing: 0.02vw;
+}
+
+.boton-finalizar-estado-anulado:active {
+  border-color: transparent;
+  text-decoration: none;
+}
+
+.boton-finalizar-estado-anulado::before {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  transform: translateX(-101%);
+  transition: 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.boton-finalizar-estado-anulado:active::before {
+  transform: translateX(0);
+}
+
+/*Anular Pedido*/
+.boton-finalizar-estado-anulado.ENTREGADO {
+  display: none;
+}
+
+.boton-finalizar-estado-anulado.ANULADO {
+  display: none;
+}
+
+.boton-finalizar-estado-anulado.EN_PROCESO.ANULADO {
+  display: none;
+}
+
+.boton-finalizar-estado-anulado::before {
+  content: "Anulado";
+  background-color: #fc615d;
+  border: 0.1vh solid #fc615d;
+}
+
+.boton-finalizar-estado-anulado.oprimido::before {
+  transform: translateX(0);
+}
+
+.select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  appearance: none;
+}

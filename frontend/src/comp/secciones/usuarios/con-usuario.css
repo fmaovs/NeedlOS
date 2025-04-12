@@ -1,0 +1,48 @@
+/* Contenedor principal */
+.con-usuario {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2vh;
+    border: 0.3vh solid #0050b8;
+    background: linear-gradient(to right, #E2EEFF, #FFFFFF,#e4fde0, #FFFFFF);
+    border-radius: 1vh;
+    width: 83vw; 
+    height: 4vh; 
+    margin: 2vh auto; 
+ }
+
+.con-usuario1 {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: space-between;
+    padding-right: 2vh;
+
+
+  }
+  
+.con-usuario2 {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: space-between;
+    padding-left: 2vh;
+  }
+  
+
+.spam-usuario1,
+.spam-usuario2 {
+    font-size: calc((0.2vw + 3.2vh)* 0.7);
+    font-weight: bold;
+    color: #374151; 
+    margin-right: 4vh;
+    text-decoration: underline;
+  }
+  
+.img-usuario {
+    width: 4vh;
+    height: 4vh;
+    margin-left: auto;
+  }
+  

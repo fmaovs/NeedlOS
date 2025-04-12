@@ -1,0 +1,24 @@
+import "./login.css";
+
+import LogoImgText from "../../../logo/logo-blanco/LogoImg+Text.jsx";
+import SepXBlanco from "../../../separadores/sep-x-blanco/sep-x-blanco.jsx";
+import Eslogan from "../../../parrafos/eslogan/eslogan.jsx";
+import Footer from "../../../footer/footer.jsx";
+import FormLogin from "../../../formularios/iniciar-sesion/iniciar-sesion.jsx";
+
+export default function Login() {
+  return (
+    <div className="cont-login">
+      <div className="cont-lados">
+        <LogoImgText />
+        <SepXBlanco />
+        <Eslogan />
+        <Footer />
+      </div>
+      <div className="cont-lados">
+        <div className="cont-form"></div>
+        <FormLogin />
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,35 @@
+.cont-login {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+/*IZQUIERDA*/
+.cont-lados {
+  width: 100%;
+  max-width: 50%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/*DERECHA*/
+.cont-form {
+  position: fixed;
+  z-index: -1;
+  background-color: rgb(255, 255, 255);
+  width: 43.5%;
+  min-width: 594.203px;
+  height: 100%;
+  transform: skew(-9.28deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}

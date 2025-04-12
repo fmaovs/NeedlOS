@@ -1,0 +1,8 @@
+.cont-nav{
+    height: 100vh;
+    width: 12.6%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;   
+    overflow: hidden;
+}

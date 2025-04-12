@@ -1,0 +1,34 @@
+import "./inp-text.css";
+
+export default function CheckBox({
+  lbDireccion,
+  txt,
+  img,
+  type,
+  placeholder,
+  id,
+  valor,
+  cambio
+}) {
+  return (
+    <>
+      <div className="cont-lb">
+        <label htmlFor={lbDireccion} className="lb-inp">
+          {txt}
+        </label>
+      </div>
+      <div className="cont-inp">
+        <img src={img} alt="checkbox" className="images" />
+        <input
+          type={type}
+          placeholder={placeholder}
+          id={id}
+          className="inputs"
+          value={valor}
+          onChange={cambio}
+          autoComplete="off"
+        />
+      </div>
+    </>
+  );
+}

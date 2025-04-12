@@ -1,0 +1,174 @@
+.cont-form-inventario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  transform: translateX(2vh);
+}
+
+.cont-form-inventario.inventario-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.form-inventario {
+  cursor: auto;
+  min-width: 54vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 1.2vh;
+  padding: 1vh;
+  margin-bottom: 8vh;
+  box-sizing: border-box;
+  border: 0.18rem solid #0050b8;
+  box-shadow: 0 0 4vh rgba(101, 101, 101, 0.3);
+}
+
+.form-inventario.editar-material {
+  position: absolute;
+  left: 50%;
+  top: 30vh;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+
+.form-inventario.editar-material.inventario-visible {
+  opacity: 1;
+}
+
+.form-inventario span:not(.fila-detalles-ordenes span) {
+  text-align: center;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+  margin: 1vh 0 2vh 0;
+}
+
+.form-inventario button:not(.sumar-restar) {
+  width: 100%;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  margin: 1vh 0 0 0;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  overflow: hidden;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: 0.1s ease-in-out;
+}
+
+.form-inventario.editar-material button:first-child:not(.sumar-restar) {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6vh;
+  margin: 0;
+  top: 1vh;
+  right: 1vh;
+  width: auto;
+  height: auto;
+  border-radius: 0.8vh;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+}
+
+.form-inventario.editar-material button:first-child:not(.sumar-restar):hover {
+  background-color: #f3f3f3;
+}
+
+.form-inventario.editar-material button:first-child img {
+  height: 1.8vh;
+  opacity: 0.6;
+}
+
+.form-inventario button:not(.sumar-restar):hover {
+  border-color: rgb(113, 113, 113);
+  text-decoration: underline;
+}
+
+.form-inventario button:active {
+  text-decoration: none;
+}
+
+.form-inventario button:focus {
+  border-color: rgb(113, 113, 113);
+}
+
+.sumar-restar {
+  flex: 1;
+  margin-top: 1vh;
+  height: 4.5vh;
+  border-radius: 1.2vh;
+  border: 0.1vh solid #d2d2d2;
+  box-sizing: border-box;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  overflow: hidden;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: 0.1s ease-in-out;
+}
+
+.sumar-restar:first-child:hover,
+.sumar-restar:first-child:focus {
+  border-color: rgba(252, 97, 93, 0.1);
+  background-color: rgba(252, 97, 93, 0.4);
+  letter-spacing: 0.02vw;
+}
+
+.sumar-restar:last-child:hover,
+.sumar-restar:last-child:focus {
+  border-color: rgba(72, 234, 96, 0.1);
+  background-color: rgba(72, 234, 96, 0.4);
+  letter-spacing: 0.02vw;
+}
+
+.sumar-restar.resta-presionada {
+  background-color: #fc615d;
+  border: 0.1vh solid #fc615d;
+  color: white;
+}
+
+.sumar-restar.resta-presionada:hover,
+.sumar-restar.resta-presionada:focus {
+  background-color: #fc615d;
+  border: 0.1vh solid #fc615d;
+  color: white;
+  letter-spacing: 0;
+}
+
+.sumar-restar.suma-presionada {
+  background-color: #48ea60;
+  border: 0.1vh solid #48ea60;
+  color: white;
+}
+
+.sumar-restar.suma-presionada:hover,
+.sumar-restar.suma-presionada:focus {
+  background-color: #48ea60;
+  border: 0.1vh solid #48ea60;
+  color: white;
+  letter-spacing: 0;
+}
+
+.th-tabla-nomina-colum1 {
+  width: 14vw;
+}
+
+.th-tabla-nomina-colum2 {
+  width: 25vw;
+}

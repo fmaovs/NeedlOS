@@ -1,0 +1,156 @@
+/*Container */
+.container-vales {
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 2vh;
+}
+
+.vales-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2vh;
+}
+
+/* Form Section */
+.form-section {
+  flex: 1;
+  margin-right: 2vw;
+}
+
+.vales-form {
+  display: grid;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+.form-group{
+  margin-bottom: 1.5vh;
+}
+
+.form-label{
+  display: block;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+  color: #0000;
+  margin-bottom: 0.7vh;
+}
+
+.form-input{
+  width: 50%;
+  padding: 0.7vh;
+  border: 0.2vh solid #ccc;
+  border-radius: 0.8vh;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+}
+
+.form-valor{
+  width: 13vw;
+  padding: 0.7vh;
+  border: 0.1vh solid #ccc;
+  border-radius: 0.8vh;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+}
+
+/*BOTONES*/
+.buttons-section{
+  display: flex;
+  gap: 1vw;
+  align-items: flex-start;
+}
+
+.action-button{
+  display: flex;
+  background-color: #0050b8;
+  color: #f7f2f2;
+  align-items: center;
+  gap: 0.8vw;
+  padding: 0.8vh 1.6vw;
+  border-radius: 0.9vh;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+  cursor: pointer;
+  height: 5vh;
+}
+
+.search-button{
+  background-color: #0050b8;
+  color: #f7f2f2;
+}
+
+.button-icon{
+  width: 2vh;
+  height: 2vh;
+}
+
+/*TABLA DE VALES*/
+
+.table-container{
+  margin: 0.5vh 1vh 0 1vh;
+  border-radius: 1.2vh 1.2vh 0 0;
+  border-top: 0.18rem solid #0050b8;
+  border-right: 0.18rem solid #0050b8;
+  border-left: 0.18rem solid #0050b8;
+  box-sizing: border-box;
+  min-height: 77vh;
+  height: auto;
+  width: 65vw;
+  padding: 0 0.8vh;
+  overflow: auto;
+}
+
+.expenses-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header-row{
+  background-color: #ffffff;
+  border-bottom: 0.1vh solid #4a90e2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-header-row th{
+  padding: 1.2vh 1.6vw;
+  text-align: left;
+  font-weight: 500;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+  background: #ffffff;
+}
+
+.row-even{
+  background-color: #ffffff;
+}
+
+.row-odd{
+  background-color: #f8f9fa;
+}
+
+.row-even td,
+.row-odd td {
+  padding: 1.2vh 1.6vw;
+  color: #333;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+  border: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .vales-section {
+    flex-direction: column;
+  }
+  
+  .vales-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .buttons-section {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 2vh;
+  }
+  
+  .form-valor {
+    width: 100%;
+  }
+}

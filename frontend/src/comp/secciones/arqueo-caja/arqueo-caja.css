@@ -1,0 +1,207 @@
+.buton-resumen-arqueo {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  padding: 2vh;
+  border-radius: 1.2vh;
+  width: 10vh;
+  height: 10vh;
+  right: 2.5vh;
+  bottom: 1.1vh;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+
+.buton-resumen-arqueo:hover {
+  cursor: pointer;
+}
+
+.buton-resumen-arqueo-open {
+  background-color: transparent;
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+  height: 29.8vh;
+}
+
+.img-maximizar {
+  width: 100%;
+  transform: rotate(-90deg);
+  transition: 0.3s ease-in-out;
+}
+
+.image-reversed {
+  transform: scaleX(1) scaleY(-1);
+  opacity: 0.4;
+}
+
+.cont-tablas-arqueo {
+  display: flex;
+  flex-direction: row;
+  margin: 1vh 1vh 0 1vh;
+  width: calc(100% - 2vh);
+  gap: 1vh;
+  box-sizing: border-box;
+}
+
+.tb-arqueo1 {
+  margin: 0;
+  width: calc(40% - 1vh);
+}
+
+.min-wi-tb1 {
+  min-width: 24rem;
+}
+
+.tb-arqueo2 {
+  margin: 0;
+  width: 60%;
+}
+
+.min-wi-tb2 {
+  min-width: 50rem;
+}
+
+.cont-resumen-arqueo {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 0.3vh solid transparent;
+  bottom: 1vh;
+  right: 2.4vh;
+  width: 0;
+  height: 0;
+  padding: 1vh 10vh 1vh 1vh;
+  gap: 1vh;
+  box-sizing: border-box;
+  border-radius: 1.2vh;
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+
+.cont-resumen-arqueo-max {
+  opacity: 1;
+  width: calc(87.5vw - 4.9vh);
+  height: 30vh;
+  border: 0.3vh solid #0050b8;
+}
+
+.head-resumen-arqueo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 15%;
+}
+
+.head-resumen-arqueo span {
+  flex: 1;
+  text-align: center;
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+}
+
+.head-resumen-arqueo span:first-of-type {
+  flex: none;
+  width: calc(16% + 2.1vh);
+}
+
+.head-resumen-arqueo span:not(:first-of-type):not(:last-of-type) {
+  flex: none;
+  width: calc(32% + 2.1vh);
+}
+
+.sep-y-small-arqueo {
+  height: 60%;
+  width: 0.1vh;
+  margin: 0 0.5vh;
+  background-color: #bababa;
+}
+
+.cont-info-resumenes {
+  flex: 1;
+  gap: 1vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.cont-info-resumenes section {
+  flex: 1;
+  max-height: 19.2vh;
+  overflow-y: auto;
+  border: 0.1vh solid #d2d2d2;
+  border-radius: 1.2vh;
+  padding: 2vh 1vh 1vh 1vh;
+}
+
+.cont-info-resumenes table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.section-resu-entradas thead tr {
+  height: 1vh;
+}
+
+.section-resu-entradas th {
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
+}
+
+.section-resu-entradas th:first-of-type {
+  border-right: 0.05vh solid #d2d2d2;
+}
+
+.section-resu-entradas th:last-of-type {
+  border-left: 0.05vh solid #d2d2d2;
+}
+
+.section-resu-entradas th:not(:first-of-type):not(:last-of-type) {
+  border-left: 0.05vh solid #d2d2d2;
+  border-right: 0.05vh solid #d2d2d2;
+}
+
+.section-resu-entradas td {
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+  text-transform: capitalize;
+}
+
+.section-resu-entradas tr:not(:last-of-type):not(:first-of-type) {
+  height: 4.8vh;
+  border-bottom: 0.1vh solid #d2d2d2;
+  text-align: center;
+}
+
+.section-resu-entradas tbody tr:last-of-type {
+  height: 4.8vh;
+  text-align: center;
+}
+
+.section-resu-entradas tbody tr:first-of-type {
+  height: 1.5vh;
+}
+
+/*Tamaños tablas*/
+.section-resu-entradas.resu-entradas {
+  flex: none;
+  width: 16%;
+}
+
+.section-resu-entradas.resu-gastos {
+  flex: none;
+  width: 32%;
+}
+
+.section-resu-entradas.resu-ingresos {
+  overflow: hidden;
+}
+
+.td.td-arqueo:hover {
+  background-color: #f8f8f8;
+  cursor: auto;
+}
+
+.cont-espacio-arqueo {
+  display: none;
+}

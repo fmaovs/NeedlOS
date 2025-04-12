@@ -1,0 +1,10 @@
+.cont-filtrador{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    border: 0.18rem solid #0050b8;
+    border-radius: 1.2vh;
+    overflow: hidden;
+}

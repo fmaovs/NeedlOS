@@ -1,0 +1,98 @@
+.cont-tablas-nomina {
+  display: flex;
+  flex-direction: row;
+  gap: 1vh;
+  margin: 1vh;
+  box-sizing: border-box;
+  height: calc(100% - 23.14vh);
+}
+
+.span-separacion {
+  margin: 0 2vh;
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
+}
+
+.ocultar-scroll {
+  width: calc(40% - 1vh);
+  border-radius: 1.2vh;
+  border: 0.3vh solid #0050b8;
+  overflow: hidden;
+}
+
+.ocultar-scroll2 {
+  height: 80%;
+  border-radius: 1.2vh;
+  border: 0.3vh solid #0050b8;
+  overflow: hidden;
+}
+
+.cont-nomina-resumen-vales {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  height: 100%;
+  gap: 1vh;
+  box-sizing: border-box;
+}
+
+.tb-nomina {
+  overflow-y: auto;
+  width: 100%;
+  min-height: 76.9vh;
+  max-height: 76.9vh;
+  border-radius: 1.2vh;
+  border: none;
+  margin: 0;
+}
+
+.tb-nomina-second {
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.2vh;
+  border: none;
+  margin: 0;
+}
+
+.cont-vales {
+  border: 0.3vh solid #0050b8;
+  border-radius: 1.2vh;
+  flex: 1;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  padding: 0 1vh;
+}
+
+.tr-nomina:hover td {
+  background-color: #e6e6e6;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tr-nomina:hover td:active {
+  text-decoration: none;
+}
+
+.td-nomina:last-child:hover {
+  background-color: #f8f8f8;
+  cursor: auto;
+}
+
+.empleado-presionado td {
+  background-color: #e6e6e6;
+  text-decoration: none;
+  cursor: default;
+}
+
+.empleado-presionado:hover td {
+  background-color: #e6e6e6;
+  text-decoration: none;
+  cursor: default;
+}
+
+.empleado-presionado #sastre-td:hover {
+  background-color: #e6e6e6;
+  text-decoration: none;
+  cursor: default;
+}

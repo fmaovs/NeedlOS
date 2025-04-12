@@ -1,0 +1,30 @@
+#none {
+  display: none;
+}
+
+.cont-crear-nuevo {
+  aspect-ratio: 1/1;
+  height: 68%;
+  margin: 0 0.8vw 0 0;
+  border-radius: 1.2vh;
+  padding: 1.4vh;
+  box-sizing: border-box;
+  border: 0.18rem solid #0050b8;
+  background-color: #edf7ff;
+  cursor: pointer;
+  transition: 0.08s ease-in-out;
+}
+
+.cont-crear-nuevo:active .img-crear-nuevo{
+  scale: 0.8;
+} 
+
+.img-crear-nuevo {
+  height: 100%;
+  width: auto;
+  transition: 0.1s ease-in-out;
+}
+
+.img-crear-nuevo:active{
+  scale: 0.9;
+}

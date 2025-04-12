@@ -1,0 +1,40 @@
+/*OCULTAR BOTON ORIGINAL*/
+.cont-cb input {
+  display: none;
+}
+
+/*ESTILO DEL BOTON*/
+.check-style {
+  width: 2.01vh;
+  height: 2.01vh;
+  box-shadow: 0 0 0 1px rgb(203, 203, 203);
+  border-radius: 0.3rem;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/*CAMBIAR ESTILO CUANDO ESTE MARCADO*/
+.cont-cb input[type="checkbox"]:checked + .check-style {
+  background-color: #014093;
+  box-shadow: 0 0 0 1px #014093;
+}
+
+.cont-cb input[type="checkbox"]:checked + .check-style:before {
+  content: "";
+  position: absolute;
+  top: 0.53vh;
+  left: 0.4vh;
+  width: 1vh;
+  height: 0.5vh;
+  background-color: transparent;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg);
+}
+
+/*ESTILOS DEL LABEL*/
+.cont-cb {
+  display: inline-block;
+  cursor: pointer;
+}

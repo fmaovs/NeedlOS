@@ -1,0 +1,25 @@
+.other-filters {
+  aspect-ratio: 1/1;
+  height: 100%;
+  margin: 0 0 0 1vh;
+  padding: 0.5vh 0 0 0;
+  box-sizing: border-box;
+  border: 0.3vh solid #0050b8;
+  border-radius: 1.2vh;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  overflow: hidden;
+  transition: 0.3s ease-in;
+}
+
+.other-filters:hover {
+  background-color: #edf7ff;
+}
+
+.img-others-filter {
+  height: 60%;
+  width: auto;
+  object-fit: contain;
+}
