@@ -105,7 +105,7 @@
 }
 
 .form-cargo{
-  width: 70%;
+  width: 30vw;
   height: 5vh;
   border-radius: 1vh;
   margin: 0 2vh ;
@@ -258,7 +258,6 @@
     min-width: auto;
   }
 }
-
 .div{
   background-color: aquamarine;
 }

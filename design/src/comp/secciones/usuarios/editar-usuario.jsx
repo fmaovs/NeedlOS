@@ -69,37 +69,60 @@ export function EditarUsuario({ idUser }) {
   }
 
   return (
-    <div className="div">
-      <h1>Editar usuario</h1>
+    <div className="modal-backdrop">
+      <div className="modal-content">
+        <div className="r-usuario">
+          <h1 className="titulo">Editar usuario</h1>
+        </div>
+        <div className="formulario">
+          <div className="from-group">
+            <label className="form-label">Nombre</label>
+            <input type="text" ref={nombreRef} className="form-input" />
+          </div>
 
-      <label htmlFor="">Nombre</label>
-      <input type="text" ref={nombreRef} />
+          <div className="from-group">
+            <label className="form-label">Apellido</label>
+            <input type="text" ref={apellidoRef} className="form-input" />
+          </div>
 
-      <label htmlFor="">Apellido</label>
-      <input type="text" ref={apellidoRef} />
+          <div className="from-group">
+            <label className="form-label">Username</label>
+            <input type="text" ref={usernameRef} className="form-input" />
+          </div>
 
-      <label htmlFor="">Username</label>
-      <input type="text" ref={usernameRef} />
+          <div className="from-group">
+            <label className="form-label">Correo</label>
+            <input type="text" ref={correoRef} className="form-input" />
+          </div>
 
-      <label htmlFor="">Correo</label>
-      <input type="text" ref={correoRef} />
+          <div className="from-group">
+            <label className="form-label">Teléfono</label>
+            <input type="number" ref={telefonoRef} className="form-input" />
+          </div>
 
-      <label htmlFor="">Telefono</label>
-      <input type="number" ref={telefonoRef} />
+          <div className="from-group">
+            <label className="form-label">Rol</label>
+            <select ref={rolRef} className="form-input-rol">
+              <option value="ADMIN">Administrador</option>
+              <option value="USER">Usuario</option>
+            </select>
+          </div>
 
-      <label htmlFor="">Rol</label>
-      <select name="" id="" ref={rolRef}>
-        <option value="ADMIN">Administrador</option>
-        <option value="USER">Usuario</option>
-      </select>
+          <div className="from-group">
+            <label className="form-label">Cargo</label>
+            <select ref={cargoRef} className="form-cargo">
+              <option value="ADMIN">Admin</option>
+              <option value="SASTRE">Sastre</option>
+            </select>
+          </div>
 
-      <label htmlFor="">Cargo</label>
-      <select name="" id="" ref={cargoRef}>
-        <option value="ADMIN">Admin</option>
-        <option value="SASTRE">Satre</option>
-      </select>
-
-      <button onClick={() => actualizarUsuario()}>Actualizar</button>
+          <div className="from-botton">
+            <button className="btn-primary" onClick={actualizarUsuario}>
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

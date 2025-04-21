@@ -1,7 +1,81 @@
-.con-gastos{
-    flex: 1;
-    height: 8%;
-    margin: 1vh 1vh 0.5vh 1vh;
+/* gastos.css */
+.form {
+    width: 30vw;
+    padding: 2vh 2vw;
+    margin: 0 0 0 5vh;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.2vh;
+}
+
+.form-label {
+    font-size: calc((0.2vw + 3.2vh)* 0.5);
+    margin-bottom: 0.2vh;
+    color: #0c0c0c;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    padding: 1.5vh 1vw;
+    font-size: calc((0.2vw + 3.2vh)* 0.5);
+    border: 0.2vh solid #ccc;
+    border-radius: 1.5vh;
+    width: 18vw;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.btn-crear {
+    width: 13vw;
+    padding: 1.5vh 3vw;
+    font-size: calc((0.2vw + 3.2vh)* 0.6);
+    background-color: #0050b8;
+    color: white;
+    border: none;
+    border-radius: 1.5vh;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  /* Tabla */
+.tabla-cont {
+    margin: 2vh 3vw;
+    padding: 0 2vw;
+    max-width: 70vw;
+    border-radius: 1.2vh 1.2vh 0 0;
+    border-top: 0.32vh solid #0050b8;
+    border-right: 0.32vh solid #0050b8;
+    border-left: 0.32vh solid #0050b8;
+    box-sizing: border-box;
+    min-height: 60vh;
+    height: auto;
+    width:80vw;
+    overflow: auto;
+}
+
+.tabla {
+    width: 100%;
+    overflow: hidden;
+}
+
+.tr-encabezado th {
+    padding: 1.2vh 1vw;
+    text-align: center;
+    font-size:calc((0.2vw + 3.2vh)* 0.6) ;
+}
+.td-user {
+    padding: 1.5vh 1vw;
+    border-bottom: 0.1vh solid #ddd;
+    font-size: 1.8vh;
 }
