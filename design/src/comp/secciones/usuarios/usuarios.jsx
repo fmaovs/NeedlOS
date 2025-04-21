@@ -35,13 +35,11 @@ export default function Usuarios() {
         axios.get("http://localhost:8080/users/cargo/{cargo}?cargo=ADMIN", {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
-            "Content-Type": "application/json",
           },
         }),
         axios.get("http://localhost:8080/users/cargo/{cargo}?cargo=SASTRE", {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
-            "Content-Type": "application/json",
           },
         }),
       ]);
@@ -70,7 +68,6 @@ export default function Usuarios() {
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
-            "Content-Type": "application/json",
           },
         }
       );
@@ -102,7 +99,6 @@ export default function Usuarios() {
         {
           headers: {
             Authorization: `Bearer ${tokenPass}`,
-            "Content-Type": "application/json",
           },
         }
       );
@@ -167,6 +163,7 @@ export default function Usuarios() {
         titEncabezado="Usuarios"
         conBtCrear="Crear Usuario"
         onClick={() => setMostrarRegistro(true)}
+        imgBoton={"../../../../public/media/img/crear.png"}
       />
       <SepXNegro />
 

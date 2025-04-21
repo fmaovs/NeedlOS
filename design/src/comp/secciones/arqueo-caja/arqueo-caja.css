@@ -146,7 +146,7 @@
 }
 
 .section-resu-entradas th {
-  font-size: calc((0.2vw + 3.2vh)* 0.5);
+  font-size: calc((0.2vw + 3.2vh) * 0.5);
 }
 
 .section-resu-entradas th:first-of-type {
@@ -163,7 +163,7 @@
 }
 
 .section-resu-entradas td {
-  font-size: calc((0.2vw + 3.2vh)* 0.45);
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
   text-transform: capitalize;
 }
 
@@ -200,4 +200,8 @@
 .td.td-arqueo:hover {
   background-color: #f8f8f8;
   cursor: auto;
+}
+
+.cont-espacio-arqueo {
+  display: none;
 }

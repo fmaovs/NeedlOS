@@ -93,6 +93,7 @@ export default function Ordenes() {
         opc3={"Valor"}
         opc4={"N°"}
         onClick={mostrarCrearOrden}
+        imgBoton={'../../../../public/media/img/crear.png'}
       />
       {mostrarFormulario && (
         <CrearOrden
