@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import TotalGrafico from "./total-grafico.jsx";
-import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import {
   LineChart,
   Line,
@@ -66,7 +65,7 @@ export default function Informe() {
         `http://localhost:8080/informe/mensual?fechaInicio=${primerDia}&fechaFin=${ultimoDia}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -81,7 +80,7 @@ export default function Informe() {
         `http://localhost:8080/informe/total?fechaInicio=${primerDia}&fechaFin=${ultimoDia}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -146,7 +145,7 @@ export default function Informe() {
         `http://localhost:8080/informe/excel?fechaInicio=${primerDia}&fechaFin=${ultimoDia}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );

@@ -1,7 +1,6 @@
 import "./estado-ordenes.css";
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import { tokenPass } from "../../../formularios/iniciar-sesion/iniciar-sesion";
 import WebCam from "react-webcam";
 import DetallesOrden from "../../../botones/abrir-detalles-orden/detalles-orden";
 import CardDetallePedido from "../../../cards/card-detalle-pedido/detalle-pedido";
@@ -20,7 +19,7 @@ export default function TbTodo() {
     try {
       const response = await axios.get("http://localhost:8080/orders/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       const sortedOrders = response.data.sort(
@@ -55,7 +54,7 @@ export default function TbTodo() {
       // Obtenemos los nuevos datos
       const response = await axios.get(`http://localhost:8080/orders/${id}`, {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
 
@@ -142,7 +141,7 @@ export default function TbTodo() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -185,7 +184,7 @@ export default function TbTodo() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -208,7 +207,7 @@ export default function TbTodo() {
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -228,7 +227,7 @@ export default function TbTodo() {
           },
           {
             headers: {
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -262,7 +261,7 @@ export default function TbTodo() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );

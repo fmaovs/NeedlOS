@@ -9,10 +9,8 @@ import Spinner from "../../loaders/spinner.jsx";
 const User = "../../../../public/media/img/user.png";
 const Password = "../../../../public/media/img/password.png";
 const Error = "../../../../public/media/img/error.png";
-const Aprobado = '../../../../public/media/img/aprobado.png'
+const Aprobado = "../../../../public/media/img/aprobado.png";
 const Cerrar = "../../../../public/media/img/cerrar.png";
-
-export let tokenPass = null
 
 export default function IniciarSesion() {
   const [username, setUsername] = useState("");
@@ -36,9 +34,9 @@ export default function IniciarSesion() {
         password,
       });
 
-      // Extraer el token de la respuesta
-      const token = response.data.token;
-      tokenPass = token
+      // Guardar token y rol
+      sessionStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("rol", response.data.rol);
 
       // Manejar el login exitoso
       setSuccessMessage("Bienvenido");
@@ -120,14 +118,11 @@ export default function IniciarSesion() {
           <label htmlFor="recuerdame" className="lb-inp-recovery">
             Recuerdame
           </label>
-          <a href="" className="link-recovery">
-            Recuperar contraseña
-          </a>
         </div>
 
         <div className="cont-butt-login">
           <button type="submit" className="buttom-login">
-            Login
+            Ingresar
           </button>
         </div>
       </form>
