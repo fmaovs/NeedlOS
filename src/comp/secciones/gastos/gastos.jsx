@@ -1,6 +1,5 @@
 import "./gastos.css";
 import React, { useEffect, useRef, useState } from "react";
-import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import Calendario from "../../calendario/nomina-calendario/nomina-calendario.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
@@ -38,7 +37,7 @@ export default function Gastos() {
   const cargarGastos = async () => {
     try {
       const res = await axios.get("http://localhost:8080/gastos/all", {
-        headers: { Authorization: `Bearer ${tokenPass}` },
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
       });
       setGastos(res.data);
       setCargando(false);
@@ -50,7 +49,7 @@ export default function Gastos() {
   const traerEmpleados = async () => {
     try {
       const res = await axios.get("http://localhost:8080/users/all", {
-        headers: { Authorization: `Bearer ${tokenPass}` },
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
       });
       setEmpleados(res.data);
     } catch (error) {
@@ -91,7 +90,7 @@ export default function Gastos() {
         nuevoGasto,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );

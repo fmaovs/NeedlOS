@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { isDate } from "date-fns";
 import printJS from "print-js";
-import { tokenPass } from "../iniciar-sesion/iniciar-sesion";
 import axios from "axios";
 import WebCam from "react-webcam";
 import "./crear-orden.css";
@@ -92,7 +91,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
       // Llamada a la API para obtener todos los clientes utilizando axios
       const response = await axios.get("http://localhost:8080/customers/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
 
@@ -126,7 +125,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
     try {
       const response = await axios.get("http://localhost:8080/prendas/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       const prenda = response.data.find((p) => p.descripcion === namePrenda);
@@ -147,7 +146,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
     try {
       const response = await axios.get("http://localhost:8080/prendas/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       setPrendas(response.data); // Actualizar el estado con las prendas obtenidas
@@ -163,7 +162,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
     try {
       const response = await axios.get(`http://localhost:8080/prendas/${id}`, {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       txtNamePrenda.value = response.data.descripcion;
@@ -183,7 +182,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
     try {
       const response = await axios.get("http://localhost:8080/users/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       setUsers(response.data);
@@ -296,7 +295,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
 
       const response = await axios.get("http://localhost:8080/prendas/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
 
@@ -517,7 +516,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
         {
           params: { phone: valueTelefono },
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -560,7 +559,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
           nuevoCliente,
           {
             headers: {
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -630,7 +629,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -663,7 +662,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
             {
               headers: {
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${tokenPass}`,
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
               },
             }
           );
@@ -687,7 +686,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
               DatosAbono,
               {
                 headers: {
-                  Authorization: `Bearer ${tokenPass}`,
+                  Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                 },
               }
             );
@@ -703,7 +702,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
             `http://localhost:8080/orders/pdf/sastreria/{Id}?id=${idOrden}`,
             {
               headers: {
-                Authorization: `Bearer ${tokenPass}`,
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
               },
               responseType: "blob",
             }
@@ -729,7 +728,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
             `http://localhost:8080/orders/pdf/cliente/{Id}?id=${idOrden}`,
             {
               headers: {
-                Authorization: `Bearer ${tokenPass}`,
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
               },
               responseType: "blob",
             }

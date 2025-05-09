@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./registroUsuario.css"
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
-import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
 
 export function RegistroUsuario({ onClose, onSubmit }) {

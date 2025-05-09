@@ -4,9 +4,7 @@ import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
 import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
 import React, { useEffect, useState } from "react";
-import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
-import { id } from "date-fns/locale";
 
 const entradaPrendas = "../../../../public/media/img/ingresoPrendas.png";
 const retiroPrendas = "../../../../public/media/img/retiroPrendas.png";
@@ -50,7 +48,7 @@ export default function ArqueoCaja() {
         `http://localhost:8080/arqueo/pedidos/${fechaLocal}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -98,7 +96,7 @@ export default function ArqueoCaja() {
         `http://localhost:8080/arqueo/pedidos/abonos/${fechaLocal}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -133,7 +131,7 @@ export default function ArqueoCaja() {
         `http://localhost:8080/gastos/detalles/dia?D%C3%ADa=${fechaLocal}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -155,7 +153,7 @@ export default function ArqueoCaja() {
         const response = await axios.get(`http://localhost:8080/users/${id}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         });
         gasto.empleadoId = `${response.data.name} ${response.data.lastname}`;
@@ -189,7 +187,7 @@ export default function ArqueoCaja() {
         `http://localhost:8080/arqueo/abonos/efectivo/${fechaLocal}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -208,7 +206,7 @@ export default function ArqueoCaja() {
         `http://localhost:8080/arqueo/abonos/entregados/efectivo/${fechaLocal}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -242,7 +240,7 @@ export default function ArqueoCaja() {
         `http://localhost:8080/arqueo/abonos/electronico/${fechaLocal}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -261,7 +259,7 @@ export default function ArqueoCaja() {
         `http://localhost:8080/arqueo/abonos/entregados/electronico/${fechaLocal}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );

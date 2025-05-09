@@ -15,83 +15,49 @@ const Nomina = "../../../public/media/img/nomina.png";
 const Ajustes = "../../../public/media/img/ajustes.png";
 
 export default function Nav({ setComponenteSeleccionado }) {
-  // Estado para la opción seleccionada
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("Ordenes");
 
   const handleClick = (componente) => {
-    setOpcionSeleccionada(componente); // Actualiza la opción seleccionada
-    setComponenteSeleccionado(componente); // Llama a la función pasada por props
+    setOpcionSeleccionada(componente);
+    setComponenteSeleccionado(componente);
+  };
+
+  // Opciones que se deben ocultar para el rol USER
+  const ocultarParaUser = [
+    "Usuarios",
+    "Nomina",
+    "Informes",
+    "Gastos",
+    "ArqueoCaja",
+  ];
+
+  // Función para renderizar una opción si corresponde
+  const renderOpcion = (img, txt, clase) => {
+    if (sessionStorage.getItem("rol") === "USER" && ocultarParaUser.includes(txt)) return null;
+
+    return (
+      <OpcionNav
+        img={img}
+        txt={txt}
+        clase={`${clase} ${opcionSeleccionada === txt ? "active" : ""}`}
+        onClick={() => handleClick(txt)}
+      />
+    );
   };
 
   return (
     <div className="cont-nav">
       <LogoImgTxt />
       <SepXBlancoSmall />
-      <OpcionNav
-        img={Ordenes}
-        txt={"Ordenes"}
-        clase={`cont-seccion-first ${
-          opcionSeleccionada === "Ordenes" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Ordenes")}
-      />
-      <OpcionNav
-        img={Inventario}
-        txt={"Inventario"}
-        clase={`cont-seccion ${
-          opcionSeleccionada === "Inventario" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Inventario")}
-      />
-      <OpcionNav
-        img={Usuarios}
-        txt={"Usuarios"}
-        clase={`cont-seccion ${
-          opcionSeleccionada === "Usuarios" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Usuarios")}
-      />
-      <OpcionNav
-        img={Gastos}
-        txt={"Gastos"}
-        clase={`cont-seccion ${
-          opcionSeleccionada === "Gastos" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Gastos")}
-      />
-      <OpcionNav
-        img={Nomina}
-        txt={"Nomina"}
-        clase={`cont-seccion ${
-          opcionSeleccionada === "Nomina" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Nomina")}
-      />
-      <OpcionNav
-        img={Informes}
-        txt={"Informes"}
-        clase={`cont-seccion ${
-          opcionSeleccionada === "Informes" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Informes")}
-      />
-      <OpcionNav
-        img={ArqueoCaja}
-        txt={"Arqueo Caja"}
-        clase={`cont-seccion-last ${
-          opcionSeleccionada === "ArqueoCaja" ? "active" : ""
-        }`}
-        onClick={() => handleClick("ArqueoCaja")}
-      />
-      <SepXBlancoSmall />
-      <OpcionNav
-        img={Ajustes}
-        txt={"Ajustes"}
-        clase={`cont-seccion-sett ${
-          opcionSeleccionada === "Ajustes" ? "active" : ""
-        }`}
-        onClick={() => handleClick("Ajustes")}
-      />
+      {renderOpcion(Ordenes, "Ordenes", "cont-seccion-first")}
+      {renderOpcion(Inventario, "Inventario", "cont-seccion")}
+      {renderOpcion(Usuarios, "Usuarios", "cont-seccion")}
+      {renderOpcion(Gastos, "Gastos", "cont-seccion")}
+      {renderOpcion(Nomina, "Nomina", "cont-seccion")}
+      {renderOpcion(Informes, "Informes", "cont-seccion")}
+      {renderOpcion(ArqueoCaja, "ArqueoCaja", "cont-seccion-last")}
+      <SepXBlancoSmall clase={"sepXBlancoNav"} />
+      {renderOpcion(Ajustes, "Ajustes", "cont-seccion-sett")}
     </div>
   );
 }

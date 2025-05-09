@@ -1,6 +1,5 @@
 import "./nomina.css";
 import axios from "axios";
-import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
@@ -20,7 +19,7 @@ export default function Nomina() {
     try {
       const response = await axios.get("http://localhost:8080/users/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       setEmpleados(response.data);
@@ -67,7 +66,7 @@ export default function Nomina() {
             fechaFin: fechaHasta.toISOString(),
           },
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -107,7 +106,7 @@ export default function Nomina() {
             categoria: "VALE",
           },
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );

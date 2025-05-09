@@ -5,7 +5,6 @@ import ConUsuari from "./con-usuario.jsx";
 import "./usuarios.css";
 import { EditarUsuario } from "./editar-usuario.jsx";
 import { RegistroUsuario } from "./registro-usuario.jsx";
-import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
 
 const ima = {
@@ -34,12 +33,12 @@ export default function Usuarios() {
       const [adminsRes, sastresRes] = await Promise.all([
         axios.get("http://localhost:8080/users/cargo/{cargo}?cargo=ADMIN", {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }),
         axios.get("http://localhost:8080/users/cargo/{cargo}?cargo=SASTRE", {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }),
       ]);
@@ -67,7 +66,7 @@ export default function Usuarios() {
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -98,7 +97,7 @@ export default function Usuarios() {
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );

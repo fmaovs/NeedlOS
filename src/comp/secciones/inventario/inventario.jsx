@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
 import "./inventario.css";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
@@ -30,7 +29,7 @@ export default function Inventario() {
     try {
       const response = await axios.get("http://localhost:8080/inventario/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
 
@@ -89,7 +88,7 @@ export default function Inventario() {
         nuevoMaterial,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -149,7 +148,7 @@ export default function Inventario() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -186,7 +185,7 @@ export default function Inventario() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -233,7 +232,7 @@ export default function Inventario() {
     try {
       const response = await axios.get("http://localhost:8080/prendas/all", {
         headers: {
-          Authorization: `Bearer ${tokenPass}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       setPrendas(response.data);
@@ -312,7 +311,7 @@ export default function Inventario() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -331,7 +330,7 @@ export default function Inventario() {
           { claseIngreso: descripcion },
           {
             headers: {
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
@@ -355,7 +354,7 @@ export default function Inventario() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${tokenPass}`,
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             },
           }
         );
