@@ -4,7 +4,7 @@ import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import { tokenPass } from "../../formularios/iniciar-sesion/iniciar-sesion.jsx";
 import axios from "axios";
 
-export function EditarUsuario({ idUser }) {
+export function EditarUsuario({ onClose, idUser }) {
   /*Campos del formulario*/
   const nombreRef = useRef(null);
   const apellidoRef = useRef(null);
@@ -115,8 +115,14 @@ export function EditarUsuario({ idUser }) {
               <option value="SASTRE">Sastre</option>
             </select>
           </div>
-
           <div className="from-botton">
+          <button
+              type = "button"
+              onClick={onClose}
+              className="btn-secondary"
+            >
+              Cancelar
+            </button>
             <button className="btn-primary" onClick={actualizarUsuario}>
               Actualizar
             </button>

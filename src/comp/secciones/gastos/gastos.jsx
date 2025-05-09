@@ -167,64 +167,67 @@ export default function Gastos() {
       <SepXNegro />
 
       <form className="form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label">Descripción:</label>
-          <input
-            type="text"
-            value={formData.descripcion}
-            onChange={(e) =>
-              setFormData({ ...formData, descripcion: e.target.value })
-            }
-          />
+      <div className="form-row">
+          <div className="form-group">
+            <label className="form-label">Descripción:</label>
+            <input
+              className="form-input"
+              type="text"
+              value={formData.descripcion}
+              onChange={(e) =>
+                setFormData({ ...formData, descripcion: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Categoría:</label>
+            <select ref={categoriaRef} defaultValue="" className="form-select">
+              <option value="" disabled>Selecciona una categoría</option>
+              <option value="ARRIENDO">Arriendo</option>
+              <option value="AGUA">Agua</option>
+              <option value="LUZ">Luz</option>
+              <option value="GAS">Gas</option>
+              <option value="TELEFONO">Teléfono</option>
+              <option value="INTERNET">Internet</option>
+              <option value="NOMINA">Nómina</option>
+              <option value="GASOLINA">Gasolina</option>
+              <option value="PLASTICOS">Plásticos</option>
+              <option value="GANCHOS">Ganchos</option>
+              <option value="PAPELERIA">Papelería</option>
+              <option value="BOLSAS">Bolsas</option>
+              <option value="MATERIAL">Material</option>
+              <option value="MANTENIMIENTO">Mantenimiento</option>
+              <option value="VALE">Vale</option>
+            </select>
+          </div>
         </div>
 
-        <div className="form-group">
-          <label className="form-label">Monto:</label>
-          <input
-            type="number"
-            value={formData.monto}
-            onChange={(e) =>
-              setFormData({ ...formData, monto: e.target.value })
-            }
-          />
-        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label className="form-label">Monto:</label>
+            <input
+              className="form-input"
+              type="number"
+              value={formData.monto}
+              onChange={(e) =>
+                setFormData({ ...formData, monto: e.target.value })
+              }
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="form-label">Categoría:</label>
-          <select ref={categoriaRef} defaultValue="">
-            <option value="" disabled>
-              Selecciona una categoría
-            </option>
-            <option value="ARRIENDO">Arriendo</option>
-            <option value="AGUA">Agua</option>
-            <option value="LUZ">Luz</option>
-            <option value="GAS">Gas</option>
-            <option value="TELEFONO">Teléfono</option>
-            <option value="INTERNET">Internet</option>
-            <option value="NOMINA">Nómina</option>
-            <option value="GASOLINA">Gasolina</option>
-            <option value="PLASTICOS">Plásticos</option>
-            <option value="GANCHOS">Ganchos</option>
-            <option value="PAPELERIA">Papelería</option>
-            <option value="BOLSAS">Bolsas</option>
-            <option value="MATERIAL">Material</option>
-            <option value="MANTENIMIENTO">Mantenimiento</option>
-            <option value="VALE">Vale</option>
-          </select>
+          <div className="form-group">
+            <label className="form-label">Empleado:</label>
+            <select ref={empleadoRef} defaultValue="" className="form-select">
+              <option value="">Selecciona un empleado</option>
+              {empleados.map((empleado) => (
+                <option key={empleado.id} value={empleado.id}>
+                  {empleado.username}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-
-        <div className="form-group">
-          <label className="form-label">Empleado:</label>
-          <select ref={empleadoRef} defaultValue="">
-            <option value="">Selecciona un empleado</option>
-            {empleados.map((empleado) => (
-              <option key={empleado.id} value={empleado.id}>
-                {empleado.username}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <button type="submit" className="btn-crear">
           Crear Gasto
         </button>
@@ -233,9 +236,6 @@ export default function Gastos() {
       {resultado && <div className="resultado">{resultado}</div>}
 
       <div className="tabla-cont">
-        {!cargando && gastos.length === 0 && (
-          <p className="sin-registros">No hay gastos registrados.</p>
-        )}
         {!cargando && gastos.length > 0 && renderTablaGastos()}
       </div>
     </>
