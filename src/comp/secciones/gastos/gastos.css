@@ -61,13 +61,13 @@
     padding: 0 2vw;
     max-width: 70vw;
     border-radius: 1.2vh 1.2vh 0 0;
-    border-top: 0.32vh solid #0050b8;
-    border-right: 0.32vh solid #0050b8;
-    border-left: 0.32vh solid #0050b8;
+    border-top: 0.3vh solid #0050b8;
+    border-right: 0.3vh solid #0050b8;
+    border-left: 0.3vh solid #0050b8;
     box-sizing: border-box;
-    min-height: 60vh;
+    min-height: 53vh;
     height: auto;
-    width:80vw;
+    width:70vw;
     overflow: auto;
 }
 
@@ -79,7 +79,7 @@
 .tr-encabezado th {
     padding: 1.2vh 1vw;
     text-align: center;
-    font-size:calc((0.2vw + 3.2vh)* 0.6) ;
+    font-size: calc((0.2vw + 3.2vh) * 0.5);
 }
 .td-user {
     padding: 1.5vh 1vw;

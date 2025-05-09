@@ -142,7 +142,7 @@ export default function Gastos() {
     <>
       <Encabezado
         titEncabezado={"Gastos"}
-        claseCont={"cont-espacio-nomina"}
+        claseCont={"cont-espacio-arqueo"}
         conBtCrear={"none"}
         opc1={"Cliente"}
         opc2={"Prenda"}
@@ -150,17 +150,6 @@ export default function Gastos() {
         opc4={"N°"}
         withSearch={"cont-buscador-none"}
       >
-        <Calendario
-          selected={fechaDesde}
-          onChange={setFechaDesde}
-          desdeHasta={"Desde:"}
-        />
-        <div className="span-separacion">/</div>
-        <Calendario
-          selected={fechaHasta}
-          onChange={setFechaHasta}
-          desdeHasta={"Hasta:"}
-        />
       </Encabezado>
 
       <SepXNegro />
@@ -235,7 +224,7 @@ export default function Gastos() {
       {resultado && <div className="resultado">{resultado}</div>}
 
       <div className="tabla-cont">
-        {!cargando && gastos.length > 0 && renderTablaGastos()}
+        {renderTablaGastos()}
       </div>
     </>
   );
