@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
-import ConUsuari from "./con-usuario.jsx";
+import Filtrador from "../../filtrador-seccion/filtrador-seccion.jsx";
+import OpcionesFilter from "../../opciones-filter/opciones-filter.jsx";
 import "./usuarios.css";
 import { EditarUsuario } from "./editar-usuario.jsx";
 import { RegistroUsuario } from "./registro-usuario.jsx";
 import axios from "axios";
 
-const ima = {
-  admi: "../../../../public/media/img/administrador.png",
-  metro: "../../../../public/media/img/metro.png",
-  editar: "../../../../public/media/img/editar.png",
-};
+const Editar = "../../../../public/media/img/editar.png";
 
 export default function Usuarios() {
   const [admins, setAdmins] = useState([]);
@@ -61,8 +58,8 @@ export default function Usuarios() {
         "http://localhost:8080/register",
         {
           ...formData,
-          user_role: formData.user_role.toUpperCase(),
-          cargo: formData.cargo.toUpperCase(),
+          user_role: formData.user_role,
+          cargo: formData.cargo,
         },
         {
           headers: {
@@ -131,26 +128,23 @@ export default function Usuarios() {
           <th className="th">Nombre</th>
           <th className="th">Apellido</th>
           <th className="th">Teléfono</th>
-          <th className="th">Acciones</th>
+          <th className="th">Editar</th>
         </tr>
+        <tr className="separacion-fila-head"></tr>
       </thead>
       <tbody>
         {usuarios.map((usuario) => (
-          <tr key={usuario.id}>
-            <td className="td-user">{usuario.name}</td>
-            <td className="td-user">{usuario.lastname}</td>
-            <td className="td-user">{usuario.phone}</td>
-            <td>
-              <div className="acciones">
-                <button
-                  className="btn-editar"
-                  onClick={() => openEditarUsuario(usuario.id)}
-                >
-                  <img src={ima.editar} alt="Editar" className="icono-editar" />
-                </button>
-              </div>
-            </td>
-          </tr>
+          <>
+            <tr key={usuario.id}>
+              <td className="td">{usuario.name}</td>
+              <td className="td">{usuario.lastname}</td>
+              <td className="td">{usuario.phone}</td>
+              <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
+                <img src={Editar} alt="Editar" className="icono-editar" />
+              </td>
+            </tr>
+            <tr className="separacion-fila"></tr>
+          </>
         ))}
       </tbody>
     </table>
@@ -160,19 +154,25 @@ export default function Usuarios() {
     <>
       <Encabezado
         titEncabezado="Usuarios"
-        conBtCrear="Crear Usuario"
+        opc1={"Rol"}
+        opc2={"Nombre"}
+        opc3={"Apellido"}
+        opc4={"Telefono"}
         onClick={() => setMostrarRegistro(true)}
         imgBoton={"../../../../public/media/img/crear.png"}
       />
       <SepXNegro />
-
-      <div className="usuarios">
-        <ConUsuari
-          txt1="Administrador"
-          img1={ima.admi}
-          txt2="Sastre"
-          img2={ima.metro}
-        />
+      <div className="cont-filterAndBoton">
+        <Filtrador>
+          <OpcionesFilter
+            txtFilter={"Administradores"}
+            clase={"azul filter-usuarios"}
+          />
+          <OpcionesFilter
+            txtFilter={"Sastres"}
+            clase={"verde filter-usuarios"}
+          />
+        </Filtrador>
       </div>
 
       <div className="tablas">

@@ -10,7 +10,7 @@ import EspacioRender from "../../espacio-render/espacio-render.jsx";
 import CrearOrden from "../../formularios/crear-orden/crear-orden.jsx";
 
 const EnProceso = "../../../../public/media/img/enProceso.png";
-const Finalizado = "../../../../public/media/img/entregado.png";
+const Finalizado = "../../../../public/media/img/finalizado.png";
 const Entregado = "../../../../public/media/img/entregado.png";
 const Anulado = "../../../../public/media/img/anulado.png";
 const Todo = "../../../../public/media/img/historial.png";
@@ -131,6 +131,7 @@ export default function Ordenes() {
           <OpcionesFilter
             txtFilter={"Todo"}
             imgFilter={Todo}
+            isLast={"isLast"}
             clase={filtroSeleccionado === "Todo" ? "gris" : ""}
             onClick={() => handleFilterClick("Todo")}
           />

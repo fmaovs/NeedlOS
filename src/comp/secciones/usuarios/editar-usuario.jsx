@@ -24,7 +24,7 @@ export function EditarUsuario({ onClose, idUser }) {
         `http://localhost:8080/users/${idUser}`,
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
@@ -56,7 +56,7 @@ export function EditarUsuario({ onClose, idUser }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenPass}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
