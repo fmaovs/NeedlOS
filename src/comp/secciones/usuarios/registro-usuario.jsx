@@ -64,7 +64,6 @@ export function RegistroUsuario({ onClose, onSubmit }) {
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-            'Content-Type': 'application/json'
           },
         }
       );
@@ -89,7 +88,6 @@ export function RegistroUsuario({ onClose, onSubmit }) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-       
         <div className="r-usuario">
           <span className="titulo">Registrar Usuario</span>
         </div>

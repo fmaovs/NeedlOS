@@ -83,8 +83,8 @@ const registrarUsuarios = (newUser) => {
       );
 
       if (response.status === 200) {
-        await cargarUsuarios(); // Recargar la lista de usuarios
-        onClose(); // Cerrar modal
+        await cargarUsuarios(); 
+        onClose(); 
       }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
@@ -117,18 +117,18 @@ const registrarUsuarios = (newUser) => {
       </thead>
       <tbody>
         {usuarios.map((usuario) => (
-          <>
-            <tr key={usuario.id}>
-              <td className="td">{usuario.name}</td>
-              <td className="td">{usuario.lastname}</td>
-              <td className="td">{usuario.phone}</td>
-              <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
-                <img src={Editar} alt="Editar" className="icono-editar" />
-              </td>
-            </tr>
-            <tr className="separacion-fila"></tr>
-          </>
-        ))}
+            <React.Fragment key={usuario.id}>
+              <tr>
+                <td className="td">{usuario.name}</td>
+                <td className="td">{usuario.lastname}</td>
+                <td className="td">{usuario.phone}</td>
+                <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
+                  <img src={Editar} alt="Editar" className="icono-editar" />
+                </td>
+              </tr>
+              <tr className="separacion-fila"></tr>
+            </React.Fragment>
+          ))}
       </tbody>
     </table>
   );
