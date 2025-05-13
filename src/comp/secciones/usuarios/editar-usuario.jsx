@@ -68,8 +68,8 @@ export function EditarUsuario({ onClose, idUser }) {
   }
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal-content">
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="r-usuario">
           <h1 className="titulo">Editar usuario</h1>
         </div>

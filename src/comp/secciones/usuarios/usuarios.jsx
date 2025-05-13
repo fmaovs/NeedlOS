@@ -52,32 +52,15 @@ export default function Usuarios() {
   };
 
   // Registrar usuarios
-  const registrarUsuarios = async (formData) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/register",
-        {
-          ...formData,
-          user_role: formData.user_role,
-          cargo: formData.cargo,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.status === 201) {
-        await cargarUsuarios();
-        setMostrarRegistro(false);
-      }
-    } catch (error) {
-      console.error("Error al registrar usuario", error);
-      throw error;
-    }
-  };
-
+const registrarUsuarios = (newUser) => {
+  // Agregar el nuevo usuario directamente al estado correspondiente
+  if (newUser.cargo === "ADMIN") {
+    setAdmins(prev => [...prev, newUser]);
+  } else if (newUser.cargo === "SASTRE") {
+    setSastres(prev => [...prev, newUser]);
+  }
+  setMostrarRegistro(false); // Cerrar modal
+};
   //Editar usuario
   const actualizarUsuario = async () => {
     if (!validateForm()) return;
