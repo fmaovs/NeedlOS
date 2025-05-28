@@ -40,6 +40,12 @@ export default function TbEnProceso() {
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
   const [primerEstado, setPrimerEstado] = useState(null);
+
+  /*CONTROL ANIMACION SALIDA FOTO*/
+  const [fotoExiste, setFotoExiste] = useState(false);
+  const [fotoVisible, setFotoVisible] = useState(false);
+  const [foto, setFoto] = useState(null);
+
   const mostrarDetalles = async (id) => {
     try {
       if (detallesVisible) {
@@ -64,14 +70,38 @@ export default function TbEnProceso() {
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
     }
+
+    // Conseguir foto de entrada
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/orders/${id}/download-photo-entrega`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          responseType: "blob",
+        }
+      );
+
+      setFoto(URL.createObjectURL(response.data));
+
+      setFotoExiste(true);
+      setTimeout(() => {
+        setFotoVisible(true);
+      }, 15);
+    } catch (error) {
+      console.log("Error obteniendo foto:", error);
+    }
   };
 
   /*OCULTAR DETALLES ORDEN*/
   const ocultarDetalles = () => {
     return new Promise((resolve) => {
       setMostrarDt(false);
+      setFotoVisible(false);
       setTimeout(() => {
         setDetallesVisible(false);
+        setFotoExiste(false);
         setCambiarColor("");
         setColorAnulado("");
         setPrimerEstado(null);
@@ -246,6 +276,18 @@ export default function TbEnProceso() {
             </React.Fragment>
           ))}
         </CardDetallePedido>
+      )}
+      {fotoExiste && (
+        <>
+          <div
+            className={`cont-camara-recibida-right ${
+              fotoVisible ? "camara-isVisible" : ""
+            }`}
+          >
+            <span className="tipo-foto">Foto Entrada</span>
+            <img src={foto} alt="" />
+          </div>
+        </>
       )}
       <div className="cont-tabla">
         <table className="tabla">

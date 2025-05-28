@@ -3,7 +3,7 @@ import "./calendario.css";
 
 const Calendario = "../../../../public/media/img/calendario.png";
 
-function CustomCalendar({ onClick }, ref) {
+function CustomCalendar({ onClick, fecha }, ref) {
   return (
     <button
       className="div-calendario"
@@ -12,6 +12,7 @@ function CustomCalendar({ onClick }, ref) {
       ref={ref}
     >
       <img src={Calendario} className="img-calendario" alt="Calendario" />
+      <span>{fecha}</span>
     </button>
   );
 }

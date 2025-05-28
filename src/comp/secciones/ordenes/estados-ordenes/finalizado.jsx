@@ -48,6 +48,12 @@ export default function TbFinalizado() {
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
   const [primerEstado, setPrimerEstado] = useState(null);
+
+  /*CONTROL ANIMACION SALIDA FOTO*/
+  const [fotoExiste, setFotoExiste] = useState(false);
+  const [fotoVisible, setFotoVisible] = useState(false);
+  const [foto, setFoto] = useState(null);
+
   const mostrarDetalles = async (id) => {
     try {
       if (detallesVisible) {
@@ -80,6 +86,28 @@ export default function TbFinalizado() {
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
     }
+
+    // Conseguir foto de entrada
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/orders/${id}/download-photo-entrega`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          responseType: "blob",
+        }
+      );
+
+      setFoto(URL.createObjectURL(response.data));
+
+      setFotoExiste(true);
+      setTimeout(() => {
+        setFotoVisible(true);
+      }, 15);
+    } catch (error) {
+      console.log("Error obteniendo foto:", error);
+    }
   };
 
   /*OCULTAR DETALLES ORDEN*/
@@ -87,8 +115,10 @@ export default function TbFinalizado() {
     return new Promise((resolve) => {
       setMostrarDt(false);
       setCamaraVisible(false);
+      setFotoVisible(false);
       setTimeout(() => {
         setDetallesVisible(false);
+        setFotoExiste(false);
         setCambiarColor("");
         setColorAnulado("");
         setPrimerEstado(null);
@@ -368,16 +398,29 @@ export default function TbFinalizado() {
       {camaraFotoEntrega && (
         <>
           <div
-            className={`cont-camara-recibida ${
+            className={`cont-camara-recibida-left ${
               camaraVisible ? "camara-isVisible" : ""
             }`}
           >
+            <span className="tipo-foto">Foto Salida</span>
             <WebCam
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/png"
               className={"camara-foto-recogida"}
             />
+          </div>
+        </>
+      )}
+      {fotoExiste && (
+        <>
+          <div
+            className={`cont-camara-recibida-right ${
+              fotoVisible ? "camara-isVisible" : ""
+            }`}
+          >
+            <span className="tipo-foto">Foto Entrada</span>
+            <img src={foto} alt="" />
           </div>
         </>
       )}

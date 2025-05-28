@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import WebCam from "react-webcam";
 import DetallesOrden from "../../../botones/abrir-detalles-orden/detalles-orden";
 import CardDetallePedido from "../../../cards/card-detalle-pedido/detalle-pedido";
+import { set } from "date-fns";
 
 const noEncontrado = "../../../../../public/media/img/no-encontrado.png";
 const ErrorMP3 = "../../../../../public/media/sounds/error.mp3";
@@ -40,12 +41,22 @@ export default function TbTodo() {
     soundError.play();
   }
 
+  /*Fotos*/
+  const [fotoIzVisible, setFotoIzVisible] = useState(false);
+  const [fotoIzExist, setFotoIzExist] = useState(false);
+
+  const [fotoDeVisible, setFotoDeVisible] = useState(false);
+  const [fotoDeExist, setFotoDeExist] = useState(false);
+
+  const [ftIzquierda, setFtIzquierda] = useState(null);
+  const [ftDerecha, setFtDerecha] = useState(null);
+
   /*MOSTRAR DETALLES ORDEN*/
   const [detalles, setDetalles] = useState(null);
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
   const [primerEstado, setPrimerEstado] = useState(null);
-  const mostrarDetalles = async (id) => {
+  const mostrarDetalles = async (id, estado) => {
     try {
       if (detallesVisible) {
         await ocultarDetalles();
@@ -77,6 +88,124 @@ export default function TbTodo() {
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
     }
+
+    // Evaluar que mostrar segun el estado
+    switch (estado) {
+      case "EN_PROCESO":
+        // Conseguir foto de entrada
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/orders/${id}/download-photo-entrega`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+              responseType: "blob",
+            }
+          );
+
+          setFtDerecha(URL.createObjectURL(response.data));
+
+          setFotoDeExist(true);
+          setTimeout(() => {
+            setFotoDeVisible(true);
+          }, 15);
+        } catch (error) {
+          console.log("Error obteniendo foto:", error);
+        }
+        break;
+      case "FINALIZADO":
+        // Conseguir foto de entrada
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/orders/${id}/download-photo-entrega`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+              responseType: "blob",
+            }
+          );
+
+          setFtDerecha(URL.createObjectURL(response.data));
+
+          setFotoDeExist(true);
+          setTimeout(() => {
+            setFotoDeVisible(true);
+          }, 15);
+        } catch (error) {
+          console.log("Error obteniendo foto:", error);
+        }
+        break;
+      case "ENTREGADO":
+        // Conseguir foto de entrada
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/orders/${id}/download-photo-entrega`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+              responseType: "blob",
+            }
+          );
+
+          setFtDerecha(URL.createObjectURL(response.data));
+
+          setFotoDeExist(true);
+          setTimeout(() => {
+            setFotoDeVisible(true);
+          }, 15);
+        } catch (error) {
+          console.log("Error obteniendo foto:", error);
+        }
+
+        // Conseguir foto de salida
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/orders/${id}/download-photo-recogida`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+              responseType: "blob",
+            }
+          );
+
+          setFtIzquierda(URL.createObjectURL(response.data));
+
+          setFotoIzExist(true);
+          setTimeout(() => {
+            setFotoIzVisible(true);
+          }, 15);
+        } catch (error) {
+          console.log("Error obteniendo foto:", error);
+        }
+        break;
+      case "ANULADO":
+        // Conseguir foto de entrada
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/orders/${id}/download-photo-entrega`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              },
+              responseType: "blob",
+            }
+          );
+
+          setFtDerecha(URL.createObjectURL(response.data));
+
+          setFotoDeExist(true);
+          setTimeout(() => {
+            setFotoDeVisible(true);
+          }, 15);
+        } catch (error) {
+          console.log("Error obteniendo foto:", error);
+        }
+        break;
+    }
   };
 
   /*OCULTAR DETALLES ORDEN*/
@@ -84,12 +213,16 @@ export default function TbTodo() {
     return new Promise((resolve) => {
       setMostrarDt(false);
       setCamaraVisible(false);
+      setFotoIzVisible(false);
+      setFotoDeVisible(false);
       setTimeout(() => {
         setDetallesVisible(false);
         setCambiarColor("");
         setColorAnulado("");
         setPrimerEstado(null);
         setCamaraFotoEntrega(false);
+        setFotoIzExist(false);
+        setFotoDeExist(false);
         setIsFinalizado(false);
         resolve();
       }, 300);
@@ -388,16 +521,41 @@ export default function TbTodo() {
       {camaraFotoEntrega && (
         <>
           <div
-            className={`cont-camara-recibida ${
+            className={`cont-camara-recibida-left ${
               camaraVisible ? "camara-isVisible" : ""
             }`}
           >
+            <span className="tipo-foto">Foto Salida</span>
             <WebCam
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/png"
               className={"camara-foto-recogida"}
             />
+          </div>
+        </>
+      )}
+      {fotoIzExist && (
+        <>
+          <div
+            className={`cont-camara-recibida-left ${
+              fotoIzVisible ? "camara-isVisible" : ""
+            }`}
+          >
+            <span className="tipo-foto">Foto Salida</span>
+            <img src={ftIzquierda} alt="" />
+          </div>
+        </>
+      )}
+      {fotoDeExist && (
+        <>
+          <div
+            className={`cont-camara-recibida-right ${
+              fotoDeVisible ? "camara-isVisible" : ""
+            }`}
+          >
+            <span className="tipo-foto">Foto Entrada</span>
+            <img src={ftDerecha} alt="" />
           </div>
         </>
       )}
@@ -457,7 +615,7 @@ export default function TbTodo() {
                           style: "decimal",
                           minimumFractionDigits: 0,
                           maximumFractionDigits: 0,
-                        }).format(order.saldo)}`}
+                        }).format(order.saldo + order.totalAbonos)}`}
                       </td>
                       <td className="td">
                         {order.prenda
@@ -467,7 +625,7 @@ export default function TbTodo() {
                       </td>
                       <td
                         className="td"
-                        onClick={() => mostrarDetalles(order.id)}
+                        onClick={() => mostrarDetalles(order.id, order.estado)}
                       >
                         {(() => {
                           switch (order.estado) {

@@ -39,7 +39,7 @@ export default function CardDetallePedido({
       }`}
     >
       <div className="tarjeta-detalles">
-        <span className="nPedido">Orden #{nPedido}</span>
+        <span className="nPedido">Orden N° {nPedido}</span>
         <SepXNegro />
         <button className="salir-tarjeta-detalles" onClick={onClick}>
           <img src={cerrar} />

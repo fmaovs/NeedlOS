@@ -40,6 +40,13 @@ export default function TbEntregado() {
   const [detallesVisible, setDetallesVisible] = useState(false);
   const [mostrarDt, setMostrarDt] = useState(false);
   const [primerEstado, setPrimerEstado] = useState(null);
+
+  /*CONTROL ANIMACION SALIDA FOTO*/
+  const [fotoExiste, setFotoExiste] = useState(false);
+  const [fotoVisible, setFotoVisible] = useState(false);
+  const [foto, setFoto] = useState(null);
+  const [foto2, setFoto2] = useState(null);
+
   const mostrarDetalles = async (id) => {
     try {
       if (detallesVisible) {
@@ -64,14 +71,60 @@ export default function TbEntregado() {
     } catch (error) {
       console.log("Error obteniendo detalles:", error);
     }
+
+    // Conseguir foto de entrada
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/orders/${id}/download-photo-entrega`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          responseType: "blob",
+        }
+      );
+
+      setFoto(URL.createObjectURL(response.data));
+
+      setFotoExiste(true);
+      setTimeout(() => {
+        setFotoVisible(true);
+      }, 15);
+    } catch (error) {
+      console.log("Error obteniendo foto:", error);
+    }
+
+    // Conseguir foto de salida
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/orders/${id}/download-photo-recogida`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          responseType: "blob",
+        }
+      );
+
+      setFoto2(URL.createObjectURL(response.data));
+
+      setFotoExiste(true);
+      setTimeout(() => {
+        setFotoVisible(true);
+      }, 15);
+    } catch (error) {
+      console.log("Error obteniendo foto:", error);
+    }
   };
 
   /*OCULTAR DETALLES ORDEN*/
   const ocultarDetalles = () => {
     return new Promise((resolve) => {
       setMostrarDt(false);
+      setFotoVisible(false);
       setTimeout(() => {
         setDetallesVisible(false);
+        setFotoExiste(false);
         setCambiarColor("");
         setColorAnulado("");
         setPrimerEstado(null);
@@ -243,6 +296,30 @@ export default function TbEntregado() {
           ))}
         </CardDetallePedido>
       )}
+      {fotoExiste && (
+        <>
+          <div
+            className={`cont-camara-recibida-left ${
+              fotoVisible ? "camara-isVisible" : ""
+            }`}
+          >
+            <span className="tipo-foto">Foto Entrada</span>
+            <img src={foto} alt="" />
+          </div>
+        </>
+      )}
+      {fotoExiste && (
+        <>
+          <div
+            className={`cont-camara-recibida-right ${
+              fotoVisible ? "camara-isVisible" : ""
+            }`}
+          >
+            <span className="tipo-foto">Foto Salida</span>
+            <img src={foto2} alt="" />
+          </div>
+        </>
+      )}
       <div className="cont-tabla">
         <table className="tabla">
           {isLoading ? null : orders.length > 0 ? (
@@ -299,7 +376,7 @@ export default function TbEntregado() {
                           style: "decimal",
                           minimumFractionDigits: 0,
                           maximumFractionDigits: 0,
-                        }).format(order.saldo)}`}
+                        }).format(order.saldo + order.totalAbonos)}`}
                       </td>
                       <td className="td">
                         {order.prenda

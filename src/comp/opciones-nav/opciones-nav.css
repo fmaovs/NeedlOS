@@ -62,6 +62,7 @@
   border-radius: 1.2vh;
   transition: 0.3s ease-in;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .cont-seccion-first:hover {

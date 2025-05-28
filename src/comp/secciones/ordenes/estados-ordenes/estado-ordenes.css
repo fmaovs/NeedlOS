@@ -102,11 +102,15 @@
 }
 
 /*Cont Camara*/
-.cont-camara-recibida {
+.cont-camara-recibida-left {
   width: 22vh;
   height: 22vh;
   position: fixed;
-  left: calc(18.5vw - 13vh);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  left: calc(17.8vw - 12.9vh);
   top: 17vh;
   transform: translateX(-50%);
   border-radius: 1.2vh;
@@ -115,6 +119,37 @@
   opacity: 0;
   box-shadow: 0 0 4vh rgba(101, 101, 101, 0.3);
   transition: 0.3s ease-in-out;
+}
+
+.cont-camara-recibida-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cont-camara-recibida-right {
+  width: 22vh;
+  height: 22vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  right: calc(30vw - 35vh);
+  top: 17vh;
+  transform: translateX(-50%);
+  border-radius: 1.2vh;
+  border: 0.3vh solid #0050b8;
+  background-color: #ffffff;
+  opacity: 0;
+  box-shadow: 0 0 4vh rgba(101, 101, 101, 0.3);
+  transition: 0.3s ease-in-out;
+}
+
+.cont-camara-recibida-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .camara-foto-recogida {
@@ -135,19 +170,22 @@
 }
 
 .detalles-txt-row select {
-  outline: none;
-  border: none;
   appearance: none;
   height: 100%;
   padding: 0 1.2vh;
   transition: 0.1s ease-in-out;
   text-align: center;
-  border: 0.1vh solid transparent;
+  border: 0.1vh solid black;
+  cursor: pointer;
   border-radius: 0 1.2vh 1.2vh 0;
 }
 
 .detalles-txt-row select:hover {
   text-decoration: underline;
-  cursor: pointer;
-  border: 0.1vh solid black;
+  background-color: rgb(236, 236, 236);
+}
+
+.tipo-foto {
+  position: absolute;
+  top: 1.4vh;
 }

@@ -44,6 +44,7 @@
 }
 
 .name-prenda {
+  text-transform: capitalize;
   text-align: center;
   font-size: calc((0.2vw + 3.2vh) * 0.5);
 }

@@ -3,19 +3,13 @@
   box-sizing: border-box;
   border-radius: 1.2vh;
   border: 0.1vh solid #d2d2d2;
-  outline: none;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
-  text-transform: uppercase;
   transition: 0.3s ease-in-out;
 }
 
 .box-form::placeholder {
   text-transform: capitalize;
   color: #D2D2D2;
-}
-
-.box-form:focus{
-  border-color: rgb(113, 113, 113);
 }
 
 .box-form[type="number"]::-webkit-inner-spin-button,

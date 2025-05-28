@@ -12,7 +12,8 @@ import SpanForm from "../../parrafos/span-form/span-form";
 import CustomDateInput from "../../calendario/custom-calendar/calendario";
 import CardPrenda from "../../cards/card-prenda/card-prenda";
 import basura from "../../../../public/media/img/basura.png";
-import { ca } from "date-fns/locale";
+import masNegro from "../../../../public/media/img/mas-negro.png";
+import imprimirPedido from "../../../../public/media/img/imprimir-pedido.png";
 
 /*CARPETA PRENDAS*/
 const prendasUbi = "../../../../public/media/img/prendas/";
@@ -82,10 +83,20 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
 
   /*INSERTAR NOMBRE SEGUN TELEFONO*/
   async function insertarNombre() {
-    const contTelefono = document.getElementById("telefono");
-    const valueTelefono = parseInt(document.getElementById("telefono").value);
     const valueNombre = document.getElementById("nombre");
     const valueApellido = document.getElementById("apellido");
+    const contTelefono = document.getElementById("telefono");
+    const valueTelefono = parseInt(document.getElementById("telefono").value);
+
+    // Quitar por defecto el color
+    valueNombre.classList.remove("err");
+    valueApellido.classList.remove("err");
+    contTelefono.classList.remove("err");
+
+    // If para manejar el caso en el que en valueTelefono no haya nada
+    if (!valueTelefono || isNaN(valueTelefono)) {
+      return;
+    }
 
     try {
       // Llamada a la API para obtener todos los clientes utilizando axios
@@ -696,6 +707,14 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
           }
         }
 
+        // Quitar colores campos
+        const valueNombre = document.getElementById("nombre");
+        const valueApellido = document.getElementById("apellido");
+        const contTelefono = document.getElementById("telefono");
+        valueNombre.classList.remove("err");
+        valueApellido.classList.remove("err");
+        contTelefono.classList.remove("err");
+
         try {
           // IMPRIMIR SASTRERIA
           const responseSastreria = await axios.get(
@@ -789,23 +808,23 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
           <form action="" className="form-crearPedido">
             <ContTxtForm className={"uno"}>
               <TxtForm
-                type={"text"}
+                type={"number"}
                 className={"one"}
+                placeholder={"Telefono..."}
+                id={"telefono"}
+                onBlur={insertarNombre}
+              />
+              <TxtForm
+                type={"text"}
+                className={"one-2"}
                 placeholder={"Nombre..."}
                 id={"nombre"}
               />
               <TxtForm
                 type={"text"}
-                className={"one-2"}
+                className={"two"}
                 placeholder={"Apellido..."}
                 id={"apellido"}
-              />
-              <TxtForm
-                type={"number"}
-                className={"two"}
-                placeholder={"Telefono..."}
-                id={"telefono"}
-                onBlur={insertarNombre}
               />
             </ContTxtForm>
             <ContTxtForm className={"dos"}>
@@ -840,8 +859,18 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
                 <option value="arreglo">Arreglo</option>
                 <option value="confeccion">Confeccion</option>
               </select>
+              <select className="box-form six-2" id="select-sastre">
+                <option className="option" value="null">
+                  Sastre
+                </option>
+                {users.map((user) => (
+                  <option className="option" key={user.id} value={user.id}>
+                    {`${user.name} ${user.lastname}`}
+                  </option>
+                ))}
+              </select>
               <button className="seven" onClick={agregarDetalles}>
-                Agregar a lista
+                <img src={masNegro} alt="Simbolo sumar" />
               </button>
             </ContTxtForm>
             <SepXNegro />
@@ -883,11 +912,13 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
                           className="td-detalles"
                           onClick={() => eliminarFila(index)}
                         >
-                          <img
-                            src={basura}
-                            className="img-basura"
-                            alt="eliminar"
-                          />
+                          <button className="btn-eliminar-fila" type="button">
+                            <img
+                              src={basura}
+                              className="img-basura"
+                              alt="eliminar"
+                            />
+                          </button>
                         </td>
                       </tr>
                       <tr className="sep-fila-detalles"></tr>
@@ -907,25 +938,6 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
                   width={206}
                 />
               </div>
-              <div className="div-column-2">
-                <CustomDateInput
-                  selected={selectedDate}
-                  onChange={(date) => {
-                    setSelectedDate(date);
-                    diasRestantes(date);
-                  }}
-                />
-                <select className="select-form" id="select-sastre">
-                  <option className="option" value="null">
-                    Sastre
-                  </option>
-                  {users.map((user) => (
-                    <option className="option" key={user.id} value={user.id}>
-                      {`${user.name} ${user.lastname}`}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <div className="div-column-full">
                 <div className="div-row">
                   <SpanForm txt={"Dias:"} id={"dias"} insert={numeroDias} />
@@ -943,21 +955,29 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
                     id="abono"
                     className="inp-abono"
                     onBlur={calcTotal}
-                    placeholder="$ 0.000"
+                    placeholder="$ 0.000... *"
                   />
                 </SpanForm>
                 <SpanForm txt={"Total:"} id={"total"} insert={total} />
               </div>
               <div className="div-column">
+                <CustomDateInput
+                  selected={selectedDate}
+                  onChange={(date) => {
+                    setSelectedDate(date);
+                    diasRestantes(date);
+                  }}
+                />
                 <select className="tipoPago" id="tipoPago">
-                  <option value="null">Met. Pago</option>
+                  <option value="null">Met. Pago?</option>
                   <option value="EFECTIVO">Efectivo</option>
                   <option value="NEQUI">Nequi</option>
                   <option value="DAVIPLATA">Daviplata</option>
                   <option value="BANCOLOMBIA">BanColom</option>
                 </select>
                 <button className="clean-print" onClick={capturarFoto}>
-                  Imprimir
+                  <img src={imprimirPedido} alt="simbolo imprimir" />
+                  <span>Crear</span>
                 </button>
               </div>
             </div>
