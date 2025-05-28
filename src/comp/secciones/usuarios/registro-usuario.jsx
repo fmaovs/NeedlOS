@@ -3,7 +3,7 @@ import "./registroUsuario.css"
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import axios from "axios";
 
-export function RegistroUsuario({ onClose, onSubmit }) {
+export function RegistroUsuario({ onClose, onSubmit, actualizaTabla }) {
   const [formData, setFormData] = useState({
     name: "",
     lastname: "",
@@ -73,6 +73,7 @@ export function RegistroUsuario({ onClose, onSubmit }) {
         console.log("Usuario registrado:", newUser);
         onSubmit(newUser);
         onClose();
+        actualizaTabla();
       } else {
         throw new Error("Error al registrar usuario");
       }

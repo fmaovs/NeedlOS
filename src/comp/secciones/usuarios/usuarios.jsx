@@ -23,6 +23,10 @@ export default function Usuarios() {
     cargarUsuarios();
   }, []);
 
+  function actualizarTabla() {
+    cargarUsuarios();
+  }
+
   // Obtener lista de usuarios
   const cargarUsuarios = async () => {
     try {
@@ -52,15 +56,15 @@ export default function Usuarios() {
   };
 
   // Registrar usuarios
-const registrarUsuarios = (newUser) => {
-  // Agregar el nuevo usuario directamente al estado correspondiente
-  if (newUser.cargo === "ADMIN") {
-    setAdmins(prev => [...prev, newUser]);
-  } else if (newUser.cargo === "SASTRE") {
-    setSastres(prev => [...prev, newUser]);
-  }
-  setMostrarRegistro(false); // Cerrar modal
-};
+  const registrarUsuarios = (newUser) => {
+    // Agregar el nuevo usuario directamente al estado correspondiente
+    if (newUser.cargo === "ADMIN") {
+      setAdmins((prev) => [...prev, newUser]);
+    } else if (newUser.cargo === "SASTRE") {
+      setSastres((prev) => [...prev, newUser]);
+    }
+    setMostrarRegistro(false); // Cerrar modal
+  };
   //Editar usuario
   const actualizarUsuario = async () => {
     if (!validateForm()) return;
@@ -83,8 +87,8 @@ const registrarUsuarios = (newUser) => {
       );
 
       if (response.status === 200) {
-        await cargarUsuarios(); 
-        onClose(); 
+        await cargarUsuarios();
+        onClose();
       }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
@@ -117,18 +121,18 @@ const registrarUsuarios = (newUser) => {
       </thead>
       <tbody>
         {usuarios.map((usuario) => (
-            <React.Fragment key={usuario.id}>
-              <tr>
-                <td className="td">{usuario.name}</td>
-                <td className="td">{usuario.lastname}</td>
-                <td className="td">{usuario.phone}</td>
-                <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
-                  <img src={Editar} alt="Editar" className="icono-editar" />
-                </td>
-              </tr>
-              <tr className="separacion-fila"></tr>
-            </React.Fragment>
-          ))}
+          <React.Fragment key={usuario.id}>
+            <tr>
+              <td className="td">{usuario.name}</td>
+              <td className="td">{usuario.lastname}</td>
+              <td className="td">{usuario.phone}</td>
+              <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
+                <img src={Editar} alt="Editar" className="icono-editar" />
+              </td>
+            </tr>
+            <tr className="separacion-fila"></tr>
+          </React.Fragment>
+        ))}
       </tbody>
     </table>
   );
@@ -168,6 +172,7 @@ const registrarUsuarios = (newUser) => {
         <RegistroUsuario
           onClose={() => setMostrarRegistro(false)}
           onSubmit={registrarUsuarios}
+          actualizaTabla={() => actualizarTabla()}
         />
       )}
       {mostrarEditar && (
