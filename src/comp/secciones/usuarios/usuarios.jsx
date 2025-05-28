@@ -52,32 +52,15 @@ export default function Usuarios() {
   };
 
   // Registrar usuarios
-  const registrarUsuarios = async (formData) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/register",
-        {
-          ...formData,
-          user_role: formData.user_role,
-          cargo: formData.cargo,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.status === 201) {
-        await cargarUsuarios();
-        setMostrarRegistro(false);
-      }
-    } catch (error) {
-      console.error("Error al registrar usuario", error);
-      throw error;
-    }
-  };
-
+const registrarUsuarios = (newUser) => {
+  // Agregar el nuevo usuario directamente al estado correspondiente
+  if (newUser.cargo === "ADMIN") {
+    setAdmins(prev => [...prev, newUser]);
+  } else if (newUser.cargo === "SASTRE") {
+    setSastres(prev => [...prev, newUser]);
+  }
+  setMostrarRegistro(false); // Cerrar modal
+};
   //Editar usuario
   const actualizarUsuario = async () => {
     if (!validateForm()) return;
@@ -100,8 +83,8 @@ export default function Usuarios() {
       );
 
       if (response.status === 200) {
-        await cargarUsuarios(); // Recargar la lista de usuarios
-        onClose(); // Cerrar modal
+        await cargarUsuarios(); 
+        onClose(); 
       }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
@@ -134,18 +117,18 @@ export default function Usuarios() {
       </thead>
       <tbody>
         {usuarios.map((usuario) => (
-          <>
-            <tr key={usuario.id}>
-              <td className="td">{usuario.name}</td>
-              <td className="td">{usuario.lastname}</td>
-              <td className="td">{usuario.phone}</td>
-              <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
-                <img src={Editar} alt="Editar" className="icono-editar" />
-              </td>
-            </tr>
-            <tr className="separacion-fila"></tr>
-          </>
-        ))}
+            <React.Fragment key={usuario.id}>
+              <tr>
+                <td className="td">{usuario.name}</td>
+                <td className="td">{usuario.lastname}</td>
+                <td className="td">{usuario.phone}</td>
+                <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
+                  <img src={Editar} alt="Editar" className="icono-editar" />
+                </td>
+              </tr>
+              <tr className="separacion-fila"></tr>
+            </React.Fragment>
+          ))}
       </tbody>
     </table>
   );
