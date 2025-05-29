@@ -730,7 +730,7 @@ public class PedidoService {
             document.add(table);
 
             document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()).setFontSize(8f).setMarginBottom(1f));
-            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()).setFontSize(8f).setMarginBottom(1f));
+            document.add(new Paragraph("Saldo: $" + pedidoResponse.getSaldo()).setFontSize(8f).setMarginBottom(1f));
             document.add(new LineSeparator(new SolidLine(1f)));
             document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             String fechaEntregaFormateada = formato.format(fecha);
@@ -880,7 +880,7 @@ public class PedidoService {
             document.add(table);
 
             document.add(new Paragraph("Abonos: $" + pedidoResponse.getTotalAbonos()).setFontSize(8f).setMarginBottom(1f));
-            document.add(new Paragraph("subtotal: $" + pedidoResponse.getSaldo()).setFontSize(8f).setMarginBottom(1f));
+            document.add(new Paragraph("Saldo: $" + pedidoResponse.getSaldo()).setFontSize(8f).setMarginBottom(1f));
             document.add(new LineSeparator(new SolidLine(1f)));
             document.add(new Paragraph("Atendido por: " + pedidoResponse.getSastre()).setFontSize(7f).setMarginBottom(1f).setTextAlignment(TextAlignment.CENTER));
             String fechaEntregaFormateada = formato.format(fecha);
