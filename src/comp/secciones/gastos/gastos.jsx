@@ -1,7 +1,6 @@
 import "./gastos.css";
 import React, { useEffect, useRef, useState } from "react";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
-import Calendario from "../../calendario/nomina-calendario/nomina-calendario.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
 import { startOfWeek, endOfWeek } from "date-fns";
 import axios from "axios";
@@ -57,6 +56,11 @@ export default function Gastos() {
     }
   };
 
+  const obtenerNombreEmpleado = (id) => {
+    const empleado = empleados.find((e) => e.id === id);
+    return empleado ? empleado.username : "No asignado";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,7 +87,6 @@ export default function Gastos() {
       empleadoId: empleadoSeleccionado,
     };
 
-    console.log("Gasto a enviar:", nuevoGasto);
     try {
       const response = await axios.post(
         "http://localhost:8080/gastos/crear",
@@ -131,7 +134,7 @@ export default function Gastos() {
             <td className="td-user">${parseFloat(gasto.monto).toFixed(2)}</td>
             <td className="td-user">{gasto.fecha}</td>
             <td className="td-user">{gasto.categoria}</td>
-            <td className="td-user">{gasto.empleado?.username || "No asignado"}</td>
+            <td className="td-user">{obtenerNombreEmpleado(gasto.empleadoId)}</td>
           </tr>
         ))}
       </tbody>
@@ -149,13 +152,12 @@ export default function Gastos() {
         opc3={"Valor"}
         opc4={"N°"}
         withSearch={"cont-buscador-none"}
-      >
-      </Encabezado>
+      />
 
       <SepXNegro />
 
       <form className="form" onSubmit={handleSubmit}>
-      <div className="form-row">
+        <div className="form-row">
           <div className="form-group">
             <label className="form-label">Descripción:</label>
             <input
@@ -216,6 +218,7 @@ export default function Gastos() {
             </select>
           </div>
         </div>
+
         <button type="submit" className="btn-crear">
           Crear Gasto
         </button>
