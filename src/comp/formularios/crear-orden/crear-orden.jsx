@@ -75,8 +75,13 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
   };
 
   /*OBSERVAR EL CAMBIO DE FOTO Y ENVIA LA ORDEN*/
+const [ordenEnProceso, setOrdenEnProceso] = useState(false)
+
   useEffect(() => {
-    if (fotoBlob) {
+    if (ordenEnProceso){
+      return;
+    } else if (fotoBlob) {
+      setOrdenEnProceso(true);
       enviarOrden();
     }
   }, [fotoBlob]);
@@ -464,9 +469,6 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
 
     /*Elimina el abono*/
     document.getElementById("abono").value = "";
-
-    /*Eliminar foto*/
-    setFotoBlob(null);
   }
 
   /*Mostrar notifiicacion*/
@@ -479,6 +481,8 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
   /*MANDAR ORDEN*/
   let idOrden = null;
   async function enviarOrden() {
+    console.log("Creando pedido...")
+
     /*EVALUA QUE HAYAN PRENDAS INGRESADAS*/
     if (dataPedido.detalles.length < 1) {
       sonidoError();
@@ -785,6 +789,10 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
     /*EJECUTAR FUNCION DE LIIMPIAR DATOS Y REFRESCAR*/
     limpiarPedido();
     ejecutarFuncion();
+    
+    /*CERRAR FORMULARIO*/
+    setIsVisible(false);
+    setCameraOn((prevState) => !prevState);
   }
 
   return (
