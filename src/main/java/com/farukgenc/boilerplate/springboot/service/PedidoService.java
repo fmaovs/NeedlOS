@@ -723,7 +723,7 @@ public class PedidoService {
             }
 
             table.addCell("");
-            table.addCell("Total").setFontSize(8f).setMarginBottom(1f);
+            table.addCell("Subtotal").setFontSize(8f).setMarginBottom(1f);
             table.addCell("" + pedidoResponse.getPrenda().stream()
                     .mapToDouble(prenda -> prenda.getValor())
                     .sum()).setFontSize(8f).setMarginBottom(1f);
@@ -873,7 +873,7 @@ public class PedidoService {
                 table.addCell(String.valueOf(+ prenda.getValor() / prenda.getCantidad())).setFontSize(8f).setMarginBottom(1f);
             }
             table.addCell("");
-            table.addCell("Total").setFontSize(8f).setMarginBottom(1f);
+            table.addCell("Subtotal").setFontSize(8f).setMarginBottom(1f);
             table.addCell("" + pedidoResponse.getPrenda().stream()
                     .mapToDouble(prenda -> prenda.getValor())
                     .sum()).setFontSize(8f).setMarginBottom(1f);
