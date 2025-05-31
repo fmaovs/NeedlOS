@@ -34,7 +34,7 @@ public class Prenda {
 
     //******************************************
 
-    //faltan foreignkey con tablas
+    // faltan foreignkey con tablas
     // detalle de pedido
     // empleado
 
