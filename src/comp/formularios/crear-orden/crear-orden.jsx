@@ -75,14 +75,15 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
   };
 
   /*OBSERVAR EL CAMBIO DE FOTO Y ENVIA LA ORDEN*/
-const [ordenEnProceso, setOrdenEnProceso] = useState(false)
+  const [ordenEnProceso, setOrdenEnProceso] = useState(false);
 
   useEffect(() => {
-    if (ordenEnProceso){
+    if (ordenEnProceso) {
       return;
     } else if (fotoBlob) {
       setOrdenEnProceso(true);
       enviarOrden();
+      setOrdenEnProceso(false);
     }
   }, [fotoBlob]);
 
@@ -297,7 +298,7 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
     let idPrenda;
     const cantidad = parseInt(document.getElementById("cantidad").value);
     const idSastre = parseInt(document.getElementById("select-sastre").value);
-    const concepto = document.getElementById("detalles").value;
+    const concepto = document.getElementById("detalles").value.toLowerCase();
     const tipoTrabajo = document.getElementById("tipo-trabajo").value;
 
     /*VARIABLES PARA LA TABLA*/
@@ -307,7 +308,9 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
 
     /*TRY PARA ASIGNAR LA PRENDA A LA VARIABLE*/
     try {
-      const namePrenda = document.getElementById("producto").value;
+      const namePrenda = document
+        .getElementById("producto")
+        .value.toLowerCase();
 
       const response = await axios.get("http://localhost:8080/prendas/all", {
         headers: {
@@ -481,7 +484,7 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
   /*MANDAR ORDEN*/
   let idOrden = null;
   async function enviarOrden() {
-    console.log("Creando pedido...")
+    console.log("Creando pedido...");
 
     /*EVALUA QUE HAYAN PRENDAS INGRESADAS*/
     if (dataPedido.detalles.length < 1) {
@@ -552,11 +555,17 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
         .toLowerCase();
       const valueTelefono = +document.getElementById("telefono").value.trim();
 
-      if (!valueNombre || !valueApellido || !valueTelefono) {
+      if (
+        !valueNombre ||
+        !valueApellido ||
+        valueTelefono.toString().length != 10
+      ) {
         let mensajeError = "Por favor completa los siguientes campos:\n";
 
         if (!valueNombre) mensajeError += "- Nombre\n";
         if (!valueApellido) mensajeError += "- Apellido\n";
+        if (valueTelefono.toString().length != 10)
+          mensajeError += "- Teléfono (10 dígitos)\n";
 
         alert(mensajeError);
         return;
@@ -789,9 +798,10 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
     /*EJECUTAR FUNCION DE LIIMPIAR DATOS Y REFRESCAR*/
     limpiarPedido();
     ejecutarFuncion();
-    
+
     /*CERRAR FORMULARIO*/
     setIsVisible(false);
+    setTimeout(onClick, 300);
     setCameraOn((prevState) => !prevState);
   }
 
@@ -818,7 +828,7 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
               <TxtForm
                 type={"number"}
                 className={"one"}
-                placeholder={"Telefono..."}
+                placeholder={"Teléfono..."}
                 id={"telefono"}
                 onBlur={insertarNombre}
               />
@@ -848,6 +858,9 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
                 placeholder={"Producto..."}
                 id={"producto"}
                 onBlur={insertarValor}
+                onInput={() => {
+                  
+                }}
               />
               <TxtForm
                 type={"number"}
@@ -865,7 +878,7 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
               />
               <select className="box-form six-2" id="tipo-trabajo">
                 <option value="arreglo">Arreglo</option>
-                <option value="confeccion">Confeccion</option>
+                <option value="confeccion">Confección</option>
               </select>
               <select className="box-form six-2" id="select-sastre">
                 <option className="option" value="null">
@@ -948,7 +961,7 @@ const [ordenEnProceso, setOrdenEnProceso] = useState(false)
               </div>
               <div className="div-column-full">
                 <div className="div-row">
-                  <SpanForm txt={"Dias:"} id={"dias"} insert={numeroDias} />
+                  <SpanForm txt={"Días:"} id={"dias"} insert={numeroDias} />
                   <SpanForm txt={"Pzs:"} id={"piezas"} insert={piezasTotal} />
                 </div>
                 <SpanForm txt={"Subtotal:"} id={"subtotal"} insert={subTotal} />

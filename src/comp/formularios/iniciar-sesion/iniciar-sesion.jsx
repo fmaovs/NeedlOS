@@ -70,7 +70,7 @@ export default function IniciarSesion() {
           txt="Usuario"
           img={User}
           type="text"
-          placeholder="Ejemplo@gmail.com"
+          placeholder="Admin"
           id="usuario"
           valor={username}
           cambio={(e) => setUsername(e.target.value)}

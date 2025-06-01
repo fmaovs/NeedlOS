@@ -1,6 +1,6 @@
 import "./txt-form.css";
 
-export default function TxtForm({ type, className, placeholder, id, onBlur }) {
+export default function TxtForm({ type, className, placeholder, id, onBlur, onInput }) {
   return (
     <input
       type={type}
@@ -8,6 +8,7 @@ export default function TxtForm({ type, className, placeholder, id, onBlur }) {
       placeholder={`${placeholder} *`}
       id={id}
       onBlur={onBlur}
+      onInput={onInput}
     />
   );
 }

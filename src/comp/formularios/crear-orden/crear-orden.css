@@ -84,7 +84,6 @@
   margin-right: 0.5vh;
   margin-left: 0.5vh;
   padding-left: 1.4vh;
-  text-transform: capitalize;
 }
 
 .one-2.err {
@@ -95,7 +94,6 @@
   width: 35%;
   margin-left: 0.5vh;
   padding-left: 1.4vh;
-  text-transform: capitalize;
 }
 
 .two.err {
@@ -123,10 +121,9 @@
 }
 
 .six {
-  width: 54%;
+  width: 50%;
   margin-right: 0.5vh;
   padding-left: 1.4vh;
-  text-transform: capitalize;
 }
 
 .six-2 {
@@ -136,11 +133,16 @@
   margin-right: 0.5vh;
 }
 
+.six-2:last-of-type {
+  width: 24%;
+}
+
 .six-2:hover {
   border-color: black;
   cursor: pointer;
   text-underline-offset: 0.2vh;
   letter-spacing: 0.02vw;
+  text-decoration: underline;
 }
 
 .seven {
@@ -180,6 +182,7 @@
   flex: 1;
   max-height: 45vh;
   overflow: auto;
+  text-transform: capitalize;
 }
 
 .cont-dateEtc {
@@ -327,7 +330,6 @@
   border: none;
   cursor: pointer;
 }
-
 
 @keyframes existe {
   0% {
