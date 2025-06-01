@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -201,6 +202,14 @@ public class UserServiceImpl implements UserService {
 		userResponse.setName(user.getName());
 		userResponse.setLastname(user.getLastname());
 		return userResponse;
+	}
+
+	public String getEmailByUsername(String username){
+		return userRepository.findByUsername(username).getEmail();
+	}
+
+	public Optional<User> findByEmail(String email){
+		return Optional.ofNullable(userRepository.findByEmail(email));
 	}
 
 

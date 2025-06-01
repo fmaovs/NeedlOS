@@ -75,4 +75,19 @@ public class JwtTokenManager {
 		return jwtVerifier.verify(token);
 	}
 
+	public String generatePasswordResetToken(String email) {
+		return JWT.create()
+				.withSubject(email)
+				.withIssuer(jwtProperties.getIssuer())
+				.withIssuedAt(new Date())
+				.withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getExpirationMinute() * 60 * 1000))
+				.sign(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes()));
+	}
+
+	public String getEmailFromResetToken(String token) {
+		return getUsernameFromToken(token); // alias para claridad
+	}
+
+
+
 }
