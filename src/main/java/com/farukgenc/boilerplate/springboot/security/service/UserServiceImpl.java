@@ -2,6 +2,7 @@ package com.farukgenc.boilerplate.springboot.security.service;
 
 import com.farukgenc.boilerplate.springboot.model.Cargo;
 import com.farukgenc.boilerplate.springboot.security.dto.*;
+import com.farukgenc.boilerplate.springboot.security.jwt.JwtTokenManager;
 import com.farukgenc.boilerplate.springboot.service.UserValidationService;
 import com.farukgenc.boilerplate.springboot.model.User;
 import com.farukgenc.boilerplate.springboot.model.UserRole;
@@ -33,6 +34,10 @@ public class UserServiceImpl implements UserService {
 
 	private final GeneralMessageAccessor generalMessageAccessor;
 
+	private final EmailService emailService;
+
+	private final JwtTokenManager jwtTokenManager;
+
 	@Override
 	public User findByUsername(String username) {
 
@@ -62,6 +67,15 @@ public class UserServiceImpl implements UserService {
 		final String registrationSuccessMessage = generalMessageAccessor.getMessage(null, REGISTRATION_SUCCESSFUL, username);
 
 		log.info("{} registered successfully!", username);
+
+		//Enviar correo con la información del registro
+		String email = user.getEmail();
+		String token = jwtTokenManager.generatePasswordResetToken(email);
+		String changeLink = "http://localhost:3000/reset-password?token=" + token;
+		emailService.send(email, "Cambio de contraseña por primera vez:\n",
+					"Usuario: " + user.getUsername() + "\n" +
+							"Contraseña: " + registrationRequest.getPassword() + "\n" +
+				"Haz clic en el siguiente enlace para cambiar tu contraseña:\n" + changeLink);
 
 		return new RegistrationResponse(registrationSuccessMessage);
 	}
