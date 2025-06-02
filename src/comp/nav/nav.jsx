@@ -13,6 +13,7 @@ const Gastos = "../../../public/media/img/gastos.png";
 const ArqueoCaja = "../../../public/media/img/arqueo-caja.png";
 const Nomina = "../../../public/media/img/nomina.png";
 const Ajustes = "../../../public/media/img/ajustes.png";
+const SesionActiva = "../../../public/media/img/sesion-activa.png";
 
 export default function Nav({ setComponenteSeleccionado }) {
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("Ordenes");
@@ -33,7 +34,11 @@ export default function Nav({ setComponenteSeleccionado }) {
 
   // Función para renderizar una opción si corresponde
   const renderOpcion = (img, txt, clase) => {
-    if (sessionStorage.getItem("rol") === "USER" && ocultarParaUser.includes(txt)) return null;
+    if (
+      sessionStorage.getItem("rol") === "USER" &&
+      ocultarParaUser.includes(txt)
+    )
+      return null;
 
     return (
       <OpcionNav
@@ -48,6 +53,13 @@ export default function Nav({ setComponenteSeleccionado }) {
   return (
     <div className="cont-nav">
       <LogoImgTxt />
+      <div className="cont-sesion-activa">
+        <img src={SesionActiva} alt="Imagen sesion activa" />
+        <div>
+          <span className="sesion-activa">Sesion: @admin</span>
+          <span className="sesion-activa">Rol: Administrador</span>
+        </div>
+      </div>
       <SepXBlancoSmall />
       {renderOpcion(Ordenes, "Ordenes", "cont-seccion-first")}
       {renderOpcion(Inventario, "Inventario", "cont-seccion")}

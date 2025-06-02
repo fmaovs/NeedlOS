@@ -88,12 +88,11 @@ export default function Ordenes() {
       <Encabezado
         titEncabezado={"Ordenes"}
         conBtCrear={""}
-        opc1={"Cliente"}
-        opc2={"Prenda"}
-        opc3={"Valor"}
-        opc4={"N°"}
+        opc1={"Id"}
+        opc2={"Cliente"}
+        opc3={"Fecha"}
         onClick={mostrarCrearOrden}
-        imgBoton={'../../../../public/media/img/crear.png'}
+        imgBoton={"../../../../public/media/img/crear.png"}
       />
       {mostrarFormulario && (
         <CrearOrden

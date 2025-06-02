@@ -73,6 +73,45 @@ export default function Inventario() {
     const stock = +document.getElementById("stock").value;
     const precioUnit = +document.getElementById("precio-unitario").value;
 
+    if (material === "") {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("Ingrese un nombre de material");
+      }, 15);
+      return;
+    }
+
+    if (descripcion === "") {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("Ingrese una descripción");
+      }, 15);
+      return;
+    }
+
+    // If para que el precio sea multiplo de 50 ni pueda ser 0
+    if (precioUnit <= 0 || precioUnit % 50 !== 0) {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("Ingrese un valor unitario válido (multiplo de 50 y mayor a 0)");
+      }, 15);
+      return;
+    }
+
+    
+    // if para que el stock sea mayor a 0
+    if (stock <= 0) {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("Ingrese una cantidad válida (mayor a 0)");
+      }, 15);
+      return;
+    }
+
     const nuevoMaterial = {
       nombre: material.toLowerCase(),
       descripcion: descripcion.toLowerCase(),
@@ -373,10 +412,8 @@ export default function Inventario() {
       <Encabezado
         titEncabezado={"Inventario"}
         conBtCrear={""}
-        opc1={"Cliente"}
-        opc2={"Prenda"}
-        opc3={"Valor"}
-        opc4={"N°"}
+        opc1={"Codigo"}
+        opc2={"Producto"}
         onClick={mostrarCrearInventario}
         imgBoton={"../../../../public/media/img/crear.png"}
       />
@@ -392,14 +429,20 @@ export default function Inventario() {
             className="form-inventario"
             onClick={(event) => event.stopPropagation()}
           >
-            <span>Creando nuevo material</span>
+            <span>Crear material</span>
             <SepXNegro />
             <section className="fila-detalles-ordenes">
-              <ContTxt type={"text"} titulo={"Producto:"} id={"material"} />
+              <ContTxt
+                type={"text"}
+                titulo={"Producto:"}
+                id={"material"}
+                placeholder={"Hilo"}
+              />
               <ContTxt
                 type={"text"}
                 titulo={"Descripcion:"}
                 id={"descripcion-material"}
+                placeholder={"Rojo"}
               />
             </section>
             <section className="fila-detalles-ordenes">
@@ -407,8 +450,14 @@ export default function Inventario() {
                 type={"number"}
                 titulo={"Vlr. Uni:"}
                 id={"precio-unitario"}
+                placeholder={"$ 40.000"}
               />
-              <ContTxt type={"number"} titulo={"Cantidad:"} id={"stock"} />
+              <ContTxt
+                type={"number"}
+                titulo={"Cantidad:"}
+                id={"stock"}
+                placeholder={"0"}
+              />
             </section>
             <button onClick={crearInventario}>Crear</button>
           </div>

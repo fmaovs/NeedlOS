@@ -80,7 +80,7 @@
   flex-direction: column;
   justify-content: center;
   padding-left: 1vh;
-  color: #d2d2d2;
+  color: #8a8a8a;
   font-size: calc((0.2vw + 3.2vh) * 0.5);
 }
 
@@ -94,7 +94,7 @@
   border: 0.1vh solid #d2d2d2;
   border-radius: 1.2vh;
   box-sizing: border-box;
-  text-transform: uppercase;
+  text-transform: capitalize;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
 }
 
@@ -108,7 +108,7 @@
   border: 0.1vh solid #d2d2d2;
   border-radius: 1.2vh;
   box-sizing: border-box;
-  text-transform: uppercase;
+  text-transform: capitalize;
   outline: none;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
   transition: 0.1s ease-in-out;
@@ -137,7 +137,7 @@
 .tabla-card-detalles-pedido th {
   font-size: calc((0.2vw + 3.2vh) * 0.5);
   font-weight: 400;
-  color: #d2d2d2;
+  color: #8a8a8a;
 }
 
 .tabla-card-detalles-pedido tbody tr:not(.last-row-tb-tarjeta-detalles) {
@@ -167,7 +167,7 @@
   width: 100%;
   height: 4.5vh;
   border-radius: 1.2vh;
-  border: 0.1vh solid #d2d2d2;
+  border: 0.1vh solid #000000;
   box-sizing: border-box;
   margin: 1vh 0 0 0;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
@@ -252,7 +252,7 @@
   width: 100%;
   height: 4.5vh;
   border-radius: 1.2vh;
-  border: 0.1vh solid #d2d2d2;
+  border: 0.1vh solid #000000;
   box-sizing: border-box;
   margin: 1vh 0 0 0;
   font-size: calc((0.2vw + 3.2vh) * 0.45);

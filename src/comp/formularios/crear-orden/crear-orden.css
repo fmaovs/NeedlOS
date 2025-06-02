@@ -80,6 +80,7 @@
 }
 
 .one-2 {
+  text-transform: capitalize;
   width: 35%;
   margin-right: 0.5vh;
   margin-left: 0.5vh;
@@ -91,6 +92,7 @@
 }
 
 .two {
+  text-transform: capitalize;
   width: 35%;
   margin-left: 0.5vh;
   padding-left: 1.4vh;

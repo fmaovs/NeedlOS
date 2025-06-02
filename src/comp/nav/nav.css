@@ -6,3 +6,26 @@
   box-sizing: border-box;
   overflow: hidden;
 }
+
+.cont-sesion-activa {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 1vh;
+  justify-content: center;
+  margin-bottom: 2vh;
+}
+
+.cont-sesion-activa img {
+  width: 16%;
+  object-fit: contain;
+}
+
+.cont-sesion-activa div {
+  display: flex;
+  flex-direction: column;
+}
+
+.sesion-activa {
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+}

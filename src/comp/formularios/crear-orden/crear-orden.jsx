@@ -847,7 +847,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
           </div>
         )}
         <div className="cont-tit-creandoP">
-          <span className="tit-creandoP">Creando pedido</span>
+          <span className="tit-creandoP">Creando orden</span>
         </div>
         <SepXNegro />
         <div className="cont-form-crearPedido">
@@ -891,7 +891,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
                 onInput={resultadoBusqueda}
                 onClick={resultadoBusqueda}
               />
-              {mostrarResultadoPrendas && (
+              {mostrarResultadoPrendas && prendaBuscada.length > 0 && (
                 <div className="resultado-busqueda">
                   {prendaBuscada.map((prenda) => (
                     <button
