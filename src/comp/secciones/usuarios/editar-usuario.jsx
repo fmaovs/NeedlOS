@@ -12,6 +12,8 @@ export function EditarUsuario({ onClose, idUser }) {
   const telefonoRef = useRef(null);
   const rolRef = useRef(null);
   const cargoRef = useRef(null);
+  const [estadoActivo, setEstadoActivo] = useState(true);
+
 
   useEffect(() => {
     mostrarDatos();
@@ -35,6 +37,8 @@ export function EditarUsuario({ onClose, idUser }) {
       telefonoRef.current.value = response.data.phone;
       rolRef.current.value = response.data.rol;
       cargoRef.current.value = response.data.cargo;
+      setEstadoActivo(response.data.active);
+
     } catch (error) {
       console.error(error);
     }
@@ -53,6 +57,7 @@ export function EditarUsuario({ onClose, idUser }) {
           username: usernameRef.current.value,
           user_role: rolRef.current.value,
           cargo: cargoRef.current.value,
+          active: estadoActivo,
         },
         {
           headers: {
@@ -66,6 +71,29 @@ export function EditarUsuario({ onClose, idUser }) {
       console.error(error);
     }
   }
+
+  async function handleEstadoChange(e) {
+  const nuevoEstado = e.target.checked;
+  setEstadoActivo(nuevoEstado);
+
+  try {
+    await axios.patch(
+      `http://localhost:8080/users/${idUser}/Estado?enabled=${nuevoEstado}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log("Estado actualizado con éxito");
+  } catch (error) {
+    console.error("Error al cambiar el estado", error);
+    // Si falla, revertimos visualmente
+    setEstadoActivo(!nuevoEstado);
+  }
+}
+
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -114,6 +142,21 @@ export function EditarUsuario({ onClose, idUser }) {
               <option value="SASTRE">Sastre</option>
             </select>
           </div>
+
+          <div className="from-group">
+            <label className="form-label">Estado del usuario</label>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={estadoActivo}
+                onChange={handleEstadoChange}
+              />
+              <span className="slider round"></span>
+            </label>
+          </div>
+
+
+
           <div className="from-botton">
           <button
               type = "button"
