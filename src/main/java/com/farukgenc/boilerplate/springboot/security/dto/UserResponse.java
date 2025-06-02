@@ -16,4 +16,5 @@ public class UserResponse {
     private Long phone;
     private String name;
     private String lastname;
+    private boolean estado = true;
 }

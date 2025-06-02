@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setUserRole(registrationRequest.getUser_role());
 		user.setCargo(Cargo.valueOf(String.valueOf(registrationRequest.getCargo())));
+		user.setEstado(true);
 		userRepository.save(user);
 
 		final String username = registrationRequest.getUsername();
@@ -85,6 +86,7 @@ public class UserServiceImpl implements UserService {
 			userResponse.setPhone(user.getPhone());
 			userResponse.setName(user.getName());
 			userResponse.setLastname(user.getLastname());
+			userResponse.setEstado(user.isEstado());
 			usersResponse.add(userResponse);
 		}
 		return usersResponse;
@@ -98,9 +100,11 @@ public class UserServiceImpl implements UserService {
 			userTemporal.setUsername(user.getUsername());
 			userTemporal.setEmail(user.getEmail());
 			userTemporal.setCargo(user.getCargo().getCargoName());
+			userTemporal.setRol(String.valueOf(user.getUserRole()));
 			userTemporal.setPhone(user.getPhone());
 			userTemporal.setName(user.getName());
 			userTemporal.setLastname(user.getLastname());
+			userTemporal.setEstado(user.isEstado());
 			users.add(userTemporal);
 		}
 		return users;
@@ -201,6 +205,7 @@ public class UserServiceImpl implements UserService {
 		userResponse.setPhone(user.getPhone());
 		userResponse.setName(user.getName());
 		userResponse.setLastname(user.getLastname());
+		userResponse.setEstado(user.isEstado());
 		return userResponse;
 	}
 
@@ -212,5 +217,24 @@ public class UserServiceImpl implements UserService {
 		return Optional.ofNullable(userRepository.findByEmail(email));
 	}
 
+	public UserResponse cambioEstado(Long id, Boolean estado) {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+		user.setEstado(estado);
+		userRepository.save(user);
+
+		UserResponse userResponse = new UserResponse();
+		userResponse.setId(user.getId());
+		userResponse.setUsername(user.getUsername());
+		userResponse.setEmail(user.getEmail());
+		userResponse.setCargo(user.getCargo().getCargoName());
+		userResponse.setRol(user.getUserRole().toString());
+		userResponse.setPhone(user.getPhone());
+		userResponse.setName(user.getName());
+		userResponse.setLastname(user.getLastname());
+		userResponse.setEstado(user.isEstado());
+		return userResponse;
+	}
 
 }

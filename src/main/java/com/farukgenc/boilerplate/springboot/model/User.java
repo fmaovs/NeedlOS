@@ -37,6 +37,9 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Cargo cargo;
 
+	@Column(name = "Estado")
+	private boolean estado = true;
+
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<DetallePedido> detallePedido;
 

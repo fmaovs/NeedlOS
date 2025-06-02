@@ -109,5 +109,10 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/{id}/Estado")
+    public ResponseEntity<UserResponse> cambioEstado(@PathVariable Long id, @RequestParam boolean enabled) {
+        UserResponse updatedUser = userServiceImpl.cambioEstado(id, enabled);
+        return ResponseEntity.ok(updatedUser);
+    }
 
 }
