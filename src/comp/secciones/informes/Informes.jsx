@@ -158,7 +158,7 @@ export default function Informe() {
   return (
     <>
       <Encabezado
-        titEncabezado={"Gastos"}
+        titEncabezado={"Informes"}
         conBtCrear={""}
         withSearch={"cont-buscador-none"}
         claseCont={"cont-buscador-informes"}

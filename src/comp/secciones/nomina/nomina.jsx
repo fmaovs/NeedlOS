@@ -9,8 +9,9 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { startOfWeek, endOfWeek } from "date-fns";
 
-const camisa = "../../../../public/media/img/camisa.png";
+const sastre = "../../../../public/media/img/sastre.png";
 const dinero = "../../../../public/media/img/dinero.png";
+const noEncontrado = "../../../../public/media/img/no-encontrado.png";
 
 export default function Nomina() {
   /*Traer empleados*/
@@ -48,6 +49,8 @@ export default function Nomina() {
   const [vale, setVale] = useState(null);
   const [devengar, setDevengar] = useState(null);
   const [isVales, setIsVales] = useState(false);
+  const [mostrarNoEncontrado, setMostrarNoEncontrado] = useState(false);
+  const [seleccionaSastre, setSeleccionaSastre] = useState(true);
   async function resumenCuenta(id) {
     setEmpleadoPresionado(id);
     if (empleadoPresionado === id) {
@@ -117,12 +120,14 @@ export default function Nomina() {
     }
 
     setDevengar(totalPedidos - totalVales);
+    setMostrarNoEncontrado(true);
+    setSeleccionaSastre(false);
   }
 
   return (
     <>
       <Encabezado
-        titEncabezado={"Nomina"}
+        titEncabezado={"Nómina"}
         claseCont={"cont-espacio-nomina"}
         conBtCrear={"none"}
         opc1={"Cliente"}
@@ -133,13 +138,25 @@ export default function Nomina() {
       >
         <CalendarioNomina
           selected={fechaDesde}
-          onChange={setFechaDesde}
+          onChange={(nuevaFechaDesde) => {
+            if (nuevaFechaDesde > fechaHasta) {
+              alert("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'");
+              return;
+            }
+            setFechaDesde(nuevaFechaDesde);
+          }}
           desdeHasta={"Desde:"}
         />
         <div className="span-separacion">/</div>
         <CalendarioNomina
           selected={fechaHasta}
-          onChange={setFechaHasta}
+          onChange={(nuevaFechaHasta) => {
+            if (nuevaFechaHasta < fechaDesde) {
+              alert("La fecha 'Hasta' no puede ser menor que la fecha 'Desde'");
+              return;
+            }
+            setFechaHasta(nuevaFechaHasta);
+          }}
           desdeHasta={"Hasta:"}
         />
       </Encabezado>
@@ -148,7 +165,7 @@ export default function Nomina() {
         <Filtrador>
           <OpcionesFilter
             txtFilter={"Sastres"}
-            imgFilter={camisa}
+            imgFilter={sastre}
             clase={"dos-diez"}
           />
           <OpcionesFilter
@@ -202,41 +219,70 @@ export default function Nomina() {
                 <thead className="th-tabla">
                   <tr className="separacion-fila-head"></tr>
                   <tr className="tr-encabezado">
-                    <th className="th th-tabla-nomina-colum1">Concepto</th>
-                    <th className="th th-tabla-nomina-colum2">Fecha</th>
+                    <th className="th">N°</th>
+                    <th className="th">Cliente</th>
+                    <th className="th">Fecha radicacion</th>
+                    <th className="th">Fecha entrega</th>
                     <th className="th">Valor</th>
                   </tr>
                   <tr className="separacion-fila-head"></tr>
                 </thead>
                 <tbody className="body-tabla">
-                  {nominas.map((nomina) => (
-                    <React.Fragment key={nomina.id}>
-                      <tr className="tr-body">
-                        <td className="td">{nomina.concepto}</td>
-                        <td className="td">
-                          {new Date(nomina.fechaPedido)
-                            .toLocaleString("es-CO", {
-                              year: "numeric",
-                              month: "numeric",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
-                            .replace(",", " -")
-                            .replace("a. m.", "AM")
-                            .replace("p. m.", "PM")}
-                        </td>
-                        <td className="td td-nomina td-totalAbonos">
-                          {`$ ${new Intl.NumberFormat("es-CO", {
-                            style: "decimal",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          }).format(nomina.totalAbonos)}`}
-                        </td>
-                      </tr>
-                      <tr className="separacion-fila"></tr>
-                    </React.Fragment>
-                  ))}
+                  {seleccionaSastre && (
+                    <span className="mensaje-sin-resultados-span">
+                      Selecciona un sastre
+                    </span>
+                  )}
+                  {nominas.length === 0 && mostrarNoEncontrado ? (
+                    <img
+                      src={noEncontrado}
+                      alt="Icono no encontrado"
+                      className="mensaje-sin-resultados"
+                    />
+                  ) : (
+                    nominas.map((nomina) => (
+                      <React.Fragment key={nomina.id}>
+                        <tr className="tr-body">
+                          <td className="td">{nomina.id}</td>
+                          <td className="td">{`${nomina.customerName} ${nomina.customerLastName}`}</td>
+                          <td className="td">
+                            {new Date(nomina.fechaPedido)
+                              .toLocaleString("es-CO", {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                              .replace(",", " -")
+                              .replace("a. m.", "AM")
+                              .replace("p. m.", "PM")}
+                          </td>
+                          <td className="td">
+                            {new Date(nomina.fechaEntrega)
+                              .toLocaleString("es-CO", {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                              .replace(",", " -")
+                              .replace("a. m.", "AM")
+                              .replace("p. m.", "PM")}
+                          </td>
+                          <td className="td td-nomina td-totalAbonos">
+                            {`$ ${new Intl.NumberFormat("es-CO", {
+                              style: "decimal",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            }).format(nomina.totalAbonos)}`}
+                          </td>
+                        </tr>
+                        <tr className="separacion-fila"></tr>
+                      </React.Fragment>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

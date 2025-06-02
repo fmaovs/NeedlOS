@@ -20,6 +20,7 @@
 }
 
 .ocultar-scroll2 {
+  position: relative;
   height: 80%;
   border-radius: 1.2vh;
   border: 0.3vh solid #0050b8;
@@ -95,4 +96,26 @@
   background-color: #e6e6e6;
   text-decoration: none;
   cursor: default;
+}
+
+.mensaje-sin-resultados {
+  position: absolute;
+  background-color: #f8f8f8;
+  padding: 3vh;
+  border-radius: 2vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 20%;
+}
+
+.mensaje-sin-resultados-span {
+  position: absolute;
+  border-radius: 2vh;
+  background-color: #f8f8f8;
+  padding: 3vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: calc((0.2vw + 3.2vh) * 0.7);
 }

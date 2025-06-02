@@ -101,7 +101,6 @@ export default function Inventario() {
       return;
     }
 
-    
     // if para que el stock sea mayor a 0
     if (stock <= 0) {
       sonidoError();
@@ -326,6 +325,7 @@ export default function Inventario() {
       const idPrenda = document.getElementById(
         "select-inventario-prenda"
       ).value;
+
       if (idPrenda === "null") {
         sonidoError();
         await new Promise((resolve) => setTimeout(resolve, 0));
@@ -334,6 +334,16 @@ export default function Inventario() {
         }, 15);
         return;
       }
+
+      if (stock <= 0) {
+        sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        setTimeout(() => {
+          alert("El stock a retirar debe ser mayor a 0");
+        }, 15);
+        return;
+      }
+
       const idPrendaInt = parseInt(idPrenda);
 
       const retiroMaterial = {
@@ -362,6 +372,30 @@ export default function Inventario() {
     }
 
     if (calculoPresionado === "+") {
+      // Evaluar que el precio a ingresar el mayor de 0 y es multiplo de 50
+      const precioUnit = +document.getElementById("precio-unitario").value;
+      console.log(precioUnit);
+      if (precioUnit <= 0 || precioUnit % 50 != 0) {
+        sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        setTimeout(() => {
+          alert(
+            "El precio unitario debe ser un numero mayor a 0 y multiplo de 50"
+          );
+        }, 15);
+        return;
+      }
+
+      //Evaluar que el stock no sea 0
+      if (stock <= 0) {
+        sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        setTimeout(() => {
+          alert("El stock a ingresar debe ser mayor a 0");
+        }, 15);
+        return;
+      }
+
       let idIngreso;
       try {
         const response = await axios.post(
@@ -478,6 +512,21 @@ export default function Inventario() {
             <ContDetalle titulo={"Producto:"} txt={producto} />
             <ContDetalle titulo={"Descripcion:"} txt={descripcion} />
           </section>
+          <span id="span-accion">Accion:</span>
+          <section className="fila-detalles-ordenes">
+            <button
+              className={`sumar-restar ${isResta ? "resta-presionada" : ""}`}
+              onClick={() => asignarCalculo("-")}
+            >
+              Descontar -
+            </button>
+            <button
+              className={`sumar-restar ${isSuma ? "suma-presionada" : ""}`}
+              onClick={() => asignarCalculo("+")}
+            >
+              Añadir +
+            </button>
+          </section>
           <section className="fila-detalles-ordenes">
             {isAñadir === true ? (
               <ContTxt
@@ -502,21 +551,14 @@ export default function Inventario() {
               type={"number"}
               titulo={`Cantidad actual: ${stockActual}`}
               id={"stock"}
+              placeholder={
+                isResta
+                  ? "Cantidad a descontar"
+                  : isSuma
+                  ? "Cantidad a añadir"
+                  : ""
+              }
             />
-          </section>
-          <section className="fila-detalles-ordenes">
-            <button
-              className={`sumar-restar ${isResta ? "resta-presionada" : ""}`}
-              onClick={() => asignarCalculo("-")}
-            >
-              Descontar -
-            </button>
-            <button
-              className={`sumar-restar ${isSuma ? "suma-presionada" : ""}`}
-              onClick={() => asignarCalculo("+")}
-            >
-              Añadir +
-            </button>
           </section>
           <button onClick={aplicarEditar}>Editar</button>
         </div>

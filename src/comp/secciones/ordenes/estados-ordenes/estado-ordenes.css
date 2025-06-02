@@ -73,7 +73,7 @@
 
 .td:last-child {
   border-radius: 0 1.2vh 1.2vh 0;
-  padding: 1vh;
+  padding: 1.1vh 1vh 0.9vh 1vh;
   transition: 0.3s ease-in-out;
 }
 
@@ -170,7 +170,6 @@
 }
 
 .detalles-txt-row select {
-  appearance: none;
   height: 100%;
   padding: 0 1.2vh;
   transition: 0.1s ease-in-out;
