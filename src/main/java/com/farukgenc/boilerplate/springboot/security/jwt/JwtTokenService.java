@@ -43,9 +43,10 @@
 			final String token = jwtTokenManager.generateToken(user);
 			final String rol = user.getUserRole().toString();
 
+
 			log.info("{} has successfully logged in!", user.getUsername());
 
-			return new LoginResponse(token, rol);
+			return new LoginResponse(token, rol, username);
 		}
 
 	}
