@@ -10,12 +10,12 @@ export default function Encabezado({
   opc1,
   opc2,
   opc3,
-  opc4,
   onClick,
   withSearch,
   children,
   claseBoton,
   imgBoton,
+  onInput,
 }) {
   return (
     <div className="cont-encabezado">
@@ -25,8 +25,8 @@ export default function Encabezado({
           opc1={opc1}
           opc2={opc2}
           opc3={opc3}
-          opc4={opc4}
           withSearch={withSearch}
+          onInput={onInput}
         />
         {children}
       </div>

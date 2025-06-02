@@ -80,6 +80,7 @@
 }
 
 .one-2 {
+  text-transform: capitalize;
   width: 35%;
   margin-right: 0.5vh;
   margin-left: 0.5vh;
@@ -91,6 +92,7 @@
 }
 
 .two {
+  text-transform: capitalize;
   width: 35%;
   margin-left: 0.5vh;
   padding-left: 1.4vh;
@@ -530,4 +532,46 @@
   width: auto;
   object-fit: contain;
   margin-right: 1vh;
+}
+
+.resultado-busqueda {
+  left: 14%;
+  right: 37.4%;
+  top: 100%;
+  border-radius: 1.2vh;
+  overflow: hidden;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 0.1vh solid #d2d2d2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.resultado-busqueda button {
+  text-align: start;
+  text-transform: capitalize;
+  border: none;
+  padding: 0.4vh 1.4vh;
+  background-color: white;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
+}
+
+.resultado-busqueda button:hover {
+  background-color: #1967d2;
+  color: white;
+}
+
+.resultado-busqueda button:focus {
+  background-color: #1967d2;
+  color: white;
+  outline: none;
+}
+
+.resultado-busqueda button:first-child {
+  border-radius: 1.2vh 1.2vh 0 0;
+}
+
+.resultado-busqueda button:last-child {
+  border-radius: 0 0 1.2vh 1.2vh;
 }

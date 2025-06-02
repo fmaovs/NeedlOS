@@ -11,6 +11,10 @@
   cursor: pointer;
 }
 
+.abrir-detalles:active {
+  cursor: default;
+}
+
 .en-proceso {
   background: linear-gradient(135deg, #5599ff, #255aa9);
 }

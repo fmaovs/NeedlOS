@@ -573,7 +573,7 @@ export default function TbTodo() {
                   <th className="th">Fecha entrega</th>
                   <th className="th"> Valor </th>
                   <th className="th">Prenda</th>
-                  <th className="th">Estado</th>
+                  <th className="th">Detalles</th>
                 </tr>
                 <tr className="separacion-fila-head"></tr>
               </thead>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./iniciar-sesion.css";
-import CheckBox from "../../input/checkbox/checkbox.jsx";
 import InpText from "../../input/text/inp-text.jsx";
 import Spinner from "../../loaders/spinner.jsx";
 
@@ -114,10 +113,9 @@ export default function IniciarSesion() {
         )}
 
         <div className="cont-recovery">
-          <CheckBox />
-          <label htmlFor="recuerdame" className="lb-inp-recovery">
-            Recuerdame
-          </label>
+          <a href="" className="link-recovery">
+            Recuperar contraseña
+          </a>
         </div>
 
         <div className="cont-butt-login">

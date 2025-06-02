@@ -193,6 +193,34 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
     }
   };
 
+  /*BUSCADOR PRENDAS*/
+  const [mostrarResultadoPrendas, setMostrarResultadoPrendas] = useState(false);
+  const [prendaBuscada, setPrendaBuscada] = useState("");
+  const resultadoBusqueda = (e) => {
+    if (e.target.value === "") {
+      setMostrarResultadoPrendas(false);
+      return;
+    }
+    setMostrarResultadoPrendas(true);
+    setPrendaBuscada(
+      prendas.filter((prenda) =>
+        prenda.descripcion
+          .toLowerCase()
+          .startsWith(e.target.value.toLowerCase())
+      )
+    );
+  };
+
+  /*AL HACER CLICK EN CUALQUIER BOTON INSERTAR LA PRENDA SELECCIONADA*/
+  const insertarPrendaBusqueda = (prenda) => {
+    console.log("Prenda seleccionada:", prenda);
+    const namePrenda = document.getElementById("producto");
+    namePrenda.value = prenda;
+    setPrendaBuscada("");
+    setMostrarResultadoPrendas(false);
+    insertarValor();
+  };
+
   /*TRY ASIGANR ID SASTRE*/
   const [users, setUsers] = useState([]);
   const mostrarUsers = async () => {
@@ -819,7 +847,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
           </div>
         )}
         <div className="cont-tit-creandoP">
-          <span className="tit-creandoP">Creando pedido</span>
+          <span className="tit-creandoP">Creando orden</span>
         </div>
         <SepXNegro />
         <div className="cont-form-crearPedido">
@@ -857,11 +885,25 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
                 className={"box-form four"}
                 placeholder={"Producto..."}
                 id={"producto"}
-                onBlur={insertarValor}
-                onInput={() => {
-                  
+                onBlur={() => {
+                  insertarValor();
                 }}
+                onInput={resultadoBusqueda}
+                onClick={resultadoBusqueda}
               />
+              {mostrarResultadoPrendas && prendaBuscada.length > 0 && (
+                <div className="resultado-busqueda">
+                  {prendaBuscada.map((prenda) => (
+                    <button
+                      key={prenda.id}
+                      type="button"
+                      onClick={() => insertarPrendaBusqueda(prenda.descripcion)}
+                    >
+                      {prenda.descripcion}
+                    </button>
+                  ))}
+                </div>
+              )}
               <TxtForm
                 type={"number"}
                 className={"box-form five"}
