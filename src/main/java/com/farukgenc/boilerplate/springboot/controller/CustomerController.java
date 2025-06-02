@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
+import com.farukgenc.boilerplate.springboot.exceptions.ResourceNotFoundException;
 import com.farukgenc.boilerplate.springboot.model.Customer;
 import com.farukgenc.boilerplate.springboot.security.dto.CustomerDTO;
 import com.farukgenc.boilerplate.springboot.service.CustomerService;
@@ -26,14 +27,14 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public Optional<Customer> getCustomerById(@PathVariable Long id) {
-        return customerService.findById(id);
+        return Optional.ofNullable(customerService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente con ID " + id + " no encontrado")));
     }
 
     @GetMapping("/phone")
     public ResponseEntity<?> buscarPorTelefono(@RequestParam Long phone) {
         return customerService.buscarPorTelefono(phone)
                 .map(customer -> ResponseEntity.ok(customer))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con teléfono " + phone + " no encontrado"));
     }
 
     @PostMapping
@@ -54,13 +55,12 @@ public class CustomerController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
-        Optional<Customer> customer = customerService.findById(id);
-        if (customer.isPresent()) {
-            customerService.delete(customer.get());
-            return ResponseEntity.ok("Customer deleted");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
-        }
+        Customer customer = customerService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con ID " + id + " no encontrado"));
+
+        customerService.delete(customer);
+        return ResponseEntity.ok("Cliente eliminado");
     }
+
 }
 

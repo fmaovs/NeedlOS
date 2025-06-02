@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
+import com.farukgenc.boilerplate.springboot.exceptions.ResourceNotFoundException;
 import com.farukgenc.boilerplate.springboot.model.Abono;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoDTO;
 import com.farukgenc.boilerplate.springboot.security.dto.AbonoResponse;
@@ -28,7 +29,7 @@ public class AbonoController {
     @GetMapping("/{id}")
     public AbonoDTO getAbono(@PathVariable Long id) {
         return abonoService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Abono no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Abono con ID " + id + " no encontrado"));
     }
 
     @GetMapping("/all")
