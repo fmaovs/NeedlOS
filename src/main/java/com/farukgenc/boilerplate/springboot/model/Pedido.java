@@ -1,6 +1,8 @@
 package com.farukgenc.boilerplate.springboot.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,19 +21,26 @@ import java.util.List;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pedido")
     private Long id;
 
+    @NotNull(message = "el campo no puede estar vacio")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = false)
     private Date date;
 
+
     @Column(nullable = false)
+    @PositiveOrZero(message = "el valor no puede ser negativo")
     private double total_abonos;
 
     @Column(nullable = false)
+    @PositiveOrZero(message = "el valor no puede ser negativo")
     private double saldo;
 
+    @NotNull(message = "el campo no puede estar vacio")
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
     private Customer customer;
 
     @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER, orphanRemoval = true)

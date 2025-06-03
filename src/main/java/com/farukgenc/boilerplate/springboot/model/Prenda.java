@@ -2,6 +2,10 @@ package com.farukgenc.boilerplate.springboot.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +21,17 @@ public class Prenda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_prenda")
     private Long id_prenda;
 
-    @Column
+    @NotBlank(message = "el campo no puede estar vacio")
+    @Size(min = 3, max = 50)
+    @Column(nullable = false, length = 50)
     private String descripcion;
 
-    @Column
+    @NotNull(message = "el campo no puede estar vacio")
+    @Positive(message = "la el monto debe ser un número positivo")
+    @Column(nullable = false)
     private Double valor;
 
     @OneToMany(mappedBy = "prenda", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -32,12 +41,5 @@ public class Prenda {
         return id_prenda;
     }
 
-    //******************************************
-
-    // faltan foreignkey con tablas
-    // detalle de pedido
-    // empleado
-
-    //******************************************
 
 }

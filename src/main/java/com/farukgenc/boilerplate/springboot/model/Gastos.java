@@ -3,8 +3,7 @@ package com.farukgenc.boilerplate.springboot.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,9 @@ public class Gastos {
     @Column(name = "id_gasto")
     private Long idGasto;
 
-    @Column(nullable = false, length = 255)
+    @NotBlank(message = "la descripcionno puede esatr vacia")
+    @Size(min = 5, max = 100)
+    @Column(nullable = false, length = 100)
     private String descripcion;
 
     @Column(nullable = false)
@@ -38,11 +39,15 @@ public class Gastos {
     @Column(nullable = false)
     private LocalDate fecha;
 
+
+    @NotNull(message = "Debe seleccionar una categoría")
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CategoriaGasto categoria;
 
+    @NotNull(message = "Debe asociar un empleado")
     @ManyToOne
-    @JoinColumn(name = "empleado_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_gasto_empleado"))
+    @JoinColumn(nullable = false, name = "empleado_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_gasto_empleado"))
     private User empleado;
 
 }
