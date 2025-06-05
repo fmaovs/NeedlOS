@@ -87,11 +87,6 @@
   min-height: 5vh;
 }
 
-/* Campos de ancho completo */
-.form-group:nth-child(7),
-.form-group:nth-child(8) {
-}
-
 .form-label {
   font-size: calc((0.2vw + 3.2vh) * 0.6);
   font-weight: 500;
