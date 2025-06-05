@@ -1,4 +1,10 @@
-/* Diseño del modal */
+/* Reseteo de box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -17,8 +23,9 @@
   width: 50%;
   max-width: 60vw;
   height: auto;
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -30,7 +37,7 @@
 }
 
 .titulo {
-  font-size: calc((0.2vw + 3.2vh)* 0.9);
+  font-size: calc((0.2vw + 3.2vh) * 0.9);
   font-weight: 700;
   color: #292828;
   letter-spacing: -0.025em;
@@ -40,80 +47,69 @@
 .formulario {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.5vh 3vw;
+  gap: 1.5vh 2rem;
   margin-top: 0.5vh;
 }
 
+/* Botón de mostrar/ocultar contraseña */
+.btn-ver-contrasena {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  transform: translateY(-30%);      
+  top: 30%;
+  right: 2vw;
+  top: 6vh;
+  color: #6b7280;
+  font-size: calc((0.2vw + 3.2vh)* 0.45);
+  cursor: pointer;
+  padding: 0.8vh 1vw;
+}
+
+.btn-ver-contrasena:hover {
+  color: #374151;
+}
+
+.icono-ver {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 /* Contenedor del grupo de formulario */
-.from-group {
+.form-group {
   display: flex;
   flex-direction: column;
   position: relative;
   background-color: #f8fafc;
-  border-radius: 5vh;
-  padding: 1vh;
-  min-height:5vh;
-}
-
-/* Asegurar un estilo consistente para todos los grupos de formulario */
-.from-group:nth-child(n) {
-  background-color: #f8fafc;
   border-radius: 1.5vh;
   padding: 2vh;
+  min-height: 5vh;
 }
 
 /* Campos de ancho completo */
-.from-group:nth-child(7),
-.from-group:nth-child(8) {
-  grid-column: 1 / -1;
+.form-group:nth-child(7),
+.form-group:nth-child(8) {
 }
 
-/* Elementos del formulario */
 .form-label {
-  font-size: calc((0.2vw + 3.2vh)* 0.6);
+  font-size: calc((0.2vw + 3.2vh) * 0.6);
   font-weight: 500;
   color: #1f2937;
   margin-bottom: 1.5vh;
 }
 
-.form-la{
-  font-size: calc((0.2vw + 3.2vh)* 0.6);
-  font-weight: 500;
-  color: #1f2937;
-  margin: 2vh 2.5vh;
-}
-
 .form-input {
-  width: 80%;
-  padding: 1.5vh 2vw;
+  width: 100%;
+  padding: 1rem 1.5rem;
   border-radius: 1vh;
   border: 0.2vh solid #d1d5db;
-  font-size: calc((0.2vw + 3.2vh)* 0.50);
+  font-size: 1rem;
   transition: all 0.2s ease;
   background-color: #fff;
   height: 5vh;
 }
 
-.form-input-rol{
-  width: 50%;
-  height: 5vh;
-  border-radius: 1vh;
-  border: 0.2vh solid #d1d5db;
-  font-size: calc((0.2vw + 3.2vh)* 0.50);
-  transition: all 0.2s ease;
-  background-color: #fff;
-}
-
-.form-cargo{
-  width: 70%;
-  height: 5vh;
-  border-radius: 1vh;
-  margin: 0 2vh ;
-  border: 0.2vh solid #d1d5db;
-  font-size: calc((0.2vw + 3.2vh)* 0.45);
-  transition: all 0.2s ease;
-  background-color: #fff;
-}
 .form-input:hover {
   border-color: #9ca3af;
 }
@@ -132,33 +128,18 @@
 
 .form-error {
   color: #ef4444;
-  font-size: calc((0.2vw + 3.2vh)* 0.45);
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
   margin-top: 1vh;
 }
 
-/* Campo de contraseña */
-.btn-ver-contrasena {
-  position: absolute;
-  right: 2vw;
-  top: 6vh;
-  background: none;
-  border: none;
-  color: #6b7280;
-  font-size: calc((0.2vw + 3.2vh)* 0.45);
-  cursor: pointer;
-  padding: 0.8vh 1vw;
-}
-
-.btn-ver-contrasena:hover {
-  color: #374151;
-}
-
 /* Contenedor de botones */
-.from-botton {
+.form-button {
   grid-column: 1 / -1;
   display: flex;
   justify-content: flex-end;
-  gap: 2vw;
+  border: none;
+  cursor: pointer;
+  gap: 2rem;
   margin-top: 4vh;
   padding-top: 2vh;
   border-top: 0.2vh solid #e5e7eb;
@@ -169,8 +150,9 @@
 .btn-primary {
   padding: 1.5vh 3vw;
   border-radius: 1vh;
+  cursor: pointer;
   font-weight: 500;
-  font-size: calc((0.2vw + 3.2vh)* 0.45);
+  font-size: 1rem;
   transition: all 0.2s ease;
   min-width: 15vw;
 }
@@ -206,6 +188,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   gap: 1vw;
 }
 
@@ -233,7 +216,7 @@
   }
 
   .titulo {
-    font-size: calc((0.2vw + 3.2vh)* 0.45);
+    font-size: calc((0.2vw + 3.2vh) * 0.45);
   }
 
   .formulario {
@@ -241,11 +224,11 @@
     gap: 2vh;
   }
 
-  .from-group:nth-child(n) {
+  .form-group {
     grid-column: 1;
   }
 
-  .from-botton {
+  .form-button {
     flex-direction: column-reverse;
     gap: 2vh;
     margin-top: 3vh;
