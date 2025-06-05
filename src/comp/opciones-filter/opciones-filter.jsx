@@ -5,12 +5,13 @@ export default function OpcionesFilter({
   txtFilter,
   imgFilter,
   onClick,
-  isLast
+  isLast,
+  tabIndex,
 }) {
   return (
-    <div className={`filter ${clase}`} onClick={onClick}>
+    <button className={`filter ${clase}`} onClick={onClick} tabIndex={tabIndex}>
       <span className="filter-txt">{txtFilter}</span>
       <img src={imgFilter} className={`filter-img ${isLast}`} />
-    </div>
+    </button>
   );
 }

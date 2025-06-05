@@ -13,7 +13,7 @@
 }
 
 .ocultar-scroll {
-  width: calc(40% - 1vh);
+  width: calc(30% - 1vh);
   border-radius: 1.2vh;
   border: 0.3vh solid #0050b8;
   overflow: hidden;
@@ -30,7 +30,7 @@
 .cont-nomina-resumen-vales {
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 70%;
   height: 100%;
   gap: 1vh;
   box-sizing: border-box;
@@ -118,4 +118,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: calc((0.2vw + 3.2vh) * 0.7);
+}
+
+.btn-resumen-nomina {
+  all: unset;
+  width: 100%;
+}
+
+.btn-resumen-nomina:focus {
+  outline: auto;
 }

@@ -32,6 +32,12 @@ export default function Nav({ setComponenteSeleccionado }) {
     "ArqueoCaja",
   ];
 
+  // Traducción de nombres internos a nombres visibles para el usuario
+  const textosVisibles = {
+    ArqueoCaja: "Arqueo Caja",
+    SesionActiva: "Sesión Activa",
+  };
+
   // Función para renderizar una opción si corresponde
   const renderOpcion = (img, txt, clase) => {
     if (
@@ -40,10 +46,12 @@ export default function Nav({ setComponenteSeleccionado }) {
     )
       return null;
 
+    const txtVisible = textosVisibles[txt] || txt;
+
     return (
       <OpcionNav
         img={img}
-        txt={txt}
+        txt={txtVisible}
         clase={`${clase} ${opcionSeleccionada === txt ? "active" : ""}`}
         onClick={() => handleClick(txt)}
       />

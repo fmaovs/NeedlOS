@@ -127,7 +127,9 @@ export default function Usuarios() {
               <td className="td">{usuario.lastname}</td>
               <td className="td">{usuario.phone}</td>
               <td className="td" onClick={() => openEditarUsuario(usuario.id)}>
-                <img src={Editar} alt="Editar" className="icono-editar" />
+                <button className="btn-editar-usuario">
+                  <img src={Editar} alt="Editar" className="icono-editar" />
+                </button>
               </td>
             </tr>
             <tr className="separacion-fila"></tr>
@@ -154,10 +156,12 @@ export default function Usuarios() {
           <OpcionesFilter
             txtFilter={"Administradores"}
             clase={"azul filter-usuarios"}
+            tabIndex={"-1"}
           />
           <OpcionesFilter
             txtFilter={"Sastres"}
             clase={"verde filter-usuarios"}
+            tabIndex={"-1"}
           />
         </Filtrador>
       </div>

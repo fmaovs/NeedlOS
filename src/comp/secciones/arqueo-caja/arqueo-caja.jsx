@@ -301,12 +301,14 @@ export default function ArqueoCaja() {
           <OpcionesFilter
             txtFilter={"Pedidos creados"}
             imgFilter={entradaPrendas}
-            clase={"dos-diez"}
+            clase={"cont-arqueo-1"}
+            tabIndex={"-1"}
           />
           <OpcionesFilter
             txtFilter={"Pedidos entregados"}
             imgFilter={retiroPrendas}
-            clase={"ocho-diez"}
+            clase={"cont-arqueo-2"}
+            tabIndex={"-1"}
           />
         </Filtrador>
       </div>
@@ -515,7 +517,7 @@ export default function ArqueoCaja() {
             <thead className="th-tabla">
               <tr className="separacion-fila-head"></tr>
               <tr className="tr-encabezado">
-                <th className="th">N° Ord</th>
+                <th className="th">N°</th>
                 <th className="th">Sastre Asig.</th>
                 <th className="th">Pzs</th>
                 <th className="th">Vlr. Ord</th>
@@ -542,7 +544,7 @@ export default function ArqueoCaja() {
                       maximumFractionDigits: 0,
                     }).format(pedidoEntregado.totalAbonos)}`}</td>
                     <td className="td">{`${pedidoEntregado.customerName} ${pedidoEntregado.customerLastName}`}</td>
-                    <td className="td">
+                    <td className="td td-arqueo">
                       {new Date(pedidoEntregado.fechaPedido).toLocaleDateString(
                         "es-CO",
                         {

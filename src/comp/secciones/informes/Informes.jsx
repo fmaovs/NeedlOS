@@ -14,6 +14,8 @@ import {
 } from "recharts";
 import axios from "axios";
 
+const pdf = "../../../../public/media/img/pdf.svg";
+
 export default function Informe() {
   useEffect(() => {
     establecerFecha();
@@ -25,7 +27,6 @@ export default function Informe() {
   const mesRef = useRef(null);
   function establecerFecha() {
     const fecha = new Date();
-
     añoRef.current.value = fecha.getFullYear();
     mesRef.current.value = fecha.getMonth();
   }
@@ -95,14 +96,19 @@ export default function Informe() {
   // Función para convertir "2025-04-16" a "Miércoles 16"
   const formatearFecha = (fechaISO) => {
     const [year, month, day] = fechaISO.split("-").map(Number);
-    const fecha = new Date(year, month - 1, day); // mes - 1 porque enero = 0
-    return new Intl.DateTimeFormat("es-ES", {
-      weekday: "long",
-      day: "numeric",
-    })
-      .format(fecha)
-      .replace(/^./, (str) => str.toUpperCase());
+    const fecha = new Date(year, month - 1, day);
+
+    const opciones = { weekday: "short", day: "numeric" };
+    let texto = new Intl.DateTimeFormat("es-ES", opciones).format(fecha);
+
+    // Reemplazar abreviaturas como "dom." por "Dom", "lun." por "Lun", etc.
+    texto = texto
+      .replace(".", "") // quitar el punto al final
+      .replace(/^./, (str) => str.toUpperCase()); // capitaliza la primera letra
+
+    return texto;
   };
+  
 
   // Función para formatear valores en pesos colombianos
   const formatearCOP = (valor) =>
@@ -118,20 +124,16 @@ export default function Informe() {
     etiqueta: formatearFecha(item.fecha),
   }));
 
-  async function traerExcell() {
-    // Valida que el año sea valido
-    if (/^\d+$/.test(añoRef.current.value)) {
-    } else {
-      alert("El año debe ser una cadena de numeros");
+  async function traerPdf() {
+    if (!/^\d+$/.test(añoRef.current.value)) {
+      alert("El año debe ser una cadena de números");
       return;
     }
 
-    // Crear fecha del primer día del mes
     const primerDia = new Date(+añoRef.current.value, +mesRef.current.value, 1)
       .toISOString()
       .split("T")[0];
 
-    // Crear fecha del último día del mes
     const ultimoDia = new Date(
       +añoRef.current.value,
       +mesRef.current.value + 1,
@@ -142,16 +144,48 @@ export default function Informe() {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/informe/excel?fechaInicio=${primerDia}&fechaFin=${ultimoDia}`,
+        `http://localhost:8080/informe/pdf/mensual?fechaInicio=${primerDia}&fechaFin=${ultimoDia}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
+          responseType: "blob", // 👈 Esto es clave para que funcione
         }
       );
-      console.log(response.data);
+
+      // Crear blob y generar descarga
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: "application/pdf" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      const meses = [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+      ];
+      const mesNombre = meses[+mesRef.current.value]; 
+
+      link.setAttribute(
+        "download",
+        `Informe ${mesNombre} ${añoRef.current.value}.pdf`
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url); // Limpieza
     } catch (error) {
-      console.error(error);
+      console.error("Error descargando PDF:", error);
+      alert("Hubo un error al generar el PDF");
     }
   }
 
@@ -163,23 +197,12 @@ export default function Informe() {
         withSearch={"cont-buscador-none"}
         claseCont={"cont-buscador-informes"}
         claseBoton={"descargar-excell"}
-        imgBoton={"../../../../public/media/img/excell.svg"}
+        imgBoton={pdf}
         onClick={() => {
-          traerExcell();
+          traerPdf();
         }}
+        title={"Descargar PDF"}
       >
-        <span className="buscar-por-txt">Año: </span>
-        <input
-          type="text"
-          maxLength="4"
-          pattern="\d*"
-          inputMode="numeric"
-          className="inp-year"
-          ref={añoRef}
-          onBlur={() => {
-            traerDatos();
-          }}
-        />
         <span className="buscar-por-txt">Mes: </span>
         <select
           className="inp-year"
@@ -201,6 +224,18 @@ export default function Informe() {
           <option value="10">Noviembre</option>
           <option value="11">Diciembre</option>
         </select>
+        <span className="buscar-por-txt">Año: </span>
+        <input
+          type="text"
+          maxLength="4"
+          pattern="\d*"
+          inputMode="numeric"
+          className="inp-year"
+          ref={añoRef}
+          onBlur={() => {
+            traerDatos();
+          }}
+        />
       </Encabezado>
       <SepXNegro />
       <div className="cont-colores-grafico">
@@ -243,7 +278,29 @@ export default function Informe() {
               height={70}
               tick={{ fontSize: 12 }}
             />
-            <YAxis tickFormatter={formatearCOP} width={94} />
+            <YAxis
+              tickFormatter={formatearCOP}
+              width={94}
+              domain={() => {
+                const maxValor = Math.max(
+                  ...datosFormateados.map((d) =>
+                    Math.max(
+                      Math.abs(d.ingresos || 0),
+                      Math.abs(d.gastos || 0),
+                      Math.abs(d.saldo || 0)
+                    )
+                  )
+                );
+
+                // Añadir 20% de margen y redondear al múltiplo de 25000 más cercano
+                const maxAbsConMargen =
+                  Math.ceil((maxValor * 1.1) / 10000) * 10000;
+
+                return [-maxAbsConMargen, maxAbsConMargen];
+              }}
+              interval={0}
+              tickCount={11}
+            />
             <Tooltip
               formatter={(value, name) => [
                 `$ ${new Intl.NumberFormat("es-CO").format(value)}`,

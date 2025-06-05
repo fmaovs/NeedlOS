@@ -167,11 +167,13 @@ export default function Nomina() {
             txtFilter={"Sastres"}
             imgFilter={sastre}
             clase={"dos-diez"}
+            tabIndex={"-1"}
           />
           <OpcionesFilter
             txtFilter={"Resumen Cuenta"}
             imgFilter={dinero}
             clase={"ocho-diez"}
+            tabIndex={"-1"}
           />
         </Filtrador>
       </div>
@@ -199,7 +201,9 @@ export default function Nomina() {
                       }`}
                       onClick={() => resumenCuenta(empleado.id)}
                     >
-                      <td className="td">{`${empleado.name} ${empleado.lastname}`}</td>
+                      <td className="td">
+                        <button className="btn-resumen-nomina">{`${empleado.name} ${empleado.lastname}`}</button>
+                      </td>
                       <td className="td" id="sastre-td">
                         {empleado.cargo.toLowerCase()}
                       </td>
@@ -227,12 +231,12 @@ export default function Nomina() {
                   </tr>
                   <tr className="separacion-fila-head"></tr>
                 </thead>
+                {seleccionaSastre && (
+                  <span className="mensaje-sin-resultados-span">
+                    Selecciona un sastre
+                  </span>
+                )}
                 <tbody className="body-tabla">
-                  {seleccionaSastre && (
-                    <span className="mensaje-sin-resultados-span">
-                      Selecciona un sastre
-                    </span>
-                  )}
                   {nominas.length === 0 && mostrarNoEncontrado ? (
                     <img
                       src={noEncontrado}

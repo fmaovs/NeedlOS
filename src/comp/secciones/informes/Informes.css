@@ -20,7 +20,7 @@
 }
 
 .grafico-container {
-  margin: 0 1vh 1vh 1vh;
+  margin: 0 1vh 0 1vh;
   height: calc(99vh - (8vh + 0.1vh + 12%));
 }
 
@@ -73,8 +73,8 @@
 }
 
 .descargar-excell {
-  border: 0.3vh solid #00b840;
-  background-color: #edfff4;
+  border: 0.3vh solid #b80000;
+  background-color: #ffeded;
 }
 
 .inp-year {

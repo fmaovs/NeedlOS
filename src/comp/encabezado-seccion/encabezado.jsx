@@ -16,6 +16,7 @@ export default function Encabezado({
   claseBoton,
   imgBoton,
   onInput,
+  title
 }) {
   return (
     <div className="cont-encabezado">
@@ -35,6 +36,7 @@ export default function Encabezado({
         onClick={onClick}
         claseBoton={claseBoton}
         imgBoton={imgBoton}
+        title={title}
       />
     </div>
   );

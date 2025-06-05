@@ -92,3 +92,10 @@
 .filter-usuarios:hover {
   cursor: auto;
 }
+
+.btn-editar-usuario {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

@@ -22,6 +22,8 @@ import TbEntregado from "./estados-ordenes/entregado.jsx";
 import TbAnulado from "./estados-ordenes/anulado.jsx";
 import TbTodo from "./estados-ordenes/todo.jsx";
 
+const mas = "../../../../public/media/img/crear.png";
+
 export default function Ordenes() {
   // Estado para controlar qué filtro está seleccionado y qué componente renderizar
   const [componenteSeleccionado, setComponenteSeleccionado] = useState(
@@ -92,7 +94,8 @@ export default function Ordenes() {
         opc2={"Cliente"}
         opc3={"Fecha"}
         onClick={mostrarCrearOrden}
-        imgBoton={"../../../../public/media/img/crear.png"}
+        title={"Crear orden"}
+        imgBoton={mas}
       />
       {mostrarFormulario && (
         <CrearOrden

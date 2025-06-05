@@ -49,7 +49,7 @@
 
 .tb-arqueo1 {
   margin: 0;
-  width: calc(40% - 1vh);
+  width: calc(45% - 1vh);
 }
 
 .min-wi-tb1 {
@@ -62,7 +62,7 @@
 }
 
 .min-wi-tb2 {
-  min-width: 50rem;
+  min-width: 43rem;
 }
 
 .cont-resumen-arqueo {
@@ -204,4 +204,15 @@
 
 .cont-espacio-arqueo {
   display: none;
+}
+
+.cont-arqueo-1 {
+  background: linear-gradient(to right, #e2eeff, #ffffff);
+  max-width: 43%;
+  cursor: auto;
+}
+
+.cont-arqueo-2 {
+  background: linear-gradient(to right, #e3ffe7, #ffffff);
+  cursor: auto;
 }
