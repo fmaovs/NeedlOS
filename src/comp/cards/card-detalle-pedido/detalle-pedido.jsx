@@ -47,7 +47,7 @@ export default function CardDetallePedido({
         <section className="fila-detalles-ordenes">
           <ContDetalle titulo={"Nombre:"} txt={nombre} />
           <ContDetalle titulo={"Apellido:"} txt={apelliido} />
-          <ContDetalle titulo={"Telefono:"} txt={telefono} />
+          <ContDetalle titulo={"Teléfono:"} txt={telefono} />
         </section>
         <section className="fila-detalles-ordenes">
           <ContDetalle titulo={"Sastre Asignado:"} txt={sastreAsignado} />

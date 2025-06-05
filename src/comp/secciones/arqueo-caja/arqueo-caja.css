@@ -209,10 +209,20 @@
 .cont-arqueo-1 {
   background: linear-gradient(to right, #e2eeff, #ffffff);
   max-width: 43%;
-  cursor: auto;
+  cursor: default;
+}
+
+.cont-arqueo-1:hover,
+.cont-arqueo-1:active {
+  cursor: default;
 }
 
 .cont-arqueo-2 {
   background: linear-gradient(to right, #e3ffe7, #ffffff);
-  cursor: auto;
+  cursor: default;
+}
+
+.cont-arqueo-2:hover,
+.cont-arqueo-2:active {
+  cursor: default;
 }

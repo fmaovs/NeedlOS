@@ -1,4 +1,7 @@
+import "./ajustes.css";
 import { useNavigate } from "react-router-dom";
+
+const cerrarSesionImg = "../../../../public/media/img/cerrar-sesion.png";
 
 export default function Ajustes() {
   const navigate = useNavigate();
@@ -6,18 +9,21 @@ export default function Ajustes() {
   // Cerrar sesion
   function cerrarSesion() {
     // Eliminar token y rol
-    sessionStorage.removeItem("token")
-    sessionStorage.removeItem("rol")
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("rol");
 
     // Esperar 0.8 segundos antes de redirigir
     setTimeout(() => {
       navigate("/");
-    }, 0);
+    }, 150);
   }
 
   return (
-    <div>
-      <button onClick={() => cerrarSesion()}>SALIRME DE ESTA MONDA</button>
+    <div className="cont-settings">
+      <button className="btn-cerrar-sesion" onClick={() => cerrarSesion()}>
+        <img src={cerrarSesionImg} alt="" />
+        Cerrar Sesión
+      </button>
     </div>
   );
 }

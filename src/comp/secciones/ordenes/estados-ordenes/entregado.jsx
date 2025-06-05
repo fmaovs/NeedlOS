@@ -329,8 +329,8 @@ export default function TbEntregado() {
                 <tr className="tr-encabezado">
                   <th className="th">N°</th>
                   <th className="th"> Cliente </th>
-                  <th className="th"> Telefono </th>
-                  <th className="th">Fecha radicacion</th>
+                  <th className="th"> Teléfono </th>
+                  <th className="th">Fecha radicación</th>
                   <th className="th">Fecha entrega</th>
                   <th className="th"> Valor </th>
                   <th className="th">Prenda</th>

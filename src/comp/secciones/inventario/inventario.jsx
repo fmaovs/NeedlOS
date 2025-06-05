@@ -446,7 +446,7 @@ export default function Inventario() {
       <Encabezado
         titEncabezado={"Inventario"}
         conBtCrear={""}
-        opc1={"Codigo"}
+        opc1={"Código"}
         opc2={"Producto"}
         onClick={mostrarCrearInventario}
         imgBoton={"../../../../public/media/img/crear.png"}
@@ -570,10 +570,10 @@ export default function Inventario() {
             <tr className="tr-encabezado">
               <th className="th">Cod. Prdc</th>
               <th className="th">Producto</th>
-              <th className="th">Descripcion</th>
+              <th className="th">Descripción</th>
               <th className="th">Vrl. Uni</th>
               <th className="th">Cantidad</th>
-              <th className="th">Ult. Actualizacion</th>
+              <th className="th">Ult. Actualización</th>
               <th className="th">Editar</th>
             </tr>
             <tr className="separacion-fila-head"></tr>

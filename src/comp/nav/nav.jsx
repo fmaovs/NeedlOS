@@ -36,6 +36,7 @@ export default function Nav({ setComponenteSeleccionado }) {
   const textosVisibles = {
     ArqueoCaja: "Arqueo Caja",
     SesionActiva: "Sesión Activa",
+    Nomina: "Nómina", // <-- Aquí agregamos la tilde
   };
 
   // Función para renderizar una opción si corresponde
@@ -64,7 +65,7 @@ export default function Nav({ setComponenteSeleccionado }) {
       <div className="cont-sesion-activa">
         <img src={SesionActiva} alt="Imagen sesion activa" />
         <div>
-          <span className="sesion-activa">Sesion: @admin</span>
+          <span className="sesion-activa">Sesión: @admin</span>
           <span className="sesion-activa">Rol: Administrador</span>
         </div>
       </div>

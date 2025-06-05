@@ -76,7 +76,7 @@ export default function CrearMaterial() {
           <span>Descripción</span>
           <input
             type="text"
-            name="descripcion"
+            name="descripción"
             value={material.descripcion}
             onChange={handleChange}
             required
