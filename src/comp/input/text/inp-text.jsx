@@ -12,6 +12,10 @@ export default function CheckBox({
 }) {
   return (
     <>
+
+
+
+    
       <div className="cont-lb">
         <label htmlFor={lbDireccion} className="lb-inp">
           {txt}

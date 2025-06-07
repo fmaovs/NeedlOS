@@ -63,7 +63,6 @@
   overflow: hidden;
   background-color: transparent;
   cursor: pointer;
-  outline: none;
   transition: 0.1s ease-in-out;
 }
 

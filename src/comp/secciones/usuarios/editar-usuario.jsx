@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./editarUsuario.css";
+import { useState, useEffect, useRef } from "react";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
+import "./registroUsuario.css";
 import axios from "axios";
 
-export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
+export function EditarUsuario({ onClose, idUser, actualizarTabla }) {
   const nombreRef = useRef(null);
   const apellidoRef = useRef(null);
   const usernameRef = useRef(null);
@@ -11,10 +11,7 @@ export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
   const telefonoRef = useRef(null);
   const rolRef = useRef(null);
   const cargoRef = useRef(null);
-
-  const [estadoActivo, setEstadoActivo] = useState(true);
-  const [telefonoOriginal, setTelefonoOriginal] = useState("");
-  const [mensaje, setMensaje] = useState("");
+  const estadoRef = useRef(null);
 
   useEffect(() => {
     mostrarDatos();
@@ -37,8 +34,7 @@ export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
       telefonoRef.current.value = response.data.phone;
       rolRef.current.value = response.data.rol;
       cargoRef.current.value = response.data.cargo;
-      setEstadoActivo(response.data.active);
-      setTelefonoOriginal(response.data.phone);
+      estadoRef.current.checked = !response.data.estado;
     } catch (error) {
       console.error(error);
     }
@@ -53,16 +49,6 @@ export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
     const rol = rolRef.current.value;
     const cargo = cargoRef.current.value;
 
-    if (!nombre || !apellido || !username || !email || !telefono || !rol || !cargo) {
-      setMensaje("Todos los campos son obligatorios.");
-      return;
-    }
-
-    if (telefono === telefonoOriginal) {
-      setMensaje("Para guardar los cambios, debes modificar el teléfono.");
-      return;
-    }
-
     try {
       const response = await axios.put(
         `http://localhost:8080/users/update/{id}?id=${idUser}`,
@@ -74,7 +60,6 @@ export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
           username: username,
           user_role: rol,
           cargo: cargo,
-          active: estadoActivo,
         },
         {
           headers: {
@@ -82,56 +67,35 @@ export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
           },
         }
       );
-
-      if (response.status === 200) {
-        setMensaje("Usuario actualizado correctamente.");
-        if (typeof onUserUpdated === "function") {
-          onUserUpdated(); // ✅ Notificar al padre
-        }
-
-        setTimeout(() => {
-          onClose();
-        }, 1500);
-      }
+      console.log("Usuario actualizado");
+      actualizarTabla();
+      onClose();
     } catch (error) {
       console.error(error);
-      setMensaje("Error al actualizar el usuario.");
     }
-  }
 
-  async function handleEstadoChange(e) {
-    const nuevoEstado = e.target.checked;
-    setEstadoActivo(nuevoEstado);
     try {
-      await axios.patch(
-        `http://localhost:8080/users/${idUser}/Estado?enabled=${nuevoEstado}`,
-        {},
+      const response = await axios.patch(
+        `http://localhost:8080/users/${idUser}/Estado?enabled=${!estadoRef
+          .current.checked}`,
+        null,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
-      console.log("Estado actualizado con éxito");
     } catch (error) {
-      console.error("Error al cambiar el estado", error);
-      setEstadoActivo(!nuevoEstado);
+      console.error(error);
     }
   }
 
   return (
     <>
-      {mensaje && (
-        <div className="editar-notificacion">
-          {mensaje}
-        </div>
-      )}
       <div className="modal-backdrop" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <div className="r-usuario">
-            <h1 className="titulo">Editar usuario</h1>
-          </div>
-
+          <span className="tit-creandoP">Editar usuario</span>
+          <SepXNegro />
           <div className="formulario">
             <div className="form-group">
               <label className="form-label">Nombre</label>
@@ -150,7 +114,11 @@ export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
 
             <div className="form-group">
               <label className="form-label">Correo</label>
-              <input type="email" ref={correoRef} className="form-input" />
+              <input
+                type="email"
+                ref={correoRef}
+                className="form-input form-input-noCapitalize"
+              />
             </div>
 
             <div className="form-group">
@@ -174,26 +142,26 @@ export function EditarUsuario({ onClose, idUser, onUserUpdated }) {
               </select>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Estado del usuario</label>
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={estadoActivo}
-                  onChange={handleEstadoChange}
-                />
-                <span className="slider round"></span>
+            <div className="form-group-check">
+              <label className="form-label" htmlFor="estadoUsuarioCheck">
+                Suspendido?
               </label>
+              <input
+                id="estadoUsuarioCheck"
+                ref={estadoRef}
+                className="checkboxUsuario"
+                type="checkbox"
+              />
             </div>
-
-            <div className="form-buttons">
-              <button type="button" onClick={onClose} className="btn-secondary">
-                Cancelar
-              </button>
-              <button type="button" className="btn-primary" onClick={actualizarUsuario}>
-                Actualizar
-              </button>
-            </div>
+          </div>
+          <div className="cont-btn-usuario">
+            <button
+              type="button"
+              className="btn-crear-usuario"
+              onClick={actualizarUsuario}
+            >
+              Actualizar
+            </button>
           </div>
         </div>
       </div>

@@ -15,22 +15,19 @@ export default function Usuarios() {
   const [sastres, setSastres] = useState([]);
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
   const [mostrarEditar, setMostrarEditar] = useState(false);
-  const [usuarioEditando, setUsuarioEditando] = useState(null);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     cargarUsuarios();
   }, []);
 
-  function actualizarTabla() {
+  const [actualizarTabla, setActualizarTabla] = useState(false);
+  useEffect(() => {
     cargarUsuarios();
-  }
+  }, [actualizarTabla]);
 
   // Obtener lista de usuarios
   const cargarUsuarios = async () => {
     try {
-      setCargando(true);
       const [adminsRes, sastresRes] = await Promise.all([
         axios.get("http://localhost:8080/users/cargo/{cargo}?cargo=ADMIN", {
           headers: {
@@ -46,58 +43,9 @@ export default function Usuarios() {
 
       setAdmins(adminsRes.data);
       setSastres(sastresRes.data);
-      setError(null);
     } catch (error) {
       console.error("Error al cargar usuarios:", error);
       setError("No se pudieron cargar los usuarios");
-    } finally {
-      setCargando(false);
-    }
-  };
-
-  // Registrar usuarios
-  const registrarUsuarios = (newUser) => {
-    // Agregar el nuevo usuario directamente al estado correspondiente
-    if (newUser.cargo === "ADMIN") {
-      setAdmins((prev) => [...prev, newUser]);
-    } else if (newUser.cargo === "SASTRE") {
-      setSastres((prev) => [...prev, newUser]);
-    }
-    setMostrarRegistro(false); // Cerrar modal
-  };
-  //Editar usuario
-  const actualizarUsuario = async () => {
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
-
-    try {
-      const response = await axios.put(
-        `http://localhost:8080/users/update/${userData.id}`,
-        {
-          ...formData,
-          user_role: formData.user_role.toUpperCase(),
-          cargo: formData.cargo.toUpperCase(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        await cargarUsuarios();
-        onClose();
-      }
-    } catch (error) {
-      console.error("Error al actualizar usuario:", error);
-      alert(
-        "Error al actualizar usuario: " +
-          (error.response?.data?.message || error.message)
-      );
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -174,17 +122,15 @@ export default function Usuarios() {
 
       {mostrarRegistro && (
         <RegistroUsuario
+          actualizaTabla={() => setActualizarTabla(!actualizarTabla)}
           onClose={() => setMostrarRegistro(false)}
-          onSubmit={registrarUsuarios}
-          actualizaTabla={() => actualizarTabla()}
         />
       )}
       {mostrarEditar && (
         <EditarUsuario
-          usuario={actualizarUsuario}
+          actualizarTabla={() => setActualizarTabla(!actualizarTabla)}
           onClose={() => {
             setMostrarEditar(false);
-            setUsuarioEditando(null);
           }}
           idUser={idUser}
         />
