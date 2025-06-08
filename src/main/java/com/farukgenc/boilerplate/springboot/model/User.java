@@ -19,7 +19,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank(message = "el campo no puede esatr vacio")
+	@NotBlank(message = "el campo no puede estar vacio")
 	@Size(min = 3, max = 20)
 	@Column(nullable = false, length = 20)
 	private String name;

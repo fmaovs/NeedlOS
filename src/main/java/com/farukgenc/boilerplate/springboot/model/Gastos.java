@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class Gastos {
     @Positive(message = "la el monto debe ser un número positivo")
     private Double monto;
 
+    @CreationTimestamp
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = false)
     private LocalDate fecha;
