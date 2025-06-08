@@ -251,7 +251,7 @@ export default function Informe() {
         <TotalGrafico
           bgColor={"red"}
           color={"grafico-red"}
-          txt={`Gastso: $ ${new Intl.NumberFormat("es-CO", {
+          txt={`Gastos: $ ${new Intl.NumberFormat("es-CO", {
             style: "decimal",
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,

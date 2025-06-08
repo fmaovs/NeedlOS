@@ -11,7 +11,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 1vh;
+  gap: 1.5vh;
   justify-content: center;
   margin-bottom: 2vh;
 }
@@ -27,5 +27,6 @@
 }
 
 .sesion-activa {
+  text-transform: capitalize;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
 }

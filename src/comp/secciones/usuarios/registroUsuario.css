@@ -9,8 +9,9 @@
 
 .modal-content {
   width: 40%;
+  min-width: 30rem;
   gap: 1vh;
-  padding: 2vh 1vh 1vh 1vh;
+  padding: 2.5vh 1vh 1vh 1vh;
   box-sizing: border-box;
   border-radius: 1.2vh;
   display: flex;
@@ -72,6 +73,10 @@
   font-size: calc((0.2vw + 3.2vh) * 0.45);
   border-radius: 1.2vh;
   border: 0.1vh solid #d2d2d2;
+}
+
+.form-input:focus {
+  text-transform: none;
 }
 
 .form-input-noCapitalize {

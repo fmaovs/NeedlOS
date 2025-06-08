@@ -33,15 +33,44 @@ export function RegistroUsuario({ onClose, actualizaTabla }) {
 
   const validateForm = () => {
     const newErrors = {};
+
     if (!formData.name.trim()) newErrors.name = "*";
     if (!formData.lastname.trim()) newErrors.lastname = "*";
-    if (!formData.username.trim()) newErrors.username = "*";
-    if (!formData.password.trim()) newErrors.password = "*";
-    if (!formData.email.trim()) newErrors.email = "*";
-    if (!/\S+@\S+\.\S+/.test(formData.email))
+
+    // Validación de username
+    if (!formData.username.trim()) {
+      newErrors.username = "*";
+    } else if (formData.username.length < 5) {
+      newErrors.username = "Mínimo 5 caracteres";
+    }
+
+    // Validación de contraseña
+    if (!formData.password.trim()) {
+      newErrors.password = "*";
+    } else {
+      const password = formData.password;
+      const hasMinLength = password.length >= 8;
+      const hasUppercase = /[A-Z]/.test(password);
+      const hasNumber = /\d/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+      if (!hasMinLength || !hasUppercase || !hasNumber || !hasSpecialChar) {
+        newErrors.password = "Formato invalido";
+      }
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "*";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Correo no válido";
-    if (!formData.phone.trim()) newErrors.phone = "*";
-    if (!/^\d{10}$/.test(formData.phone)) newErrors.phone = "10 dígitos";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "*";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "10 dígitos";
+    }
+
     if (!formData.user_role) newErrors.user_role = "Selecciona rol";
     if (!formData.cargo) newErrors.cargo = "Selecciona cargo";
 
@@ -87,7 +116,7 @@ export function RegistroUsuario({ onClose, actualizaTabla }) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <span className="tit-creandoP">Registrar Usuario</span>
+        <span className="tit-creandoP tit-form">Registrar usuario</span>
         <SepXNegro />
         <form className="formulario">
           <div className="form-group">
@@ -156,10 +185,10 @@ export function RegistroUsuario({ onClose, actualizaTabla }) {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`form-input form-input-noCapitalize ${
+              className={`form-input ${
                 errors.password ? "form-input-error" : ""
               }`}
-              placeholder="∗ ∗ ∗ ∗ ∗ ∗ ∗ ∗ ∗ ∗"
+              placeholder="Admin1@"
             />
 
             {errors.password && (

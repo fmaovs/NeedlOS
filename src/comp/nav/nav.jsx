@@ -65,8 +65,12 @@ export default function Nav({ setComponenteSeleccionado }) {
       <div className="cont-sesion-activa">
         <img src={SesionActiva} alt="Imagen sesion activa" />
         <div>
-          <span className="sesion-activa">Sesión: @admin</span>
-          <span className="sesion-activa">Rol: Administrador</span>
+          <span className="sesion-activa">
+            Sesión: {sessionStorage.getItem("username")}
+          </span>
+          <span className="sesion-activa">
+            Rol: {sessionStorage.getItem("rol")}
+          </span>
         </div>
       </div>
       <SepXBlancoSmall />
@@ -75,8 +79,8 @@ export default function Nav({ setComponenteSeleccionado }) {
       {renderOpcion(Usuarios, "Usuarios", "cont-seccion")}
       {renderOpcion(Gastos, "Gastos", "cont-seccion")}
       {renderOpcion(Nomina, "Nomina", "cont-seccion")}
-      {renderOpcion(Informes, "Informes", "cont-seccion")}
-      {renderOpcion(ArqueoCaja, "ArqueoCaja", "cont-seccion-last")}
+      {renderOpcion(ArqueoCaja, "ArqueoCaja", "cont-seccion")}
+      {renderOpcion(Informes, "Informes", "cont-seccion-last")}
       <SepXBlancoSmall clase={"sepXBlancoNav"} />
       {renderOpcion(Ajustes, "Ajustes", "cont-seccion-sett")}
     </div>

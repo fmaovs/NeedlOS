@@ -23,9 +23,15 @@ export default function Nomina() {
           Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
-      setEmpleados(response.data);
+
+      // Filtrar usuarios con estado: true
+      const usuariosActivos = response.data.filter(
+        (user) => user.estado === true
+      );
+
+      setEmpleados(usuariosActivos);
     } catch (error) {
-      console.error(error);
+      console.log("Error buscando clientes", error.message);
     }
   };
 
@@ -219,6 +225,11 @@ export default function Nomina() {
         <div className="cont-nomina-resumen-vales">
           <div className="ocultar-scroll2">
             <div className="cont-tabla tb-nomina-second">
+              {seleccionaSastre && (
+                <span className="mensaje-sin-resultados-span">
+                  Selecciona un sastre
+                </span>
+              )}
               <table className="tabla">
                 <thead className="th-tabla">
                   <tr className="separacion-fila-head"></tr>
@@ -231,11 +242,6 @@ export default function Nomina() {
                   </tr>
                   <tr className="separacion-fila-head"></tr>
                 </thead>
-                {seleccionaSastre && (
-                  <span className="mensaje-sin-resultados-span">
-                    Selecciona un sastre
-                  </span>
-                )}
                 <tbody className="body-tabla">
                   {nominas.length === 0 && mostrarNoEncontrado ? (
                     <img

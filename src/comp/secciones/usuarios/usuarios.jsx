@@ -9,6 +9,7 @@ import { RegistroUsuario } from "./registro-usuario.jsx";
 import axios from "axios";
 
 const Editar = "../../../../public/media/img/editar.png";
+const Mas = "../../../../public/media/img/crear.png";
 
 export default function Usuarios() {
   const [admins, setAdmins] = useState([]);
@@ -96,7 +97,7 @@ export default function Usuarios() {
         opc3={"Apellido"}
         opc4={"Telefono"}
         onClick={() => setMostrarRegistro(true)}
-        imgBoton={"../../../../public/media/img/crear.png"}
+        imgBoton={Mas}
       />
       <SepXNegro />
       <div className="cont-filterAndBoton">

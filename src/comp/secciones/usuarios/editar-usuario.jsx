@@ -49,6 +49,22 @@ export function EditarUsuario({ onClose, idUser, actualizarTabla }) {
     const rol = rolRef.current.value;
     const cargo = cargoRef.current.value;
 
+    // Validaciones
+    if (username.length < 5) {
+      alert("El nombre de usuario debe tener al menos 5 caracteres.");
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert("El correo electrónico no es válido.");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(telefono)) {
+      alert("El teléfono debe tener exactamente 10 dígitos.");
+      return;
+    }
+
     try {
       const response = await axios.put(
         `http://localhost:8080/users/update/{id}?id=${idUser}`,
@@ -71,7 +87,8 @@ export function EditarUsuario({ onClose, idUser, actualizarTabla }) {
       actualizarTabla();
       onClose();
     } catch (error) {
-      console.error(error);
+      console.error("Error actualizando usuario:", error);
+      return;
     }
 
     try {
@@ -94,7 +111,7 @@ export function EditarUsuario({ onClose, idUser, actualizarTabla }) {
     <>
       <div className="modal-backdrop" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <span className="tit-creandoP">Editar usuario</span>
+          <span className="tit-creandoP tit-form">Editar usuario</span>
           <SepXNegro />
           <div className="formulario">
             <div className="form-group">

@@ -230,9 +230,15 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
           Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
-      setUsers(response.data);
-    } catch {
-      console.log("Error buscando clientes", response.message);
+
+      // Filtrar usuarios con estado: true
+      const usuariosActivos = response.data.filter(
+        (user) => user.estado === true
+      );
+
+      setUsers(usuariosActivos);
+    } catch (error) {
+      console.log("Error buscando clientes", error.message);
     }
   };
 

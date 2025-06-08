@@ -134,6 +134,7 @@
   text-align: center;
   margin-left: 0.5vh;
   margin-right: 0.5vh;
+  text-transform: capitalize;
 }
 
 .six-2:last-of-type {
@@ -239,6 +240,7 @@
 
 .option {
   box-sizing: border-box;
+  text-transform: capitalize;
 }
 
 .div-column {

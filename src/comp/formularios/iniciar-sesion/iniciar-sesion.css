@@ -92,12 +92,12 @@
   cursor: pointer;
   background: linear-gradient(to bottom, #003983, #022859);
   color: white;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 .buttom-login:hover {
   text-decoration: underline;
-  letter-spacing: 0.2vh;
+  letter-spacing: 0.14vh;
 }
 
 .buttom-login:active {

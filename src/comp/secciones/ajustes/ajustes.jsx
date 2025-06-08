@@ -11,6 +11,7 @@ export default function Ajustes() {
     // Eliminar token y rol
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("rol");
+    sessionStorage.removeItem("username");
 
     // Esperar 0.8 segundos antes de redirigir
     setTimeout(() => {

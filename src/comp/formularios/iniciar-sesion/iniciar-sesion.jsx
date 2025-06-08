@@ -9,7 +9,6 @@ const User = "../../../../public/media/img/user.png";
 const Password = "../../../../public/media/img/password.png";
 const Error = "../../../../public/media/img/error.png";
 const Aprobado = "../../../../public/media/img/aprobado.png";
-const Cerrar = "../../../../public/media/img/cerrar.png";
 
 export default function IniciarSesion() {
   const [username, setUsername] = useState("");
@@ -33,9 +32,10 @@ export default function IniciarSesion() {
         password,
       });
 
-      // Guardar token y rol
+      // Guardar token, rol y username
       sessionStorage.setItem("token", response.data.token);
       sessionStorage.setItem("rol", response.data.rol);
+      sessionStorage.setItem("username", response.data.username);
 
       // Manejar el login exitoso
       setSuccessMessage("Bienvenido");
@@ -47,15 +47,13 @@ export default function IniciarSesion() {
     } catch (error) {
       setError("Credenciales incorrectas");
       setHideError(false);
+      setTimeout(() => {
+        setHideError(true);
+        setTimeout(() => setError(""), 300);
+      }, 1200);
     } finally {
       setLoading(false);
     }
-  };
-
-  /*BORRAR MENSAJE DE ERROR*/
-  const closeError = () => {
-    setHideError(true);
-    setTimeout(() => setError(""), 300);
   };
 
   return (
@@ -98,9 +96,6 @@ export default function IniciarSesion() {
           <div className={`cont-err ${hideError ? "hide" : ""}`}>
             <img src={Error} className="img-err" />
             <p className="text-err">{error}</p>
-            <div className="cont-cerrar" onClick={closeError}>
-              <img src={Cerrar} className="img-cerrar" alt="Cerrar" />
-            </div>
           </div>
         )}
 

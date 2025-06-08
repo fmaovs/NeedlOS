@@ -1,233 +1,244 @@
 import "./gastos.css";
-import React, { useEffect, useRef, useState } from "react";
 import Encabezado from "../../encabezado-seccion/encabezado.jsx";
 import SepXNegro from "../../separadores/sep-x-negro/sep-x-negro.jsx";
-import { startOfWeek, endOfWeek } from "date-fns";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
+const Mas = "../../../../public/media/img/crear.png";
+
 export default function Gastos() {
-  const [formData, setFormData] = useState({
-    descripcion: "",
-    monto: "",
-    fecha: "",
-  });
-
-  const [error, setError] = useState("");
-  const [gastos, setGastos] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [resultado, setResultado] = useState(null);
-  const [empleados, setEmpleados] = useState([]);
-
-  const categoriaRef = useRef(null);
-  const empleadoRef = useRef(null);
-
-  const [fechaDesde, setFechaDesde] = useState(() =>
-    startOfWeek(new Date(), { weekStartsOn: 1 })
-  );
-  const [fechaHasta, setFechaHasta] = useState(() =>
-    endOfWeek(new Date(), { weekStartsOn: 1 })
-  );
-
+  // Primer render
   useEffect(() => {
-    cargarGastos();
+    traerGastos();
     traerEmpleados();
   }, []);
 
-  const cargarGastos = async () => {
-    try {
-      const res = await axios.get("http://localhost:8080/gastos/all", {
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
-      });
-      setGastos(res.data);
-      setCargando(false);
-    } catch (error) {
-      console.error("Error al cargar gastos:", error);
+  // Estado Formulario y funcion ocultar
+  const [formularioVisible, setFormularioVisible] = useState(false);
+  const ocultarFormulario = (e) => {
+    if (e.target !== e.currentTarget) {
+      return;
     }
+    setFormularioVisible(!formularioVisible);
   };
 
-  const traerEmpleados = async () => {
+  // Traer todos los gastos
+  const [gastos, setGastos] = useState([]);
+  const traerGastos = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/users/all", {
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+      const response = await axios.get("http://localhost:8080/gastos/all", {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
       });
-      setEmpleados(res.data);
+      setGastos(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const obtenerNombreEmpleado = (id) => {
-    const empleado = empleados.find((e) => e.id === id);
-    return empleado ? empleado.username : "No asignado";
+  // Traer todos los empleados
+  const [empleados, setEmpleados] = useState([]);
+  const traerEmpleados = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/users/all", {
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+      });
+      setEmpleados(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Referencia de los campos
+  const usuarioRef = useRef(null);
+  const categoriaRef = useRef(null);
+  const montoRef = useRef(null);
+  const descripcionRef = useRef(null);
 
-    const categoriaSeleccionada = categoriaRef.current.value;
-    const empleadoSeleccionado = empleadoRef.current.value;
-
-    if (
-      !formData.descripcion ||
-      !formData.monto ||
-      !categoriaSeleccionada ||
-      !empleadoSeleccionado
-    ) {
-      alert("Por favor completa todos los campos obligatorios.");
+  // Funcion crear gasto
+  const crearGasto = async () => {
+    // Validaciones de datos
+    if (usuarioRef.current.value === "none") {
+      alert("Selecciona un usuario");
       return;
     }
 
-    const fechaFinal =
-      formData.fecha || new Date().toISOString().split("T")[0];
+    if (categoriaRef.current.value === "none") {
+      alert("Selecciona una categoria");
+      return;
+    }
 
-    const nuevoGasto = {
-      ...formData,
-      fecha: fechaFinal,
-      categoria: categoriaSeleccionada,
-      empleadoId: empleadoSeleccionado,
-    };
+    if (montoRef.current.value <= 0 || montoRef.current.value % 50 !== 0) {
+      alert("El debe ser un numero mayor a 0 multiplo de 50");
+      return;
+    }
+
+    if (descripcionRef.current.value.length < 5) {
+      alert("Especifica una descripcion");
+      return;
+    }
 
     try {
       const response = await axios.post(
         "http://localhost:8080/gastos/crear",
-        nuevoGasto,
+        {
+          descripcion: descripcionRef.current.value.toLowerCase(),
+          monto: montoRef.current.value,
+          categoria: categoriaRef.current.value,
+          empleadoId: usuarioRef.current.value,
+        },
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );
-
-      alert("Gasto creado exitosamente");
-      cargarGastos();
-
-      setFormData({
-        descripcion: "",
-        monto: "",
-        fecha: "",
-      });
-
-      if (categoriaRef.current) categoriaRef.current.value = "";
-      if (empleadoRef.current) empleadoRef.current.value = "";
+      traerGastos();
+      setFormularioVisible(false);
     } catch (error) {
       console.error(error);
-      setError("Error al crear gasto");
     }
   };
-
-  const renderTablaGastos = () => (
-    <table className="tabla">
-      <thead className="th-tabla">
-        <tr className="separacion-fila-head"></tr>
-        <tr className="tr-encabezado">
-          <th className="th">Descripción</th>
-          <th className="th">Monto</th>
-          <th className="th">Fecha</th>
-          <th className="th">Categoría</th>
-          <th className="th">Empleado</th>
-        </tr>
-      </thead>
-      <tbody>
-        {gastos.map((gasto, index) => (
-          <tr className="tr-gastos" key={index}>
-            <td className="td-user">{gasto.descripcion}</td>
-            <td className="td-user">${parseFloat(gasto.monto).toFixed(2)}</td>
-            <td className="td-user">{gasto.fecha}</td>
-            <td className="td-user">{gasto.categoria}</td>
-            <td className="td-user">{obtenerNombreEmpleado(gasto.empleadoId)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
 
   return (
     <>
       <Encabezado
         titEncabezado={"Gastos"}
-        claseCont={"cont-espacio-arqueo"}
-        conBtCrear={"none"}
-        opc1={"Cliente"}
-        opc2={"Prenda"}
-        opc3={"Valor"}
-        opc4={"N°"}
-        withSearch={"cont-buscador-none"}
+        opc1={"Usuario"}
+        opc2={"Categoria"}
+        imgBoton={Mas}
+        onClick={() => setFormularioVisible(true)}
       />
-
       <SepXNegro />
-
-      <form className="form" onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label className="form-label">Descripción:</label>
-            <input
-              className="form-input"
-              type="text"
-              value={formData.descripcion}
-              onChange={(e) =>
-                setFormData({ ...formData, descripcion: e.target.value })
-              }
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Categoría:</label>
-            <select ref={categoriaRef} defaultValue="" className="form-select">
-              <option value="" disabled>Selecciona una categoría</option>
-              <option value="ARRIENDO">Arriendo</option>
-              <option value="AGUA">Agua</option>
-              <option value="LUZ">Luz</option>
-              <option value="GAS">Gas</option>
-              <option value="TELEFONO">Teléfono</option>
-              <option value="INTERNET">Internet</option>
-              <option value="NOMINA">Nómina</option>
-              <option value="GASOLINA">Gasolina</option>
-              <option value="PLASTICOS">Plásticos</option>
-              <option value="GANCHOS">Ganchos</option>
-              <option value="PAPELERIA">Papelería</option>
-              <option value="BOLSAS">Bolsas</option>
-              <option value="MATERIAL">Material</option>
-              <option value="MANTENIMIENTO">Mantenimiento</option>
-              <option value="VALE">Vale</option>
-            </select>
-          </div>
+      {formularioVisible && (
+        <div className="modal-backdrop" onClick={ocultarFormulario}>
+          <form className="form-gasto">
+            <span className="tit-creandoP tit-form">Registrar Gasto</span>
+            <SepXNegro />
+            <div className="cont-form-group">
+              <div className="form-group">
+                <label className="form-label" htmlFor="usuario">
+                  Usuario
+                </label>
+                <select
+                  id="usuario"
+                  className="form-input no-capitalize"
+                  ref={usuarioRef}
+                >
+                  <option value="none">Seleccione un usuario</option>
+                  {empleados.map((empleado) => (
+                    <option
+                      key={empleado.id}
+                      value={empleado.id}
+                    >{`${empleado.name} ${empleado.lastname}`}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="categoria">
+                  Categoria
+                </label>
+                <select
+                  id="categoria"
+                  className="form-input no-capitalize"
+                  ref={categoriaRef}
+                >
+                  <option value="none">Seleccione una categoria</option>
+                  <option value="AGUA">Agua</option>
+                  <option value="ARRIENDO">Arriendo</option>
+                  <option value="BOLSAS">Bolsas</option>
+                  <option value="GANCHOS">Ganchos</option>
+                  <option value="GAS">Gas</option>
+                  <option value="GASOLINA">Gasolina</option>
+                  <option value="INTERNET">Internet</option>
+                  <option value="LUZ">Luz</option>
+                  <option value="MANTENIMIENTO">Mantenimiento</option>
+                  <option value="MATERIAL">Material</option>
+                  <option value="NOMINA">Nómina</option>
+                  <option value="PAPELERIA">Papelería</option>
+                  <option value="PLASTICOS">Plásticos</option>
+                  <option value="TELEFONO">Teléfono</option>
+                  <option value="VALE">Vale</option>
+                </select>
+              </div>
+            </div>
+            <div className="cont-form-group">
+              <div className="form-group">
+                <label className="form-label" htmlFor="monto">
+                  Monto
+                </label>
+                <input
+                  id="monto"
+                  ref={montoRef}
+                  type="number"
+                  className="form-input"
+                  placeholder="$0.000"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="descripcion">
+                  Descripcion
+                </label>
+                <input
+                  id="descripcion"
+                  ref={descripcionRef}
+                  className="form-input"
+                  placeholder="Arriendo"
+                />
+              </div>
+            </div>
+            <button
+              className="btn-crear-usuario"
+              type="button"
+              onClick={() => crearGasto()}
+            >
+              Crear Gasto
+            </button>
+          </form>
         </div>
+      )}
+      <div className="cont-tabla tb-inventario">
+        <table className="tabla">
+          <thead className="th-tabla">
+            <tr className="separacion-fila-head"></tr>
+            <tr className="tr-encabezado">
+              <th className="th">Usuario</th>
+              <th className="th">Categ.</th>
+              <th className="th">Descripcion</th>
+              <th className="th">Valor</th>
+              <th className="th">Fecha</th>
+            </tr>
+            <tr className="separacion-fila-head"></tr>
+          </thead>
+          <tbody className="body-tabla">
+            {gastos.map((gasto, index) => (
+              <React.Fragment key={index}>
+                <tr className="tr-body">
+                  <td className="td">
+                    {(empleados.find((emp) => emp.id === gasto.empleadoId)
+                      ?.name || "") +
+                      " " +
+                      (empleados.find((emp) => emp.id === gasto.empleadoId)
+                        ?.lastname || "")}
+                  </td>
+                  <td className="td">{gasto.categoria.toLowerCase()}</td>
+                  <td className="td">
+                    {gasto.descripcion.length > 20
+                      ? gasto.descripcion.slice(0, 20) + "..."
+                      : gasto.descripcion}
+                  </td>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label className="form-label">Monto:</label>
-            <input
-              className="form-input"
-              type="number"
-              value={formData.monto}
-              onChange={(e) =>
-                setFormData({ ...formData, monto: e.target.value })
-              }
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Empleado:</label>
-            <select ref={empleadoRef} defaultValue="" className="form-select">
-              <option value="">Selecciona un empleado</option>
-              {empleados.map((empleado) => (
-                <option key={empleado.id} value={empleado.id}>
-                  {empleado.username}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <button type="submit" className="btn-crear">
-          Crear Gasto
-        </button>
-      </form>
-
-      {resultado && <div className="resultado">{resultado}</div>}
-
-      <div className="tabla-cont">
-        {renderTablaGastos()}
+                  <td className="td">{gasto.monto}</td>
+                  <td className="td">
+                    {new Date(gasto.fecha).toLocaleDateString("en-US")}
+                  </td>
+                </tr>
+                <tr className="separacion-fila"></tr>
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );
