@@ -46,7 +46,6 @@ public class GastoService {
         Gastos gastos = new Gastos();
         gastos.setDescripcion(gastosRequest.getDescripcion());
         gastos.setMonto(gastosRequest.getMonto());
-        gastos.setFecha(LocalDate.now());
         gastos.setCategoria(gastosRequest.getCategoria());
         gastos.setEmpleado(empleado);
         return gastoRepository.save(gastos);
@@ -146,7 +145,6 @@ public class GastoService {
         gastosRequest.setDescripcion(gastos.get().getDescripcion());
         gastosRequest.setCategoria(gastos.get().getCategoria());
         gastosRequest.setMonto(gastos.get().getMonto());
-        gastosRequest.setFecha(gastos.get().getFecha());
         gastosRequest.setEmpleadoId(gastos.get().getEmpleado().getId());
         return gastosRequest;
 
