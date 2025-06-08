@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 		//Enviar correo con la información del registro
 		String email = user.getEmail();
 		String token = jwtTokenManager.generatePasswordResetToken(email);
-		String changeLink = "http://localhost:3000/reset-password?token=" + token;
+		String changeLink = "http://localhost:5173/reset-password?token=" + token;
 		emailService.send(email, "Cambio de contraseña por primera vez:\n",
 					"Usuario: " + user.getUsername() + "\n" +
 							"Contraseña: " + registrationRequest.getPassword() + "\n" +
