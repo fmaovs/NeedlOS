@@ -58,6 +58,7 @@ public class GastoService {
                 .map(gasto -> new GastosRequest(
                         gasto.getDescripcion(),
                         gasto.getMonto(),
+                        gasto.getFecha(),
                         gasto.getCategoria(),
                         gasto.getEmpleado().getId()
                 ))
@@ -80,6 +81,7 @@ public class GastoService {
                 .map(gasto -> new GastosRequest(
                         gasto.getDescripcion(),
                         gasto.getMonto(),
+                        gasto.getFecha(),
                         gasto.getCategoria(),
                         gasto.getEmpleado().getId()
                 ))
@@ -102,6 +104,7 @@ public class GastoService {
                 .map(gasto -> new GastosRequest(
                         gasto.getDescripcion(),
                         gasto.getMonto(),
+                        gasto.getFecha(),
                         gasto.getCategoria(),
                         gasto.getIdGasto()
                 ))
@@ -129,6 +132,7 @@ public class GastoService {
                 .map(gasto -> new GastosRequest(
                         gasto.getDescripcion(),
                         gasto.getMonto(),
+                        gasto.getFecha(),
                         gasto.getCategoria(),
                         gasto.getIdGasto()
                 ))

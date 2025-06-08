@@ -15,6 +15,7 @@ public class GastosRequest {
 
     private String descripcion;
     private Double monto;
+    private LocalDate fecha;
     private CategoriaGasto categoria;
     private Long empleadoId;
 }
