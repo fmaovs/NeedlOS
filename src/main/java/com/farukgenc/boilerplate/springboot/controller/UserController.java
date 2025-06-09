@@ -74,7 +74,8 @@ public class UserController {
 
     // Obtener correo del usuario para restablecer contraseña
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+    public ResponseEntity<?> forgotPassword(@RequestParam String username) {
+        String email = userRepository.findByUsername(username).getEmail();
         Optional<User> optionalUser = userServiceImpl.findByEmail(email);
         if (optionalUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
