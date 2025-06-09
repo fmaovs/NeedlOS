@@ -1,6 +1,6 @@
 import "./inp-text.css";
 
-export default function CheckBox({
+export default function InpText({
   lbDireccion,
   txt,
   img,
@@ -8,14 +8,10 @@ export default function CheckBox({
   placeholder,
   id,
   valor,
-  cambio
+  cambio,
 }) {
   return (
     <>
-
-
-
-    
       <div className="cont-lb">
         <label htmlFor={lbDireccion} className="lb-inp">
           {txt}

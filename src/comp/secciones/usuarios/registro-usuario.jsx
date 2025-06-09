@@ -217,9 +217,7 @@ export function RegistroUsuario({ onClose, actualizaTabla }) {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`form-input form-input-noCapitalize ${
-                errors.email ? "form-input-error" : ""
-              }`}
+              className={`form-input ${errors.email ? "form-input-error" : ""}`}
               placeholder="ejemplo@gmail.com"
             />
             {errors.email && <span className="form-error">{errors.email}</span>}

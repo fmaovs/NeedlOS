@@ -67,7 +67,6 @@
 }
 
 .form-input {
-  text-transform: capitalize;
   height: 4.5vh;
   padding-left: 1.4vh;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
@@ -77,10 +76,6 @@
 
 .form-input:focus {
   text-transform: none;
-}
-
-.form-input-noCapitalize {
-  text-transform: lowercase;
 }
 
 /* Botón de mostrar/ocultar contraseña */

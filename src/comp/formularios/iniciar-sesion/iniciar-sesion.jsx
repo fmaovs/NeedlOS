@@ -9,6 +9,7 @@ const User = "../../../../public/media/img/user.png";
 const Password = "../../../../public/media/img/password.png";
 const Error = "../../../../public/media/img/error.png";
 const Aprobado = "../../../../public/media/img/aprobado.png";
+const Correo = "../../../../public/media/img/correo.png";
 
 export default function IniciarSesion() {
   const [username, setUsername] = useState("");
@@ -53,6 +54,47 @@ export default function IniciarSesion() {
       }, 1200);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Mostrar mensaje correo
+  const [isCorreo, setIsCorreo] = useState(false);
+  const [correoIsVisible, setCorreoIsVisible] = useState(false);
+  const recuperarContraseña = async () => {
+    // Verifica si hay un usuario escrito
+    if (!username) {
+      alert(
+        "Por favor, ingrese su nombre de usuario en el campo 'Usuario' para recuperar la contraseña"
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    // Enviar corrreo
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/users/forgot-password?username=${username}`
+      );
+      setLoading(false);
+
+      setIsCorreo(true);
+      setTimeout(() => {
+        setCorreoIsVisible(true);
+      }, 10);
+
+      setTimeout(() => {
+        setCorreoIsVisible(false);
+        setTimeout(() => {
+          setIsCorreo(false);
+        }, 300);
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.status === 500) {
+        alert("El usuario ingresado no existe");
+      }
+      return;
     }
   };
 
@@ -107,10 +149,26 @@ export default function IniciarSesion() {
           </div>
         )}
 
+        {/* Muestra el mensaje de correo */}
+        {isCorreo && (
+          <div
+            className={`cont-correo ${
+              correoIsVisible ? "cont-correo-visible" : ""
+            }`}
+          >
+            <img src={Correo} className="img-apro" />
+            <p className="text-apro">Recuperacion de contraseña enviada</p>
+          </div>
+        )}
+
         <div className="cont-recovery">
-          <a href="" className="link-recovery">
+          <button
+            type="button"
+            className="link-recovery"
+            onClick={() => recuperarContraseña()}
+          >
             Recuperar contraseña
-          </a>
+          </button>
         </div>
 
         <div className="cont-butt-login">

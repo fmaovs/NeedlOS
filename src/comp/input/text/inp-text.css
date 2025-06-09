@@ -1,5 +1,5 @@
 .cont-lb {
-  width: 90%;
+  width: 100%;
   margin: 2vh auto 2vh auto;
 }
 
@@ -15,13 +15,12 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  width: 90%;
+  width: 100%;
   height: 4vh;
   margin: 1vh auto;
   transition: 0.3s ease-in;
   border-radius: calc(0.1vw + 1vh);
   box-shadow: 0 0 0 1px rgb(203, 203, 203);
-
 }
 
 .cont-inp:focus-within {

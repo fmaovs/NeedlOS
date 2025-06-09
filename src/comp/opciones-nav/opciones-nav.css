@@ -63,6 +63,16 @@
   transition: 0.3s ease-in;
   cursor: pointer;
   overflow: hidden;
+  background-color: transparent;
+}
+
+.cont-help {
+  margin-bottom: 0;
+  transition: 0.1s ease-in-out;
+}
+
+.cont-seccion-sett.cont-help:active {
+  border: 0.3vh solid #0050b8;
 }
 
 .cont-seccion-first:hover {
@@ -103,4 +113,11 @@
 .active:hover {
   border: 0.3vh solid #0050b8;
   background: linear-gradient(to right, #eff6ff, #ffffff);
+}
+
+.cont-seccion:active,
+.cont-seccion-first:active,
+.cont-seccion-last:active,
+.cont-seccion-sett:active {
+  cursor: default;
 }

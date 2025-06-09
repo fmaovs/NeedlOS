@@ -134,7 +134,7 @@ export function EditarUsuario({ onClose, idUser, actualizarTabla }) {
               <input
                 type="email"
                 ref={correoRef}
-                className="form-input form-input-noCapitalize"
+                className="form-input"
               />
             </div>
 

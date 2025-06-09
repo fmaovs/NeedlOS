@@ -18,7 +18,9 @@
 
 .form-iniciar-sesion {
   width: calc(100% - 0.6vh);
-  height: calc(100% - 0.7vh);
+  height: calc(100% - 0.6vh);
+  padding: 3vh;
+  box-sizing: border-box;
   background-color: white;
   border-radius: 1vh;
 }
@@ -39,7 +41,7 @@
 }
 
 .cont-recovery {
-  width: 90%;
+  width: 100%;
   margin: 2.4vh auto 2.4vh auto;
   display: flex;
   flex-direction: row;
@@ -56,25 +58,27 @@
 
 .link-recovery {
   margin-left: auto;
+  cursor: pointer;
   color: #0059cc;
   font-size: calc((0.2vw + 3.2vh) * 0.5);
-
-}
-
-.link-recovery:visited {
-  color: #022859;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
 }
 
 .link-recovery:hover {
-  color: #0059cc;
+  color: #003983;
 }
 
 .link-recovery:active {
   color: #0059cc;
+  cursor: default;
+  text-decoration: none;
 }
 
 .cont-butt-login {
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -189,13 +193,11 @@
   width: auto;
   margin: auto 0;
   object-fit: contain;
-  margin-right: 1vw;
 }
 
 .text-apro {
   font-size: calc(0.2vw + 3.2vh);
   width: auto;
-  margin-right: 1vw;
 }
 
 .cont-cerrar {
@@ -223,3 +225,28 @@
   transition: 0.3s ease-in;
 }
 
+.cont-correo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  width: 50vh;
+  height: 16vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 1.2vh;
+  background-color: white;
+  padding: 0 3vh;
+  gap: 3vh;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+
+.cont-correo-visible {
+  opacity: 1;
+}
