@@ -72,41 +72,95 @@ public class UserController {
         return userServiceImpl.convertUsertoUserResponse(id);
     }
 
-    // Obtener correo del usuario para restablecer contraseña
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String username) {
-        String email = userRepository.findByUsername(username).getEmail();
-        Optional<User> optionalUser = userServiceImpl.findByEmail(email);
-        if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        try {
+            // Buscar usuario por username
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+
+            String email = user.getEmail();
+            if (email == null || email.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no tiene email configurado");
+            }
+            // Verificar que el usuario existe por email también (doble verificación)
+            Optional<User> optionalUser = userServiceImpl.findByEmail(email);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado por email");
+            }
+            String token = jwtTokenManager.generatePasswordResetToken(email);
+            String resetLink = "http://localhost:5173/reset-password?token=" + token;
+
+            emailService.send(email, "Recuperación de contraseña",
+                    "Haz clic en el siguiente enlace para restablecer tu contraseña:\n" + resetLink);
+
+            return ResponseEntity.ok("Correo de recuperación enviado");
+
+        } catch (Exception e) {
+            System.err.println("Error en forgot-password: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno del servidor");
         }
-
-        String token = jwtTokenManager.generatePasswordResetToken(email);
-        String resetLink = "http://localhost:5173/reset-password?token=" + token;
-
-        emailService.send(email, "Recuperación de contraseña",
-                "Haz clic en el siguiente enlace para restablecer tu contraseña:\n" + resetLink);
-
-        return ResponseEntity.ok("Correo de recuperación enviado");
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
         try {
+            // Validar que los parámetros no estén vacíos
+            if (token == null || token.trim().isEmpty()) {
+                System.err.println("ERROR: Token vacío o nulo");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token no puede estar vacío");
+            }
+            if (newPassword == null || newPassword.trim().isEmpty()) {
+                System.err.println("ERROR: Contraseña vacía o nula");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La nueva contraseña no puede estar vacía");
+            }
             String email = jwtTokenManager.getEmailFromResetToken(token);
-
+            if (email == null || email.trim().isEmpty()) {
+                System.err.println("ERROR: Email extraído del token está vacío");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido - email vacío");
+            }
             Optional<User> optionalUser = userServiceImpl.findByEmail(email);
             if (optionalUser.isEmpty()) {
+                System.err.println("ERROR: Usuario no encontrado con email: " + email);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
-
             User user = optionalUser.get();
-            user.setPassword(bCryptPasswordEncoder.encode(newPassword));
-            userRepository.save(user);
+            // Encriptar la nueva contraseña
+            String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
+            System.out.println("Contraseña encriptada generada");
+            user.setPassword(encodedPassword);
+            // Guardar el usuario actualizado
+            User savedUser = userRepository.save(user);
+            System.out.println("Usuario guardado exitosamente con ID: " + savedUser.getId());
+            System.out.println("=== FIN RESET PASSWORD EXITOSO ===");
 
             return ResponseEntity.ok("Contraseña actualizada con éxito");
+
+        } catch (RuntimeException e) {
+            // Manejo genérico para errores de JWT
+            String errorMessage = e.getMessage().toLowerCase();
+            if (errorMessage.contains("expired")) {
+                System.err.println("Token expirado: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El token ha expirado");
+            } else if (errorMessage.contains("signature") || errorMessage.contains("invalid")) {
+                System.err.println("Token con firma inválida: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido");
+            } else if (errorMessage.contains("malformed")) {
+                System.err.println("Token malformado: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token malformado");
+            } else {
+                throw e; // Re-lanzar si no es un error conocido de JWT
+            }
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido o expirado");
+            System.err.println("Error en reset-password: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno del servidor");
         }
     }
 

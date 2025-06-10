@@ -44,7 +44,8 @@ public class SecurityConfiguration {
 																          "/swagger-ui/**",
 																	      "/swagger-ui.html",
 																	      "/actuator/**",
-																			"/users/forgot-password/**")
+																			"/users/forgot-password",
+																			"/users/reset-password")
 													   .permitAll()
 						//ADMIN
 						.requestMatchers("/orders/reasignar-sastre/{id}").hasAuthority("ADMIN")
