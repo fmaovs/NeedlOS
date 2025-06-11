@@ -312,7 +312,7 @@ export default function TbEnProceso() {
                   <React.Fragment key={order.id}>
                     <tr className="tr-body">
                       <td className="td">{order.id}</td>
-                      <td className="td">{order.customerName}</td>
+                      <td className="td">{`${order.customerName} ${order.customerLastName}`}</td>
                       <td className="td">{order.telefono}</td>
                       <td className="td">
                         {new Date(order.fechaPedido)
@@ -345,7 +345,7 @@ export default function TbEnProceso() {
                           style: "decimal",
                           minimumFractionDigits: 0,
                           maximumFractionDigits: 0,
-                        }).format(order.saldo)}`}
+                        }).format(order.saldo + order.totalAbonos)}`}
                       </td>
                       <td className="td">
                         {order.prenda

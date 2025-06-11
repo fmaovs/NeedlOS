@@ -582,7 +582,7 @@ export default function TbTodo() {
                   <React.Fragment key={order.id}>
                     <tr className="tr-body">
                       <td className="td">{order.id}</td>
-                      <td className="td">{order.customerName}</td>
+                      <td className="td">{`${order.customerName} ${order.customerLastName}`}</td>
                       <td className="td">{order.telefono}</td>
                       <td className="td">
                         {new Date(order.fechaPedido)

@@ -125,7 +125,7 @@ export default function Nomina() {
       console.error(error);
     }
 
-    setDevengar(totalPedidos - totalVales);
+    setDevengar(totalPedidos * 0.4 - totalVales);
     setMostrarNoEncontrado(true);
     setSeleccionaSastre(false);
   }
@@ -331,7 +331,7 @@ export default function Nomina() {
                           style: "decimal",
                           minimumFractionDigits: 0,
                           maximumFractionDigits: 0,
-                        }).format(devengar)}`}
+                        }).format(devengar)} (40%)`}
                       </td>
                     </tr>
                     <tr className="separacion-fila"></tr>

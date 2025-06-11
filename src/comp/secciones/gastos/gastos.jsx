@@ -229,7 +229,11 @@ export default function Gastos() {
                       : gasto.descripcion}
                   </td>
 
-                  <td className="td">{gasto.monto}</td>
+                  <td className="td">{`$ ${new Intl.NumberFormat("es-CO", {
+                    style: "decimal",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  }).format(gasto.monto)}`}</td>
                   <td className="td">
                     {new Date(gasto.fecha).toLocaleDateString("en-US")}
                   </td>
