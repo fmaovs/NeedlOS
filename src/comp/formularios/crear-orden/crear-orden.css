@@ -301,8 +301,9 @@
   gap: 1vh;
   box-sizing: border-box;
   border-radius: 1.2vh;
-  background-color: transparent;
-  border: 0.1vh solid black;
+  background-color: #0050b8;
+  border: none;
+  color: white;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
   transition: 0.1s ease-in-out;
 }
@@ -312,7 +313,6 @@
   text-underline-offset: 0.2vh;
   letter-spacing: 0.02vw;
   cursor: pointer;
-  background-color: rgb(236, 236, 236);
 }
 
 .clean-print:active {
@@ -327,6 +327,10 @@
 
 .clean-print:hover img {
   transform: scale(1.1);
+}
+
+.clean-print:active img {
+  transform: scale(1);
 }
 
 .btn-eliminar-fila {

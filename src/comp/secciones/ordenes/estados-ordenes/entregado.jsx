@@ -250,17 +250,11 @@ export default function TbEntregado() {
           }
           fechaEntrega={
             detalles.fechaEntrega
-              ? new Date(detalles.fechaEntrega)
-                  .toLocaleString("es-CO", {
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                  .replace(",", " -")
-                  .replace("a. m.", "AM")
-                  .replace("p. m.", "PM")
+              ? new Date(detalles.fechaEntrega).toLocaleDateString("es-CO", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                })
               : "No disponible"
           }
           mostrarAnulado={detalles.estado}
@@ -359,17 +353,14 @@ export default function TbEntregado() {
                           .replace("p. m.", "PM")}
                       </td>
                       <td className="td">
-                        {new Date(order.fechaEntrega)
-                          .toLocaleString("es-CO", {
+                        {new Date(order.fechaEntrega).toLocaleDateString(
+                          "es-CO",
+                          {
                             year: "numeric",
                             month: "numeric",
                             day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                          .replace(",", " -")
-                          .replace("a. m.", "AM")
-                          .replace("p. m.", "PM")}
+                          }
+                        )}
                       </td>
                       <td className="td">
                         {`$ ${new Intl.NumberFormat("es-CO", {

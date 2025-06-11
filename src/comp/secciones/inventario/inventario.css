@@ -9,7 +9,6 @@
   bottom: 0;
   right: 0;
   opacity: 0;
-  cursor: pointer;
   transition: 0.3s ease-in-out;
   transform: translateX(2vh);
 }
@@ -56,12 +55,13 @@
   width: 100%;
   height: 4.5vh;
   border-radius: 1.2vh;
-  border: 0.1vh solid #000000;
+  border: none;
   box-sizing: border-box;
   margin: 1vh 0 0 0;
   font-size: calc((0.2vw + 3.2vh) * 0.45);
   overflow: hidden;
-  background-color: transparent;
+  background-color: #0050b8;
+  color: white;
   cursor: pointer;
   transition: 0.1s ease-in-out;
 }
@@ -95,8 +95,9 @@
 }
 
 .form-inventario button:not(.sumar-restar):hover {
-  border-color: rgb(113, 113, 113);
   text-decoration: underline;
+  text-underline-offset: 0.2vh;
+  letter-spacing: 0.02vw;
 }
 
 .form-inventario button:active {

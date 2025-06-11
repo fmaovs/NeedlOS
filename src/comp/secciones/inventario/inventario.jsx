@@ -493,7 +493,7 @@ export default function Inventario() {
                 placeholder={"0"}
               />
             </section>
-            <button onClick={crearInventario}>Crear</button>
+            <button onClick={crearInventario}>Crear Material</button>
           </div>
         </div>
       )}
