@@ -584,7 +584,12 @@ export default function Inventario() {
                 <tr className="tr-body">
                   <td className="td">{inventario.id_material}</td>
                   <td className="td">{inventario.nombre}</td>
-                  <td className="td">{inventario.descripcion}</td>
+                  <td className="td">
+                    {inventario.descripcion.length > 20
+                      ? inventario.descripcion.slice(0, 20) + "..."
+                      : inventario.descripcion}
+                  </td>
+
                   <td className="td">
                     {`$ ${new Intl.NumberFormat("es-CO", {
                       style: "decimal",
