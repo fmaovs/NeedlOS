@@ -177,6 +177,7 @@
   border: 0.1vh solid black;
   cursor: pointer;
   border-radius: 0 1.2vh 1.2vh 0;
+  font-size: calc((0.2vw + 3.2vh) * 0.45);
 }
 
 .detalles-txt-row select:hover {
