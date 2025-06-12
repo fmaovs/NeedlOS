@@ -70,12 +70,12 @@ export default function Gastos() {
     }
 
     if (montoRef.current.value <= 0 || montoRef.current.value % 50 !== 0) {
-      alert("El debe ser un numero mayor a 0 multiplo de 50");
+      alert("El monto debe ser un numero mayor a 0 multiplo de 50");
       return;
     }
 
     if (descripcionRef.current.value.length < 5) {
-      alert("Especifica una descripcion");
+      alert("Especifica una descripcion minimo 5 caracteres");
       return;
     }
 

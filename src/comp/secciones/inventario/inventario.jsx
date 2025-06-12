@@ -82,7 +82,25 @@ export default function Inventario() {
       return;
     }
 
+    if (material.length < 5) {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("El nombre del material debe tener minimo 5 letras");
+      }, 15);
+      return;
+    }
+
     if (descripcion === "") {
+      sonidoError();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      setTimeout(() => {
+        alert("Ingrese una descripción");
+      }, 15);
+      return;
+    }
+
+    if (descripcion.length < 5) {
       sonidoError();
       await new Promise((resolve) => setTimeout(resolve, 0));
       setTimeout(() => {
