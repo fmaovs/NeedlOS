@@ -248,9 +248,7 @@ export default function Inventario() {
   function hidenEditarInventario() {
     setEditarInvVisible(false);
     setIdMaterial(undefined);
-    setDescripcion(undefined);
     setCalculoPresionado("");
-    setStockActual("");
     setTimeout(() => {
       setShowEditarInventario(false);
       setIsResta(false);
@@ -258,6 +256,8 @@ export default function Inventario() {
       setIsAñadir(undefined);
       setInicial(true);
       setValorUnitario(null);
+      setDescripcion(undefined);
+      setStockActual("");
     }, 300);
   }
 
@@ -504,68 +504,74 @@ export default function Inventario() {
       )}
       {showEditarInventario && (
         <div
-          className={`form-inventario editar-material ${
+          className={`modal-backdrop modal-inventario ${
             editarInvVisible ? "inventario-visible" : ""
           }`}
+          onClick={hidenEditarInventario}
         >
-          <button onClick={hidenEditarInventario}>
-            <img src={cerrarInventario} />
-          </button>
-          <span>Editando material</span>
-          <SepXNegro />
-          <section className="fila-detalles-ordenes">
-            <ContDetalle titulo={"Producto:"} txt={producto} />
-            <ContDetalle titulo={"Descripcion:"} txt={descripcion} />
-          </section>
-          <span id="span-accion">Accion:</span>
-          <section className="fila-detalles-ordenes">
-            <button
-              className={`sumar-restar ${isResta ? "resta-presionada" : ""}`}
-              onClick={() => asignarCalculo("-")}
-            >
-              Descontar -
+          <div
+            className={"form-inventario editar-material"}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button onClick={hidenEditarInventario}>
+              <img src={cerrarInventario} />
             </button>
-            <button
-              className={`sumar-restar ${isSuma ? "suma-presionada" : ""}`}
-              onClick={() => asignarCalculo("+")}
-            >
-              Añadir +
-            </button>
-          </section>
-          <section className="fila-detalles-ordenes">
-            {isAñadir === true ? (
+            <span>Editando material</span>
+            <SepXNegro />
+            <section className="fila-detalles-ordenes">
+              <ContDetalle titulo={"Producto:"} txt={producto} />
+              <ContDetalle titulo={"Descripcion:"} txt={descripcion} />
+            </section>
+            <span id="span-accion">Accion:</span>
+            <section className="fila-detalles-ordenes">
+              <button
+                className={`sumar-restar ${isResta ? "resta-presionada" : ""}`}
+                onClick={() => asignarCalculo("-")}
+              >
+                Descontar -
+              </button>
+              <button
+                className={`sumar-restar ${isSuma ? "suma-presionada" : ""}`}
+                onClick={() => asignarCalculo("+")}
+              >
+                Añadir +
+              </button>
+            </section>
+            <section className="fila-detalles-ordenes">
+              {isAñadir === true ? (
+                <ContTxt
+                  type={"number"}
+                  titulo={"Vlr. Uni:"}
+                  id={"precio-unitario"}
+                />
+              ) : isAñadir === false ? (
+                <ContSelect titulo={"Prenda:"} id={"select-inventario-prenda"}>
+                  <option value="null">Prenda...</option>
+                  {prendas.map((prenda) => (
+                    <React.Fragment key={prenda.id}>
+                      <option
+                        value={prenda.id}
+                      >{`${prenda.id}. ${prenda.descripcion}`}</option>
+                    </React.Fragment>
+                  ))}
+                </ContSelect>
+              ) : null}
+              {inicial && <ContDetalle titulo={""} txt={""} />}
               <ContTxt
                 type={"number"}
-                titulo={"Vlr. Uni:"}
-                id={"precio-unitario"}
+                titulo={`Cantidad actual: ${stockActual}`}
+                id={"stock"}
+                placeholder={
+                  isResta
+                    ? "Cantidad a descontar"
+                    : isSuma
+                    ? "Cantidad a añadir"
+                    : ""
+                }
               />
-            ) : isAñadir === false ? (
-              <ContSelect titulo={"Prenda:"} id={"select-inventario-prenda"}>
-                <option value="null">Prenda...</option>
-                {prendas.map((prenda) => (
-                  <React.Fragment key={prenda.id}>
-                    <option
-                      value={prenda.id}
-                    >{`${prenda.id}. ${prenda.descripcion}`}</option>
-                  </React.Fragment>
-                ))}
-              </ContSelect>
-            ) : null}
-            {inicial && <ContDetalle titulo={""} txt={""} />}
-            <ContTxt
-              type={"number"}
-              titulo={`Cantidad actual: ${stockActual}`}
-              id={"stock"}
-              placeholder={
-                isResta
-                  ? "Cantidad a descontar"
-                  : isSuma
-                  ? "Cantidad a añadir"
-                  : ""
-              }
-            />
-          </section>
-          <button onClick={aplicarEditar}>Editar</button>
+            </section>
+            <button onClick={aplicarEditar}>Editar</button>
+          </div>
         </div>
       )}
       <div className="cont-tabla tb-inventario">

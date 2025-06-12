@@ -10,12 +10,15 @@
   right: 0;
   opacity: 0;
   transition: 0.3s ease-in-out;
-  transform: translateX(2vh);
 }
 
-.cont-form-inventario.inventario-visible {
+.modal-inventario {
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+
+.inventario-visible {
   opacity: 1;
-  transform: translateX(0);
 }
 
 .form-inventario {
@@ -37,12 +40,7 @@
   left: 50%;
   top: 30vh;
   transform: translateX(-50%);
-  opacity: 0;
   transition: 0.3s ease-in-out;
-}
-
-.form-inventario.editar-material.inventario-visible {
-  opacity: 1;
 }
 
 .form-inventario span:not(.fila-detalles-ordenes span) {
