@@ -118,6 +118,7 @@ export default function Inventario() {
       stockActual: stock,
     };
 
+    console.log("Material creado.");
     console.log(nuevoMaterial);
 
     try {
@@ -191,8 +192,6 @@ export default function Inventario() {
           }
         );
 
-        console.log(response.data);
-
         /* Esperar a que el DOM se actualice */
         setTimeout(() => {
           setProducto(response.data.nombre);
@@ -202,8 +201,8 @@ export default function Inventario() {
 
           setEditarInvVisible(true);
         }, 0);
-      } catch {
-        console.log("No se pudo acceder al material");
+      } catch (error) {
+        console.error(error);
       }
 
       // Iniciamos la animación de aparición
@@ -227,8 +226,6 @@ export default function Inventario() {
             },
           }
         );
-
-        console.log(response.data);
 
         /* Esperar a que el DOM se actualice */
         setTimeout(() => {
@@ -344,6 +341,15 @@ export default function Inventario() {
         return;
       }
 
+      if (stock >= stockActual) {
+        sonidoError();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        setTimeout(() => {
+          alert("El stock no puede quedar en 0");
+        }, 15);
+        return;
+      }
+
       const idPrendaInt = parseInt(idPrenda);
 
       const retiroMaterial = {
@@ -352,7 +358,6 @@ export default function Inventario() {
         cantidad_usada: stock,
       };
 
-      console.log(retiroMaterial);
       try {
         const response = await axios.put(
           "http://localhost:8080/inventario/Usando",

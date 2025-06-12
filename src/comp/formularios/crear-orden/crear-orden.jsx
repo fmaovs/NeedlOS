@@ -213,7 +213,6 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
 
   /*AL HACER CLICK EN CUALQUIER BOTON INSERTAR LA PRENDA SELECCIONADA*/
   const insertarPrendaBusqueda = (prenda) => {
-    console.log("Prenda seleccionada:", prenda);
     const namePrenda = document.getElementById("producto");
     namePrenda.value = prenda;
     setPrendaBuscada("");
@@ -576,7 +575,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
       // Si encontramos el cliente, asignamos su ID
       dataPedido.customerId = response.data.id;
     } catch (error) {
-      console.error("Cliente no encontrado, Creando...");
+      console.log("Cliente no encontrado, Creando...");
 
       // Obtener y validar campos
       const valueNombre = document
@@ -622,9 +621,8 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
           }
         );
         dataPedido.customerId = createResponse.data.id;
-        console.error("Cliente creado ID = ", createResponse.data.id);
-      } catch (creationError) {
-        console.error("Error al crear cliente:", creationError.message);
+      } catch (error) {
+        console.error(error);
       }
     }
 
@@ -819,10 +817,7 @@ export default function CrearOrden({ onClick, ejecutarFuncion }) {
         }
       }
     } catch (error) {
-      console.error(
-        "Error al crear el pedido:",
-        error.response?.data || error.message
-      );
+      console.error(error);
       return;
     }
 
