@@ -19,7 +19,7 @@ import imprimirPedido from "../../../../public/media/img/imprimir-pedido.png";
 const prendasUbi = "../../../../public/media/img/prendas/";
 const Aprobado = "../../../../public/media/img/aprobado.png";
 const ErrorMP3 = "../../../../public/media/sounds/error.mp3";
-const PedidoCreado = "../../../../public/media/sounds/pedidoCreado.mp3";
+const PedidoCreado = "/media/sounds/pedidoCreado.mp3";
 
 export default function CrearOrden({ onClick, ejecutarFuncion }) {
   const [isVisible, setIsVisible] = useState(true);
